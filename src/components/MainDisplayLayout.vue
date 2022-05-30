@@ -11,7 +11,12 @@
           <el-table-column type="index" label="#" width="40" />
           <el-table-column sortable prop="name" label="Название" width="750">
             <template #default="scope">
-              <el-link>{{ scope.row.name }}</el-link>
+              <el-popover placement="right" :width="300" trigger="hover" :show-after="500">
+                <template #reference>
+                  <el-link>{{ scope.row.name }}</el-link>
+                </template>
+                <h2>{{ scope.row.name }}</h2>
+              </el-popover>
             </template>
           </el-table-column>
           <el-table-column sortable prop="rating" label="Рейтинг" width="150" />
