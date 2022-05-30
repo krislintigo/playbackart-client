@@ -5,17 +5,21 @@
       <MainDisplayLayout :items="allItems" />
     </el-col>
     <el-col :span="5" :push="1">
-      <el-aside>
-        <h3 class="back-header">Оценки</h3>
-        <BarChart
-          :labels="grades"
-          :data="grades.map(grade => allItems.filter(item => item.rating === grade).length)"
-        />
-        <h3 class="back-header">Возрастные ограничения</h3>
-        <BarChart
-          :labels="['G', 'PG', 'PG-13', 'R-17', 'R+'].filter(r => restrictions.includes(r))"
-          :data="['G', 'PG', 'PG-13', 'R-17', 'R+'].filter(r => restrictions.includes(r)).map(r => allItems.filter(item => item.restriction === r).length)"
-        />
+      <el-aside class="aside">
+        <el-col>
+          <h3 class="back-header">Оценки</h3>
+          <BarChart
+            :labels="grades"
+            :data="grades.map(grade => allItems.filter(item => item.rating === grade).length)"
+          />
+        </el-col>
+        <el-col>
+          <h3 class="back-header">Возрастные ограничения</h3>
+          <BarChart
+            :labels="restrictionsLabels"
+            :data="restrictionsLabels.map(r => allItems.filter(item => item.restriction === r).length)"
+          />
+        </el-col>
       </el-aside>
     </el-col>
   </el-row>
@@ -87,9 +91,17 @@ const allItems = ref([
 const grades = computed(() =>
   Array.from(new Set(allItems.value.map(i => i.rating))).sort((a, b) => b - a))
 const restrictions = computed(() => Array.from(new Set(allItems.value.map(i => i.restriction))))
+const restrictionsLabels = computed(() =>
+  ['G', 'PG', 'PG-13', 'R-17', 'R+'].filter(r => restrictions.value.includes(r)))
 </script>
 
 <style scoped>
+.aside {
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+}
+
 .back-header {
   background-color: #e8ebef;
   padding: 10px;
