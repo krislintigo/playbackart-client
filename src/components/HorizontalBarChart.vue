@@ -1,5 +1,5 @@
 <template>
-  <BarChart :chart-data="simpleData" :options="options" />
+  <BarChart :chart-data="simpleData" :options="options" :height="labels.length > 5 ? 60 * labels.length : 300" />
 </template>
 
 <script setup>

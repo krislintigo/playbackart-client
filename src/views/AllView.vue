@@ -89,6 +89,30 @@ const allItems = ref([
     rating: 9,
     status: 'viewed',
     restriction: 'G'
+  },
+  {
+    name: 'Призрак в костюме',
+    rating: 10,
+    status: 'viewed',
+    restriction: 'G'
+  },
+  {
+    name: 'Евангелион',
+    rating: 10,
+    status: 'viewed',
+    restriction: 'R+'
+  },
+  {
+    name: 'Конец Евангелиона',
+    rating: 4,
+    status: 'viewed',
+    restriction: 'R+'
+  },
+  {
+    name: 'Куколка',
+    rating: 3,
+    status: 'viewed',
+    restriction: 'R+'
   }
 ])
 

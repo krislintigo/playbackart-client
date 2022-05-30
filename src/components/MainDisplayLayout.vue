@@ -9,7 +9,7 @@
         </el-row>
       </template>
       <el-table :data="block.items">
-        <el-table-column type="index" label="#" width="35" />
+        <el-table-column type="index" label="#" width="40" />
         <el-table-column sortable prop="name" label="Название" width="750" />
         <el-table-column sortable prop="rating" label="Рейтинг" />
       </el-table>
