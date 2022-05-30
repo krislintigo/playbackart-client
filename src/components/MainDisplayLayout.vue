@@ -14,13 +14,24 @@
           </template>
         </el-table-column>
         <el-table-column sortable prop="rating" label="Рейтинг" />
+        <el-table-column sortable prop="time" label="Длительность" :sort-method="sortByDuration">
+          <template #default="scope">
+            <span v-if="scope.row.time.count > 1">{{ scope.row.time.count }} x </span>
+            <span>{{formatDuration(scope.row.time.duration)}}</span>
+          </template>
+        </el-table-column>
       </el-table>
+      <h4 style="margin: 5px 0">
+        Общая продолжительность:
+        {{formatDuration(block.items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0))}}
+      </h4>
     </el-collapse-item>
   </el-collapse>
 </template>
 
 <script setup>
 import { computed, ref, defineProps } from 'vue'
+import formatDuration from '@/utils/formatDuration'
 
 const props = defineProps({
   items: {
@@ -59,6 +70,13 @@ const displayedItems = computed(() => [
     items: abandonedItems.value
   }
 ])
+
+const sortByDuration = (a, b) => {
+  const totalA = a.time.count * a.time.duration
+  const totalB = b.time.count * b.time.duration
+  if (totalA === totalB) return 0
+  return totalA > totalB ? 1 : -1
+}
 </script>
 
 <style scoped>

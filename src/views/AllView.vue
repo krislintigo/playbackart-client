@@ -57,7 +57,11 @@ const allItems = ref([
     status: 'viewed',
     type: 'series',
     restriction: 'R+',
-    genres: ['Экшен', 'Триллер', 'Военное']
+    genres: ['Экшен', 'Триллер', 'Военное'],
+    time: {
+      count: 25,
+      duration: 25
+    }
   },
   {
     name: 'Fairy Tail',
@@ -65,7 +69,11 @@ const allItems = ref([
     status: 'postponed',
     type: 'series',
     restriction: 'R-17',
-    genres: ['Экшен', 'Психологическое', 'Фантастика']
+    genres: ['Экшен', 'Психологическое', 'Фантастика'],
+    time: {
+      count: 25,
+      duration: 25
+    }
   },
   {
     name: 'One Piece',
@@ -73,7 +81,11 @@ const allItems = ref([
     status: 'planned',
     type: 'series',
     restriction: 'R-17',
-    genres: ['Экшен', 'Приключения', 'Фантастика']
+    genres: ['Экшен', 'Приключения', 'Фантастика'],
+    time: {
+      count: 25,
+      duration: 25
+    }
   },
   {
     name: 'Naruto',
@@ -81,7 +93,11 @@ const allItems = ref([
     status: 'looking',
     type: 'series',
     restriction: 'PG-13',
-    genres: ['Экшен', 'Приключения', 'Фантастика']
+    genres: ['Экшен', 'Приключения', 'Фантастика'],
+    time: {
+      count: 520,
+      duration: 23
+    }
   },
   {
     name: 'Bleach',
@@ -89,7 +105,11 @@ const allItems = ref([
     status: 'abandoned',
     type: 'series',
     restriction: 'PG-13',
-    genres: ['Экшен', 'Приключения', 'Фантастика']
+    genres: ['Экшен', 'Приключения', 'Фантастика'],
+    time: {
+      count: 24,
+      duration: 25
+    }
   },
   {
     name: 'Dragon Ball',
@@ -97,7 +117,11 @@ const allItems = ref([
     status: 'looking',
     type: 'series',
     restriction: 'R-17',
-    genres: ['Экшен', 'Приключения', 'Фантастика']
+    genres: ['Экшен', 'Приключения', 'Фантастика'],
+    time: {
+      count: 25,
+      duration: 25
+    }
   },
   {
     name: 'Re:Zero',
@@ -105,42 +129,66 @@ const allItems = ref([
     status: 'viewed',
     type: 'movie',
     restriction: 'R-17',
-    genres: ['Экшен', 'Приключения', 'Фантастика']
+    genres: ['Экшен', 'Приключения', 'Фантастика'],
+    time: {
+      count: 24,
+      duration: 24
+    }
   },
   {
     name: 'Я встретил вашу маму и очень долго не мог ей ответить на призывы дружбы, и всё-таки это получилось',
     rating: 9,
     status: 'viewed',
     restriction: 'G',
-    genres: ['Драма', 'Комедия', 'Романтика']
+    genres: ['Драма', 'Комедия', 'Романтика'],
+    time: {
+      count: 12,
+      duration: 24
+    }
   },
   {
     name: 'Призрак в костюме',
     rating: 10,
     status: 'viewed',
     restriction: 'G',
-    genres: ['Экшен', 'Фантастика']
+    genres: ['Экшен', 'Фантастика'],
+    time: {
+      count: 12,
+      duration: 24
+    }
   },
   {
     name: 'Евангелион',
     rating: 10,
     status: 'viewed',
     restriction: 'R+',
-    genres: ['Меха', 'Приключения', 'Научная фантастика']
+    genres: ['Меха', 'Приключения', 'Научная фантастика'],
+    time: {
+      count: 24,
+      duration: 25
+    }
   },
   {
     name: 'Конец Евангелиона',
     rating: 4,
     status: 'viewed',
     restriction: 'R+',
-    genres: ['Меха', 'Приключения', 'Научная фантастика']
+    genres: ['Меха', 'Приключения', 'Научная фантастика'],
+    time: {
+      count: 1,
+      duration: 48
+    }
   },
   {
     name: 'Куколка',
     rating: 3,
     status: 'viewed',
     restriction: 'R+',
-    genres: ['Трагедия', 'Фантастика']
+    genres: ['Трагедия', 'Фантастика'],
+    time: {
+      count: 5,
+      duration: 7
+    }
   }
 ])
 
@@ -156,7 +204,6 @@ const restrictions = computed(() => Array.from(new Set(allItems.value.map(i => i
 const restrictionsLabels = computed(() =>
   ['G', 'PG', 'PG-13', 'R-17', 'R+'].filter(r => restrictions.value.includes(r)))
 const genres = computed(() => Array.from(new Set(allItems.value.map(i => i.genres).flat(1))))
-console.log(selectedGenres.value)
 
 const queriedItems = computed(() => {
   const searchFilter = allItems.value.filter(i => i.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
