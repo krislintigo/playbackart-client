@@ -2,35 +2,11 @@
   <el-header>
     <el-row justify="space-between">
       <h1>PlaybackArt</h1>
-      <el-tabs>
-        <el-tab-pane label="/">
+      <el-tabs v-model="active" @tab-click="tabClick">
+        <el-tab-pane v-for="tab in tabs" :key="tab.label" :name="tab.label">
           <template #label>
-            <el-icon><List /></el-icon>
-            Все
-          </template>
-        </el-tab-pane>
-        <el-tab-pane label="/films">
-          <template #label>
-            <el-icon><VideoCameraFilled /></el-icon>
-            Фильмы
-          </template>
-        </el-tab-pane>
-        <el-tab-pane label="/series">
-          <template #label>
-            <el-icon><Film /></el-icon>
-            Сериалы
-          </template>
-        </el-tab-pane>
-        <el-tab-pane label="/games">
-          <template #label>
-            <el-icon><Monitor /></el-icon>
-            Игры
-          </template>
-        </el-tab-pane>
-        <el-tab-pane label="/books">
-          <template #label>
-            <el-icon><Collection /></el-icon>
-            Книги
+            <el-icon><component :is="tab.icon"/></el-icon>
+            {{ tab.name }}
           </template>
         </el-tab-pane>
       </el-tabs>
@@ -39,8 +15,45 @@
 </template>
 
 <script setup>
-
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { List, Collection, Film, Monitor, VideoCameraFilled } from '@element-plus/icons-vue'
+
+const tabs = [
+  {
+    label: '/',
+    icon: List,
+    name: 'Все'
+  },
+  {
+    label: '/films',
+    icon: VideoCameraFilled,
+    name: 'Фильмы'
+  },
+  {
+    label: '/series',
+    icon: Film,
+    name: 'Сериалы'
+  },
+  {
+    label: '/games',
+    icon: Monitor,
+    name: 'Игры'
+  },
+  {
+    label: '/books',
+    icon: Collection,
+    name: 'Книги'
+  }
+]
+
+const router = useRouter()
+
+const active = ref('/')
+
+const tabClick = (tab) => {
+  router.push(tab.props.name)
+}
 </script>
 
 <style scoped>
