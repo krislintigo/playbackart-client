@@ -1,11 +1,27 @@
 <template>
   <h2>Список фильмов</h2>
-  <MainDisplayLayout :items="films" />
+  <el-row>
+    <el-col :span="18">
+      <el-input v-model="searchQuery" placeholder="Поиск по названию..." clearable />
+      <el-divider />
+      <MainDisplayLayout :items="queriedItems" />
+    </el-col>
+    <el-col :span="5" :push="1">
+      <AsideFilters
+        :items="films"
+        v-model:selected-grades="selectedGrades"
+        v-model:selected-restrictions="selectedRestrictions"
+        v-model:selected-genres="selectedGenres"
+      />
+    </el-col>
+  </el-row>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { useFilters } from '@/composables/filters'
 import MainDisplayLayout from '@/components/MainDisplayLayout'
+import AsideFilters from '@/components/AsideFilters'
 
 const films = ref([
   {
@@ -37,7 +53,7 @@ const films = ref([
     rating: 9,
     status: 'postponed',
     type: 'movie',
-    restriction: 'PG-13',
+    restriction: 'R-17',
     genres: ['Триллер', 'Боевик', 'Драма', 'Фантастика'],
     time: {
       count: 1,
@@ -45,6 +61,14 @@ const films = ref([
     }
   }
 ])
+
+const {
+  searchQuery,
+  selectedGrades,
+  selectedRestrictions,
+  selectedGenres,
+  queriedItems
+} = useFilters(films)
 </script>
 
 <style scoped>
