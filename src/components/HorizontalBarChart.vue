@@ -3,19 +3,31 @@
 </template>
 
 <script setup>
+import { computed, defineProps } from 'vue'
 import { BarChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
 Chart.register(...registerables)
 
-const simpleData = {
-  labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre'],
+const props = defineProps({
+  labels: {
+    type: Array,
+    required: true
+  },
+  data: {
+    type: Array,
+    required: true
+  }
+})
+
+const simpleData = computed(() => ({
+  labels: props.labels,
   datasets: [
     {
-      data: [30, 40, 60, 70, 5],
+      data: props.data,
       backgroundColor: ['#77CEFF']
     }
   ]
-}
+}))
 
 const options = {
   indexAxis: 'y',
@@ -39,9 +51,6 @@ const options = {
     y: {
       grid: {
         color: 'transparent'
-      },
-      ticks: {
-        maxTicksLimit: 7
       }
     }
   }
