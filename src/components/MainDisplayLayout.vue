@@ -4,13 +4,13 @@
   <el-collapse v-model="activeItems">
     <el-collapse-item v-for="(block, i) in displayedItems" :key="block.title" :name="i">
       <template #title>
-        <el-row class="test-row">
+        <el-row class="block-header">
           {{block.title}}
         </el-row>
       </template>
       <el-table :data="block.items">
         <el-table-column type="index" label="#" width="35" />
-        <el-table-column sortable prop="name" label="Название" width="1200" />
+        <el-table-column sortable prop="name" label="Название" width="750" />
         <el-table-column sortable prop="rating" label="Рейтинг" />
       </el-table>
     </el-collapse-item>
@@ -42,12 +42,12 @@ const displayedItems = computed(() => [
     items: lookingItems.value
   },
   {
-    title: 'ПРОСМОТРЕНО',
-    items: viewedItems.value
-  },
-  {
     title: 'ЗАПЛАНИРОВАНО',
     items: plannedItems.value
+  },
+  {
+    title: 'ПРОСМОТРЕНО',
+    items: viewedItems.value
   },
   {
     title: 'ОТЛОЖЕНО',
@@ -61,7 +61,7 @@ const displayedItems = computed(() => [
 </script>
 
 <style scoped>
-.test-row {
+.block-header {
   font-weight: 700;
   font-size: 16px;
 }
@@ -72,5 +72,13 @@ const displayedItems = computed(() => [
   padding: 0 20px;
   border-left: 5px solid black;
   border-bottom: 0;
+}
+
+.el-table {
+  --el-table-border-color: transparent;
+}
+
+.el-table .el-table__cell {
+  padding: 3px 0;
 }
 </style>

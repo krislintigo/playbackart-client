@@ -1,13 +1,13 @@
 <template>
   <h2>Список фильмов</h2>
-  <MainDisplayLayout :items="data" />
+  <MainDisplayLayout :items="films" />
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import MainDisplayLayout from '@/components/MainDisplayLayout'
 
-const data = ref([
+const films = ref([
   {
     name: 'Interstellar',
     rating: 10,

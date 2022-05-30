@@ -1,5 +1,5 @@
 <template>
-  <el-header>
+  <el-header style="padding: 0 30px">
     <el-row justify="space-between">
       <h1>PlaybackArt</h1>
       <el-tabs v-model="active" @tab-click="tabClick">
@@ -12,6 +12,7 @@
       </el-tabs>
     </el-row>
   </el-header>
+  <el-divider />
 </template>
 
 <script setup>
