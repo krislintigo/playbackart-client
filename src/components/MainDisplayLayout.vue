@@ -11,28 +11,11 @@
           <el-table-column type="index" label="#" width="40" />
           <el-table-column sortable prop="name" label="Название" width="750">
             <template #default="scope">
-              <el-popover placement="right" :width="400" trigger="hover" :show-after="500">
+              <el-popover placement="right" :width="420" trigger="hover" :show-after="500" :hide-after="100000">
                 <template #reference>
                   <el-link>{{ scope.row.name }}</el-link>
                 </template>
-                <el-row>
-                  <el-col :span="10">
-                    <el-image :src="scope.row.image" />
-                    <el-collapse>
-                      <el-collapse-item class="set-status">
-                        <template #title>
-                          <el-row>
-                            <h2>Статус</h2>
-                          </el-row>
-                        </template>
-                      </el-collapse-item>
-                    </el-collapse>
-                  </el-col>
-                  <el-col :span="13" :push="1">
-                    <h2>{{ scope.row.name }}</h2>
-                    <h3>Жанры:</h3>
-                  </el-col>
-                </el-row>
+                <ItemPreview :item="scope.row" />
               </el-popover>
             </template>
           </el-table-column>
@@ -56,6 +39,7 @@
 <script setup>
 import { computed, ref, defineProps } from 'vue'
 import formatDuration from '@/utils/formatDuration'
+import ItemPreview from '@/components/ItemPreview'
 
 const props = defineProps({
   items: {
@@ -111,13 +95,6 @@ const sortByDuration = (a, b) => {
   background: #e8ebef;
   padding: 0 20px;
   border-left: 5px solid black;
-  border-bottom: 0;
-}
-
-.set-status .el-collapse-item__header {
-  background: #95d475;
-  padding: 0 20px;
-  border-left: 5px solid gold;
   border-bottom: 0;
 }
 
