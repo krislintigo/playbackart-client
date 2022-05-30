@@ -8,7 +8,11 @@
       </template>
       <el-table :data="block.items">
         <el-table-column type="index" label="#" width="40" />
-        <el-table-column sortable prop="name" label="Название" width="750" />
+        <el-table-column sortable prop="name" label="Название" width="750">
+          <template #default="scope">
+            <el-link>{{ scope.row.name }}</el-link>
+          </template>
+        </el-table-column>
         <el-table-column sortable prop="rating" label="Рейтинг" />
       </el-table>
     </el-collapse-item>
