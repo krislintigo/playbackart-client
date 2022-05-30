@@ -4,7 +4,27 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/MainView.vue')
+    component: () => import('../views/AllView.vue')
+  },
+  {
+    path: '/films',
+    name: 'films',
+    component: () => import('../views/FilmsView.vue')
+  },
+  {
+    path: '/series',
+    name: 'series',
+    component: () => import('../views/SeriesView.vue')
+  },
+  {
+    path: '/games',
+    name: 'games',
+    component: () => import('../views/GamesView.vue')
+  },
+  {
+    path: '/books',
+    name: 'books',
+    component: () => import('../views/BooksView.vue')
   }
 ]
 
