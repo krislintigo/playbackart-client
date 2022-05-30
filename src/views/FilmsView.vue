@@ -11,17 +11,38 @@ const films = ref([
   {
     name: 'Interstellar',
     rating: 10,
-    status: 'viewed'
+    status: 'viewed',
+    type: 'movie',
+    restriction: 'PG-13',
+    genres: ['Драма', 'Приключения', 'Фантастика'],
+    time: {
+      count: 1,
+      duration: 169
+    }
   },
   {
     name: 'The Martian',
     rating: 8,
-    status: 'abandoned'
+    status: 'abandoned',
+    type: 'movie',
+    restriction: 'PG-13',
+    genres: ['Приключения', 'Фантастика'],
+    time: {
+      count: 1,
+      duration: 144
+    }
   },
   {
     name: 'District 9',
     rating: 9,
-    status: 'postponed'
+    status: 'postponed',
+    type: 'movie',
+    restriction: 'PG-13',
+    genres: ['Триллер', 'Боевик', 'Драма', 'Фантастика'],
+    time: {
+      count: 1,
+      duration: 112
+    }
   }
 ])
 </script>
