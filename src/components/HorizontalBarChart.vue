@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps } from 'vue'
+import { computed, defineProps, defineEmits } from 'vue'
 import { BarChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
 Chart.register(...registerables)
@@ -16,7 +16,15 @@ const props = defineProps({
   data: {
     type: Array,
     required: true
+  },
+  selected: {
+    type: Array,
+    required: true
   }
+})
+
+const emit = defineEmits({
+  click: null
 })
 
 const simpleData = computed(() => ({
@@ -24,13 +32,17 @@ const simpleData = computed(() => ({
   datasets: [
     {
       data: props.data,
-      backgroundColor: ['#77CEFF']
+      backgroundColor: props.labels.map(s => props.selected.includes(s) ? '#337ecc' : '#77CEFF')
     }
   ]
 }))
 
 const options = {
   indexAxis: 'y',
+  onClick: (e, arr) => {
+    if (!arr.length) return
+    emit('click', arr[0].index)
+  },
   plugins: {
     legend: {
       display: false

@@ -8,16 +8,20 @@
       <el-aside class="aside">
         <el-col>
           <h3 class="back-header">Оценки</h3>
-          <BarChart
+          <HorizontalBarChart
             :labels="grades"
             :data="grades.map(grade => allItems.filter(item => item.rating === grade).length)"
+            :selected="selectedGrades"
+            @click="gradeClick"
           />
         </el-col>
         <el-col>
           <h3 class="back-header">Возрастные ограничения</h3>
-          <BarChart
+          <HorizontalBarChart
             :labels="restrictionsLabels"
             :data="restrictionsLabels.map(r => allItems.filter(item => item.restriction === r).length)"
+            :selected="selectedRestrictions"
+            @click="restrictionClick"
           />
         </el-col>
       </el-aside>
@@ -28,7 +32,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import MainDisplayLayout from '@/components/MainDisplayLayout'
-import BarChart from '@/components/HorizontalBarChart'
+import HorizontalBarChart from '@/components/HorizontalBarChart'
 
 const allItems = ref([
   {
@@ -88,11 +92,32 @@ const allItems = ref([
   }
 ])
 
+const selectedGrades = ref([])
+const selectedRestrictions = ref([])
+
 const grades = computed(() =>
   Array.from(new Set(allItems.value.map(i => i.rating))).sort((a, b) => b - a))
 const restrictions = computed(() => Array.from(new Set(allItems.value.map(i => i.restriction))))
 const restrictionsLabels = computed(() =>
   ['G', 'PG', 'PG-13', 'R-17', 'R+'].filter(r => restrictions.value.includes(r)))
+
+const gradeClick = (gradeIndex) => {
+  const grade = grades.value[gradeIndex]
+  if (selectedGrades.value.includes(grade)) {
+    selectedGrades.value = selectedGrades.value.filter(g => g !== grade)
+  } else {
+    selectedGrades.value.push(grade)
+  }
+}
+
+const restrictionClick = (restrictionIndex) => {
+  const restriction = restrictionsLabels.value[restrictionIndex]
+  if (selectedRestrictions.value.includes(restriction)) {
+    selectedRestrictions.value = selectedRestrictions.value.filter(r => r !== restriction)
+  } else {
+    selectedRestrictions.value.push(restriction)
+  }
+}
 </script>
 
 <style scoped>
