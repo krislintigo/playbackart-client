@@ -2,7 +2,9 @@
   <h2>Полный список</h2>
   <el-row>
     <el-col :span="18">
-      <MainDisplayLayout :items="allItems" />
+      <el-input v-model="searchQuery" placeholder="Поиск по названию..." />
+      <el-divider />
+      <MainDisplayLayout :items="queriedItems" />
     </el-col>
     <el-col :span="5" :push="1">
       <el-aside class="aside">
@@ -23,6 +25,9 @@
             :selected="selectedRestrictions"
             @click="restrictionClick"
           />
+        </el-col>
+        <el-col>
+          <h3 class="back-header">Жанры</h3>
         </el-col>
       </el-aside>
     </el-col>
@@ -116,6 +121,8 @@ const allItems = ref([
   }
 ])
 
+// FILTERS
+const searchQuery = ref('')
 const selectedGrades = ref([])
 const selectedRestrictions = ref([])
 
@@ -124,6 +131,16 @@ const grades = computed(() =>
 const restrictions = computed(() => Array.from(new Set(allItems.value.map(i => i.restriction))))
 const restrictionsLabels = computed(() =>
   ['G', 'PG', 'PG-13', 'R-17', 'R+'].filter(r => restrictions.value.includes(r)))
+
+const queriedItems = computed(() => {
+  const searchFilter = allItems.value.filter(i => i.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
+  const gradeFilter = selectedGrades.value.length
+    ? searchFilter.filter(i => selectedGrades.value.includes(i.rating))
+    : searchFilter
+  return selectedRestrictions.value.length
+    ? gradeFilter.filter(i => selectedRestrictions.value.includes(i.restriction))
+    : gradeFilter
+})
 
 const gradeClick = (gradeIndex) => {
   const grade = grades.value[gradeIndex]

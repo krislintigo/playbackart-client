@@ -1,6 +1,4 @@
 <template>
-  <el-input v-model="searchQuery" placeholder="Поиск по названию..." />
-  <el-divider />
   <el-collapse v-model="activeItems">
     <el-collapse-item v-for="(block, i) in displayedItems" :key="block.title" :name="i">
       <template #title>
@@ -28,7 +26,6 @@ const props = defineProps({
 })
 
 const activeItems = ref([0, 1, 2, 3, 4])
-const searchQuery = ref('')
 
 const lookingItems = computed(() => props.items.filter(item => item.status === 'looking'))
 const plannedItems = computed(() => props.items.filter(item => item.status === 'planned'))
