@@ -2,7 +2,7 @@
   <h2>Полный список</h2>
   <el-row>
     <el-col :span="18">
-      <el-input v-model="searchQuery" placeholder="Поиск по названию..." />
+      <el-input v-model="searchQuery" placeholder="Поиск по названию..." clearable />
       <el-divider />
       <MainDisplayLayout :items="queriedItems" />
     </el-col>
@@ -31,9 +31,10 @@
           <el-row>
             <el-link
               class="genre-item"
-              :class="{[genClasses()]: true}"
+              :class="{[getGenreTextClass(genre)]: true, 'genre-selected': selectedGenres.includes(genre)}"
               v-for="genre in genres"
               :key="genre"
+              @click="genreClick(genre)"
             >
               {{genre}}
             </el-link>
@@ -162,9 +163,12 @@ const queriedItems = computed(() => {
   const gradeFilter = selectedGrades.value.length
     ? searchFilter.filter(i => selectedGrades.value.includes(i.rating))
     : searchFilter
-  return selectedRestrictions.value.length
+  const restrictionFilter = selectedRestrictions.value.length
     ? gradeFilter.filter(i => selectedRestrictions.value.includes(i.restriction))
     : gradeFilter
+  return selectedGenres.value.length
+    ? restrictionFilter.filter(i => selectedGenres.value.some(g => i.genres.includes(g)))
+    : restrictionFilter
 })
 
 const gradeClick = (gradeIndex) => {
@@ -185,8 +189,29 @@ const restrictionClick = (restrictionIndex) => {
   }
 }
 
-const genClasses = (genre) => {
-  return `text${Math.round(Math.random() * 4)}`
+const genreClick = (genre) => {
+  if (selectedGenres.value.includes(genre)) {
+    selectedGenres.value = selectedGenres.value.filter(g => g !== genre)
+  } else {
+    selectedGenres.value.push(genre)
+  }
+}
+
+const getGenreTextClass = (genre) => {
+  const percentage = allItems.value.filter(i => i.genres.includes(genre)).length / allItems.value.length * 100
+  // fix this later to be more good
+  switch (true) {
+    case percentage > 50:
+      return 'text4'
+    case percentage > 35:
+      return 'text3'
+    case percentage > 20:
+      return 'text2'
+    case percentage > 10:
+      return 'text1'
+    default:
+      return 'text0'
+  }
 }
 </script>
 
@@ -209,6 +234,10 @@ const genClasses = (genre) => {
 
 .genre-item {
   margin: 4px 8px;
+}
+
+.genre-selected {
+  color: #409eff;
 }
 
 .text0 {
