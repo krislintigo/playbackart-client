@@ -1,31 +1,33 @@
 <template>
   <el-collapse v-model="activeItems">
-    <el-collapse-item v-for="(block, i) in displayedItems" :key="block.title" :name="i">
-      <template #title>
-        <el-row class="block-header">
-          <h2 style="font-size: 18px">{{block.title}}</h2>
-        </el-row>
-      </template>
-      <el-table :data="block.items">
-        <el-table-column type="index" label="#" width="40" />
-        <el-table-column sortable prop="name" label="Название" width="750">
-          <template #default="scope">
-            <el-link>{{ scope.row.name }}</el-link>
-          </template>
-        </el-table-column>
-        <el-table-column sortable prop="rating" label="Рейтинг" />
-        <el-table-column sortable prop="time" label="Длительность" :sort-method="sortByDuration">
-          <template #default="scope">
-            <span v-if="scope.row.time.count > 1">{{ scope.row.time.count }} x </span>
-            <span>{{formatDuration(scope.row.time.duration)}}</span>
-          </template>
-        </el-table-column>
-      </el-table>
-      <h4 style="margin: 5px 0">
-        Общая продолжительность:
-        {{formatDuration(block.items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0))}}
-      </h4>
-    </el-collapse-item>
+    <div v-for="(block, i) in displayedItems" :key="block.title">
+      <el-collapse-item v-if="block.items.length" :name="i">
+        <template #title>
+          <el-row class="block-header">
+            <h2 style="font-size: 18px">{{block.title}}</h2>
+          </el-row>
+        </template>
+        <el-table :data="block.items">
+          <el-table-column type="index" label="#" width="40" />
+          <el-table-column sortable prop="name" label="Название" width="750">
+            <template #default="scope">
+              <el-link>{{ scope.row.name }}</el-link>
+            </template>
+          </el-table-column>
+          <el-table-column sortable prop="rating" label="Рейтинг" width="150" />
+          <el-table-column sortable prop="time" label="Длительность" :sort-method="sortByDuration">
+            <template #default="scope">
+              <span v-if="scope.row.time.count > 1">{{ scope.row.time.count }} x </span>
+              <span>{{formatDuration(scope.row.time.duration)}}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+        <h4 style="margin: 5px 0">
+          Общая продолжительность:
+          {{formatDuration(block.items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0))}}
+        </h4>
+      </el-collapse-item>
+    </div>
   </el-collapse>
 </template>
 
