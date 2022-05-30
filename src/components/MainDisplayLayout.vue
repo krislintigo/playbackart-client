@@ -3,7 +3,7 @@
     <el-collapse-item v-for="(block, i) in displayedItems" :key="block.title" :name="i">
       <template #title>
         <el-row class="block-header">
-          {{block.title}}
+          <h2 style="font-size: 18px">{{block.title}}</h2>
         </el-row>
       </template>
       <el-table :data="block.items">

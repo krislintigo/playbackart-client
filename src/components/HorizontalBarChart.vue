@@ -32,7 +32,7 @@ const simpleData = computed(() => ({
   datasets: [
     {
       data: props.data,
-      backgroundColor: props.labels.map(s => props.selected.includes(s) ? '#337ecc' : '#77CEFF')
+      backgroundColor: props.labels.map(s => props.selected.includes(s) ? '#004cc7' : '#609eff')
     }
   ]
 }))

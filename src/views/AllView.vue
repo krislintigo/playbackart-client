@@ -28,6 +28,16 @@
         </el-col>
         <el-col>
           <h3 class="back-header">Жанры</h3>
+          <el-row>
+            <el-link
+              class="genre-item"
+              :class="{[genClasses()]: true}"
+              v-for="genre in genres"
+              :key="genre"
+            >
+              {{genre}}
+            </el-link>
+          </el-row>
         </el-col>
       </el-aside>
     </el-col>
@@ -45,79 +55,91 @@ const allItems = ref([
     rating: 10,
     status: 'viewed',
     type: 'series',
-    restriction: 'R+'
+    restriction: 'R+',
+    genres: ['Экшен', 'Триллер', 'Военное']
   },
   {
     name: 'Fairy Tail',
     rating: 10,
     status: 'postponed',
     type: 'series',
-    restriction: 'R-17'
+    restriction: 'R-17',
+    genres: ['Экшен', 'Психологическое', 'Фантастика']
   },
   {
     name: 'One Piece',
     rating: 6,
     status: 'planned',
     type: 'series',
-    restriction: 'R-17'
+    restriction: 'R-17',
+    genres: ['Экшен', 'Приключения', 'Фантастика']
   },
   {
     name: 'Naruto',
     rating: 6,
     status: 'looking',
     type: 'series',
-    restriction: 'PG-13'
+    restriction: 'PG-13',
+    genres: ['Экшен', 'Приключения', 'Фантастика']
   },
   {
     name: 'Bleach',
     rating: 9,
     status: 'abandoned',
     type: 'series',
-    restriction: 'PG-13'
+    restriction: 'PG-13',
+    genres: ['Экшен', 'Приключения', 'Фантастика']
   },
   {
     name: 'Dragon Ball',
     rating: 6,
     status: 'looking',
     type: 'series',
-    restriction: 'R-17'
+    restriction: 'R-17',
+    genres: ['Экшен', 'Приключения', 'Фантастика']
   },
   {
     name: 'Re:Zero',
     rating: 10,
     status: 'viewed',
     type: 'movie',
-    restriction: 'R-17'
+    restriction: 'R-17',
+    genres: ['Экшен', 'Приключения', 'Фантастика']
   },
   {
     name: 'Я встретил вашу маму и очень долго не мог ей ответить на призывы дружбы, и всё-таки это получилось',
     rating: 9,
     status: 'viewed',
-    restriction: 'G'
+    restriction: 'G',
+    genres: ['Драма', 'Комедия', 'Романтика']
   },
   {
     name: 'Призрак в костюме',
     rating: 10,
     status: 'viewed',
-    restriction: 'G'
+    restriction: 'G',
+    genres: ['Экшен', 'Фантастика']
   },
   {
     name: 'Евангелион',
     rating: 10,
     status: 'viewed',
-    restriction: 'R+'
+    restriction: 'R+',
+    genres: ['Меха', 'Приключения', 'Научная фантастика']
   },
   {
     name: 'Конец Евангелиона',
     rating: 4,
     status: 'viewed',
-    restriction: 'R+'
+    restriction: 'R+',
+    genres: ['Меха', 'Приключения', 'Научная фантастика']
   },
   {
     name: 'Куколка',
     rating: 3,
     status: 'viewed',
-    restriction: 'R+'
+    restriction: 'R+',
+    genres: ['Трагедия', 'Фантастика']
   }
 ])
 
@@ -125,12 +147,15 @@ const allItems = ref([
 const searchQuery = ref('')
 const selectedGrades = ref([])
 const selectedRestrictions = ref([])
+const selectedGenres = ref([])
 
 const grades = computed(() =>
   Array.from(new Set(allItems.value.map(i => i.rating))).sort((a, b) => b - a))
 const restrictions = computed(() => Array.from(new Set(allItems.value.map(i => i.restriction))))
 const restrictionsLabels = computed(() =>
   ['G', 'PG', 'PG-13', 'R-17', 'R+'].filter(r => restrictions.value.includes(r)))
+const genres = computed(() => Array.from(new Set(allItems.value.map(i => i.genres).flat(1))))
+console.log(selectedGenres.value)
 
 const queriedItems = computed(() => {
   const searchFilter = allItems.value.filter(i => i.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
@@ -159,6 +184,10 @@ const restrictionClick = (restrictionIndex) => {
     selectedRestrictions.value.push(restriction)
   }
 }
+
+const genClasses = (genre) => {
+  return `text${Math.round(Math.random() * 4)}`
+}
 </script>
 
 <style scoped>
@@ -174,5 +203,29 @@ const restrictionClick = (restrictionIndex) => {
   margin-top: 0;
   margin-bottom: 10px;
   border-left: 5px solid black;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.genre-item {
+  margin: 4px 8px;
+}
+
+.text0 {
+  font-size: 10px;
+}
+.text1 {
+  font-size: 12px;
+}
+.text2 {
+  font-size: 13px;
+}
+.text3 {
+  font-size: 14px;
+  font-weight: bold;
+}
+.text4 {
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>
