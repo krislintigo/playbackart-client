@@ -20,7 +20,7 @@
             align="middle"
             :class="status.value"
           >
-            <el-button text :icon="status.icon" :class="status.value" style="font-size: large">
+            <el-button text :icon="status.icon" :style="{fontSize: 'large', color: status.color}">
               <h3 class="set-status-button-text">{{status.title}}</h3>
             </el-button>
           </el-row>
@@ -45,80 +45,39 @@ const statuses = [
   {
     title: 'Смотрю',
     icon: VideoPlay,
-    value: 'looking'
+    value: 'looking',
+    color: '#79bbff'
   },
   {
     title: 'Запланировано',
     icon: Plus,
-    value: 'planned'
+    value: 'planned',
+    color: '#f7b954'
   },
   {
     title: 'Просмотрено',
     icon: Select,
-    value: 'viewed'
+    value: 'viewed',
+    color: '#95d475'
   },
   {
     title: 'Отложено',
     icon: VideoPause,
-    value: 'postponed'
+    value: 'postponed',
+    color: '#b1b3b8'
   },
   {
     title: 'Брошено',
     icon: CloseBold,
-    value: 'abandoned'
+    value: 'abandoned',
+    color: '#f56c6c'
   }
 ]
-
-// const getStatusText = (status) => {
-//   switch (status) {
-//     case 'looking':
-//       return 'Смотрю'
-//     case 'planned':
-//       return 'Запланировано'
-//     case 'viewed':
-//       return 'Просмотрено'
-//     case 'postponed':
-//       return 'Отложено'
-//     case 'abandoned':
-//       return 'Брошено'
-//   }
-// }
-
-// const getStatusIcon = (status) => {
-//   switch (status) {
-//     case 'looking':
-//       return VideoPlay
-//     case 'planned':
-//       return Plus
-//     case 'viewed':
-//       return Select
-//     case 'postponed':
-//       return VideoPause
-//     case 'abandoned':
-//       return CloseBold
-//   }
-// }
 </script>
 
 <style scoped>
 .set-status-button-text {
   font-size: 16px;
-}
-
-.looking {
-  color: #79bbff;
-}
-.planned {
-  color: #f7b954;
-}
-.viewed {
-  color: #95d475;
-}
-.postponed {
-  color: #b1b3b8;
-}
-.abandoned {
-  color: #f56c6c;
 }
 </style>
 <style>
