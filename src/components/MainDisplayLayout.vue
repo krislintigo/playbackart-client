@@ -1,9 +1,9 @@
 <template>
   <el-collapse v-model="activeItems">
     <div v-for="(block, i) in displayedItems" :key="block.title">
-      <el-collapse-item v-if="block.items.length" :name="i">
+      <el-collapse-item v-if="block.items.length" :name="i" class="block-header">
         <template #title>
-          <el-row class="block-header">
+          <el-row>
             <h2 style="font-size: 18px">{{block.title}}</h2>
           </el-row>
         </template>
@@ -11,11 +11,28 @@
           <el-table-column type="index" label="#" width="40" />
           <el-table-column sortable prop="name" label="Название" width="750">
             <template #default="scope">
-              <el-popover placement="right" :width="300" trigger="hover" :show-after="500">
+              <el-popover placement="right" :width="400" trigger="hover" :show-after="500">
                 <template #reference>
                   <el-link>{{ scope.row.name }}</el-link>
                 </template>
-                <h2>{{ scope.row.name }}</h2>
+                <el-row>
+                  <el-col :span="10">
+                    <el-image :src="scope.row.image" />
+                    <el-collapse>
+                      <el-collapse-item class="set-status">
+                        <template #title>
+                          <el-row>
+                            <h2>Статус</h2>
+                          </el-row>
+                        </template>
+                      </el-collapse-item>
+                    </el-collapse>
+                  </el-col>
+                  <el-col :span="13" :push="1">
+                    <h2>{{ scope.row.name }}</h2>
+                    <h3>Жанры:</h3>
+                  </el-col>
+                </el-row>
               </el-popover>
             </template>
           </el-table-column>
@@ -87,16 +104,20 @@ const sortByDuration = (a, b) => {
 </script>
 
 <style scoped>
-.block-header {
-  font-weight: 700;
-  font-size: 16px;
-}
+
 </style>
 <style>
-.el-collapse-item__header {
+.block-header .el-collapse-item__header {
   background: #e8ebef;
   padding: 0 20px;
   border-left: 5px solid black;
+  border-bottom: 0;
+}
+
+.set-status .el-collapse-item__header {
+  background: #95d475;
+  padding: 0 20px;
+  border-left: 5px solid gold;
   border-bottom: 0;
 }
 

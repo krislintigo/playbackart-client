@@ -26,6 +26,7 @@ import AsideFilters from '@/components/AsideFilters'
 const films = ref([
   {
     name: 'Interstellar',
+    image: 'https://image.tmdb.org/t/p/original/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg',
     rating: 10,
     status: 'viewed',
     type: 'movie',
@@ -38,6 +39,7 @@ const films = ref([
   },
   {
     name: 'The Martian',
+    image: 'https://www.1c-interes.ru/images/2020/03/29387162_Marsianin_DVD.jpg',
     rating: 8,
     status: 'abandoned',
     type: 'movie',
@@ -50,6 +52,7 @@ const films = ref([
   },
   {
     name: 'District 9',
+    image: 'https://picfiles.alphacoders.com/147/147334.jpg',
     rating: 9,
     status: 'postponed',
     type: 'movie',

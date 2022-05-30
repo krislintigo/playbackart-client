@@ -26,6 +26,7 @@ import AsideFilters from '@/components/AsideFilters'
 const allItems = ref([
   {
     name: 'Attack on Titan',
+    image: 'https://static.zerochan.net/104th.Trainees.Squad.full.1779661.jpg',
     rating: 10,
     status: 'viewed',
     type: 'series',
