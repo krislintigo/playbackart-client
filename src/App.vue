@@ -6,6 +6,10 @@
 </template>
 
 <style>
+html {
+  overflow-y: scroll;
+}
+
 body, input, button, textarea, select {
   box-sizing: border-box;
   font-family: Avenir, Helvetica, Arial, sans-serif;
