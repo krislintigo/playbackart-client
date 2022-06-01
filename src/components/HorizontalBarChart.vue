@@ -1,5 +1,9 @@
 <template>
-  <BarChart :chart-data="simpleData" :options="options" />
+  <BarChart
+    :chart-data="simpleData"
+    :options="options"
+    :styles="chartStyles"
+  />
 </template>
 
 <script setup>
@@ -23,11 +27,14 @@ const props = defineProps({
   }
 })
 
-console.log(props)
-
 const emit = defineEmits({
   click: null
 })
+
+const chartStyles = computed(() => ({
+  height: props.labels.length > 5 ? 60 * props.labels.length : 300 + 'px',
+  position: 'relative'
+}))
 
 const simpleData = computed(() => ({
   labels: props.labels,
@@ -41,6 +48,7 @@ const simpleData = computed(() => ({
 
 const options = {
   indexAxis: 'y',
+  responsive: true,
   onClick: (e, arr) => {
     if (!arr.length) return
     emit('click', arr[0].index)
