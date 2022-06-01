@@ -1,6 +1,6 @@
 <template>
   <el-header style="padding: 0 30px">
-    <el-row justify="space-between">
+    <el-row justify="space-between" align="middle">
       <h1>PlaybackArt</h1>
       <div class="right-container">
         <el-tabs v-model="active" @tab-click="tabClick">

@@ -4,21 +4,28 @@
       <el-avatar :size="50" :icon="Avatar" />
     </template>
     <h2>Профиль</h2>
-    <h3 v-if="store.state.user.login">Добро пожаловать, {{store.state.user.login}}!</h3>
-    <h3 v-else>Войдите в аккаунт!</h3>
-    <el-form v-model="inputInfo" label-position="right" :label-width="65">
-      <el-form-item label="Логин">
-        <el-input v-model="inputInfo.login" />
-      </el-form-item>
-      <el-form-item label="Пароль">
-        <el-input v-model="inputInfo.password" type="password" show-password />
-      </el-form-item>
+    <div v-if="store.state.user.login">
+      <h3 >Добро пожаловать, {{store.state.user.login}}!</h3>
       <el-row justify="end">
-        <el-button type="success" @click="login">Sign in</el-button>
-        <el-button type="warning" @click="registration">Sign up</el-button>
-        <el-button type="danger" @click="logout">Logout</el-button>
+        <el-button type="danger" @click="logout">Выход</el-button>
       </el-row>
-    </el-form>
+    </div>
+    <div v-else>
+      <h3>Войдите в аккаунт!</h3>
+      <el-form v-model="inputInfo" label-position="right" :label-width="65">
+        <el-form-item label="Логин">
+          <el-input v-model="inputInfo.login" />
+        </el-form-item>
+        <el-form-item label="Пароль">
+          <el-input v-model="inputInfo.password" type="password" show-password />
+        </el-form-item>
+        <el-row justify="end">
+          <el-button type="success" @click="login">Вход</el-button>
+          <el-button type="warning" @click="registration">Регистрация</el-button>
+        </el-row>
+      </el-form>
+    </div>
+
   </el-popover>
 </template>
 
