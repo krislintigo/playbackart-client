@@ -29,6 +29,7 @@ import { Avatar } from '@element-plus/icons-vue'
 import { AuthAPI } from '@/api/AuthAPI'
 import { userNames } from '@/store/modules/user'
 import { ElMessage } from 'element-plus'
+import { UserAPI } from '@/api/UserAPI'
 
 const store = useStore()
 
@@ -39,11 +40,11 @@ const inputInfo = reactive({
 
 onBeforeMount(async () => {
   try {
-    const response = await AuthAPI.validate()
-    console.log(response)
-    store.commit(userNames.setUser, response.data)
+    const validateResponse = await AuthAPI.validate()
+    const userResponse = await UserAPI.getOneShort(validateResponse.data.id)
+    store.commit(userNames.setUser, userResponse.data)
   } catch (e) {
-    ElMessage.error(e.response.data.message)
+    console.error('Invalid token')
   }
 })
 
