@@ -31,7 +31,7 @@ const tabs = [
     name: 'Все'
   },
   {
-    label: '/films',
+    label: '/movies',
     icon: VideoCameraFilled,
     name: 'Фильмы'
   },
