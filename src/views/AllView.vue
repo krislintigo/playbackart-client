@@ -1,9 +1,9 @@
 <template>
   <h2>Полный список</h2>
-  <el-row v-if="!allItems.length && !loading">
+  <el-row v-if="!store.state.user._id">
     <h2>Войдите, чтобы продолжить!</h2>
   </el-row>
-  <el-row v-if="allItems.length" v-loading="loading">
+  <el-row v-else v-loading="loading">
     <el-col :span="18">
       <el-input v-model="searchQuery" placeholder="Поиск по названию..." clearable />
       <el-divider />
@@ -187,8 +187,10 @@ const getItems = async () => {
   console.log('user id changed or mounted', store.state.user._id)
   if (!store.state.user._id) {
     allItems.value = []
+    loading.value = false
     return
   }
+  console.log('get items')
   loading.value = true
   try {
     const response = await ItemsAPI.getAll()
