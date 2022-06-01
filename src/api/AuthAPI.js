@@ -8,17 +8,17 @@ const endpoints = {
 }
 
 export class AuthAPI {
-  static async register (email, password) {
+  static async register (login, password) {
     const response = await authClient.post(endpoints.register, {
-      email,
+      login,
       password
     })
     return response.data
   }
 
-  static async login (email, password) {
+  static async login (login, password) {
     const response = await authClient.post(endpoints.login, {
-      email,
+      login,
       password
     })
     return response.data

@@ -2,14 +2,17 @@
   <el-header style="padding: 0 30px">
     <el-row justify="space-between">
       <h1>PlaybackArt</h1>
-      <el-tabs v-model="active" @tab-click="tabClick">
-        <el-tab-pane v-for="tab in tabs" :key="tab.label" :name="tab.label">
-          <template #label>
-            <el-icon><component :is="tab.icon"/></el-icon>
-            {{ tab.name }}
-          </template>
-        </el-tab-pane>
-      </el-tabs>
+      <div class="right-container">
+        <el-tabs v-model="active" @tab-click="tabClick">
+          <el-tab-pane v-for="tab in tabs" :key="tab.label" :name="tab.label">
+            <template #label>
+              <el-icon><component :is="tab.icon"/></el-icon>
+              {{ tab.name }}
+            </template>
+          </el-tab-pane>
+        </el-tabs>
+        <ProfileController />
+      </div>
     </el-row>
   </el-header>
   <el-divider />
@@ -19,6 +22,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { List, Collection, Film, Monitor, VideoCameraFilled } from '@element-plus/icons-vue'
+import ProfileController from '@/components/ProfileController'
 
 const tabs = [
   {
@@ -58,5 +62,8 @@ const tabClick = (tab) => {
 </script>
 
 <style scoped>
-
+.right-container {
+  display: flex;
+  column-gap: 30px;
+}
 </style>
