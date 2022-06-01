@@ -1,9 +1,11 @@
 <template>
   <h2>Список фильмов</h2>
-  <el-row>
+  <el-row v-if="!store.state.user._id">
+    <h2>Войдите, чтобы продолжить!</h2>
+  </el-row>
+  <el-row v-else v-loading="loading">
     <el-col :span="18">
-      <el-input v-model="searchQuery" placeholder="Поиск по названию..." clearable />
-      <el-divider />
+      <SearchInput v-model="searchQuery" />
       <MainDisplayLayout :items="queriedItems" />
     </el-col>
     <el-col :span="5" :push="1">
@@ -18,52 +20,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
+import { useStore } from 'vuex'
 import { useFilters } from '@/composables/filters'
 import MainDisplayLayout from '@/components/MainDisplayLayout'
 import AsideFilters from '@/components/AsideFilters'
+import { ItemsAPI } from '@/api/ItemsAPI'
+import { ElMessage } from 'element-plus'
+import SearchInput from '@/components/SearchInput'
 
-const films = ref([
-  {
-    name: 'Interstellar',
-    image: 'https://image.tmdb.org/t/p/original/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg',
-    rating: 10,
-    status: 'viewed',
-    type: 'movie',
-    restriction: 'PG-13',
-    genres: ['Драма', 'Приключения', 'Фантастика'],
-    time: {
-      count: 1,
-      duration: 169
-    }
-  },
-  {
-    name: 'The Martian',
-    image: 'https://www.1c-interes.ru/images/2020/03/29387162_Marsianin_DVD.jpg',
-    rating: 8,
-    status: 'abandoned',
-    type: 'movie',
-    restriction: 'PG-13',
-    genres: ['Приключения', 'Фантастика'],
-    time: {
-      count: 1,
-      duration: 144
-    }
-  },
-  {
-    name: 'District 9',
-    image: 'https://picfiles.alphacoders.com/147/147334.jpg',
-    rating: 9,
-    status: 'postponed',
-    type: 'movie',
-    restriction: 'R-17',
-    genres: ['Триллер', 'Боевик', 'Драма', 'Фантастика'],
-    time: {
-      count: 1,
-      duration: 112
-    }
-  }
-])
+const store = useStore()
+
+const loading = ref(true)
+const films = ref([])
 
 const {
   searchQuery,
@@ -72,6 +41,26 @@ const {
   selectedGenres,
   queriedItems
 } = useFilters(films)
+
+const getItems = async () => {
+  if (!store.state.user._id) {
+    films.value = []
+    loading.value = false
+    return
+  }
+  loading.value = true
+  try {
+    const response = await ItemsAPI.getByType('movie')
+    films.value = response.data
+  } catch (e) {
+    ElMessage.error(e.response.data.message)
+  }
+  loading.value = false
+}
+
+onBeforeMount(getItems)
+
+watch(() => store.state.user._id, getItems)
 </script>
 
 <style scoped>

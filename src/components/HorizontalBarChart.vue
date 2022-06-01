@@ -41,7 +41,8 @@ const simpleData = computed(() => ({
   datasets: [
     {
       data: props.data,
-      backgroundColor: props.labels.map(s => props.selected.includes(s) ? '#004cc7' : '#609eff')
+      backgroundColor: props.labels.map(s => props.selected.includes(s) ? '#004cc7' : '#609eff'),
+      maxBarThickness: 40
     }
   ]
 }))

@@ -5,8 +5,7 @@
   </el-row>
   <el-row v-else v-loading="loading">
     <el-col :span="18">
-      <el-input v-model="searchQuery" placeholder="Поиск по названию..." clearable />
-      <el-divider />
+      <SearchInput v-model="searchQuery" />
       <MainDisplayLayout :items="queriedItems" />
     </el-col>
     <el-col :span="5" :push="1">
@@ -28,6 +27,7 @@ import MainDisplayLayout from '@/components/MainDisplayLayout'
 import AsideFilters from '@/components/AsideFilters'
 import { ItemsAPI } from '@/api/ItemsAPI'
 import { ElMessage } from 'element-plus'
+import SearchInput from '@/components/SearchInput'
 
 const store = useStore()
 
