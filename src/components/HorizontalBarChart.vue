@@ -1,5 +1,5 @@
 <template>
-  <BarChart :chart-data="simpleData" :options="options" :height="labels.length > 5 ? 60 * labels.length : 300" />
+  <BarChart :chart-data="simpleData" :options="options" />
 </template>
 
 <script setup>
@@ -22,6 +22,8 @@ const props = defineProps({
     required: true
   }
 })
+
+console.log(props)
 
 const emit = defineEmits({
   click: null
@@ -70,5 +72,7 @@ const options = {
 </script>
 
 <style scoped>
-
+canvas {
+  display: flex;
+}
 </style>
