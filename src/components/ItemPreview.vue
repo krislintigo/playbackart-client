@@ -32,7 +32,7 @@
 
 <script setup>
 import { defineProps } from 'vue'
-import { VideoPlay, VideoPause, Plus, Select, CloseBold } from '@element-plus/icons-vue'
+import statuses from '@/data/statuses'
 
 defineProps({
   item: {
@@ -40,39 +40,6 @@ defineProps({
     required: true
   }
 })
-
-const statuses = [
-  {
-    title: 'Смотрю',
-    icon: VideoPlay,
-    value: 'looking',
-    color: '#79bbff'
-  },
-  {
-    title: 'Запланировано',
-    icon: Plus,
-    value: 'planned',
-    color: '#f7b954'
-  },
-  {
-    title: 'Просмотрено',
-    icon: Select,
-    value: 'viewed',
-    color: '#95d475'
-  },
-  {
-    title: 'Отложено',
-    icon: VideoPause,
-    value: 'postponed',
-    color: '#b1b3b8'
-  },
-  {
-    title: 'Брошено',
-    icon: CloseBold,
-    value: 'abandoned',
-    color: '#f56c6c'
-  }
-]
 </script>
 
 <style scoped>
