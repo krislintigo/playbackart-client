@@ -3,17 +3,18 @@
     <template #header>
       <h3>Добавить элемент</h3>
     </template>
-    <el-form v-model="item" label-position="right" :label-width="100">
+    <el-form v-model="item" label-position="right" :label-width="110">
       <el-form-item label="Название:" prop="name">
         <el-input v-model="item.name" />
       </el-form-item>
       <el-form-item label="Фото:" prop="image">
         <el-input v-model="item.image" />
       </el-form-item>
-      <el-form-item label="Рейтинг:">
+      <el-form-item label="Рейтинг:" prop="rating">
         <el-rate v-model="item.rating" :max="10" show-text :texts="rating.texts" :colors="rating.colors" />
+        <el-button style="margin-left: 5px;" :icon="Close" size="small" circle text @click="item.rating = 0" />
       </el-form-item>
-      <el-form-item label="Статус:">
+      <el-form-item label="Статус:" prop="status">
         <el-radio-group v-model="item.status">
           <el-radio-button
             v-for="status in statuses"
@@ -24,6 +25,29 @@
             {{status.title}}
           </el-radio-button>
         </el-radio-group>
+        <el-button style="margin-left: 5px;" :icon="Close" size="small" circle text @click="item.status = ''" />
+      </el-form-item>
+      <el-form-item label="Тип:" prop="type">
+        <el-radio-group v-model="item.type">
+          <el-radio-button
+            v-for="type in types"
+            :key="type.value"
+            :label="type.value"
+          >
+            {{type.title}}
+          </el-radio-button>
+        </el-radio-group>
+        <el-button style="margin-left: 5px;" :icon="Close" size="small" circle text @click="item.type = ''" />
+      </el-form-item>
+      <el-form-item label="Ограничение:" prop="restriction">
+        <el-radio-group v-model="item.restriction">
+          <el-radio-button
+            v-for="restriction in restrictions"
+            :key="restriction"
+            :label="restriction"
+           />
+        </el-radio-group>
+        <el-button style="margin-left: 5px;" :icon="Close" size="small" circle text @click="item.restriction = ''" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -34,6 +58,7 @@
 
 <script setup>
 import { defineProps, defineEmits, computed, reactive } from 'vue'
+import { Close } from '@element-plus/icons-vue'
 import statuses from '@/data/statuses'
 
 const rating = {
@@ -52,6 +77,25 @@ const rating = {
     10: '#67c23a'
   }
 }
+const types = [
+  {
+    value: 'movie',
+    title: 'Фильм'
+  },
+  {
+    value: 'series',
+    title: 'Сериал'
+  },
+  {
+    value: 'game',
+    title: 'Игра'
+  },
+  {
+    value: 'book',
+    title: 'Книга'
+  }
+]
+const restrictions = ['G', 'PG', 'PG-13', 'R-17', 'R+']
 
 const props = defineProps({
   modelValue: {
