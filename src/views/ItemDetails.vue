@@ -1,10 +1,13 @@
 <template>
-  <el-row>
-    <el-col :span="10">
+  <el-row v-if="!store.state.user._id">
+    <h2>Войдите, чтобы продолжить!</h2>
+  </el-row>
+  <el-row v-else-if="item.id">
+    <el-col :span="5">
       <el-image :src="item.image">
         <template #error>
           <el-row class="image-placeholder">
-            <el-icon :size="175"><picture-rounded /></el-icon>
+            <el-icon :size="400"><picture-rounded /></el-icon>-
           </el-row>
         </template>
       </el-image>
@@ -63,85 +66,42 @@
 </template>
 
 <script setup>
-import { defineProps, inject } from 'vue'
-import { ElNotification } from 'element-plus'
+import { ref, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
+import { ItemsAPI } from '@/api/ItemsAPI'
 import { PictureRounded } from '@element-plus/icons-vue'
+import { ElNotification } from 'element-plus'
+import { statuses } from '@/data/static'
 import { getTypeWord } from '@/utils/getTypeWord'
 import { getDeveloperWordByType } from '@/utils/getDeveloperWordByType'
-import { ItemsAPI } from '@/api/ItemsAPI'
-import { statuses } from '@/data/static'
 
-const props = defineProps({
-  item: {
-    type: Object,
-    required: true
+const route = useRoute()
+const store = useStore()
+
+const item = ref({})
+const loading = ref(true)
+
+watchEffect(async () => {
+  if (!store.state.user._id) {
+    item.value = []
+    loading.value = false
+    return
+  }
+  loading.value = true
+  try {
+    const response = await ItemsAPI.getOne(route.params.id)
+    item.value = response.data
+    console.log(item.value)
+  } catch (e) {
+    ElNotification.error({
+      title: e.response.data.message,
+      position: 'bottom-right'
+    })
   }
 })
-
-const refetch = inject('refetch')
-
-const updateItemStatus = async (status) => {
-  try {
-    await ItemsAPI.update(props.item.id, { status })
-    refetch()
-    ElNotification.success({
-      title: 'Статус изменен',
-      position: 'bottom-right'
-    })
-  } catch (error) {
-    ElNotification.error({
-      title: error.response.data.message,
-      position: 'bottom-right'
-    })
-  }
-}
 </script>
 
 <style scoped>
-.item-header {
-  word-break: normal;
-  text-align: left;
-}
 
-.set-status-button-text {
-  font-size: 16px;
-}
-</style>
-<style>
-.set-status .el-collapse-item__header {
-  padding: 0 20px;
-  border-bottom: 0;
-}
-
-.el-collapse-item__content {
-  display: flex;
-  flex-direction: column;
-  padding: 10px 0 0 2px;
-  row-gap: 10px;
-}
-
-.looking .el-collapse-item__header {
-  background: #79bbff;
-  border-left: 10px solid #a0cfff;
-}
-
-.planned .el-collapse-item__header {
-  background: #f7b954;
-  border-left: 10px solid #f7c9a7;
-}
-
-.viewed .el-collapse-item__header {
-  background: #95d475;
-  border-left: 10px solid #b3e19d;
-}
-
-.postponed .el-collapse-item__header {
-  background: #b1b3b8;
-  border-left: 10px solid #c8c9cc;
-}
-
-.abandoned .el-collapse-item__header {
-  background: #f56c6c;
-  border-left: 10px solid #fab6b6;
-}
 </style>

@@ -70,9 +70,8 @@ const refetch = async () => {
       items.value = response.data
     }
   } catch (e) {
-    ElNotification({
+    ElNotification.error({
       title: e.response.data.message,
-      type: 'error',
       position: 'bottom-right'
     })
   }

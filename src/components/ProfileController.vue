@@ -35,7 +35,7 @@ import { useStore } from 'vuex'
 import { Avatar } from '@element-plus/icons-vue'
 import { AuthAPI } from '@/api/AuthAPI'
 import { userNames } from '@/store/modules/user'
-import { ElMessage } from 'element-plus'
+import { ElNotification } from 'element-plus'
 import { UserAPI } from '@/api/UserAPI'
 
 const store = useStore()
@@ -59,9 +59,15 @@ const login = async () => {
   try {
     const response = await AuthAPI.login(inputInfo.login, inputInfo.password)
     store.commit(userNames.setUser, response.data)
-    ElMessage.success(response.message)
+    ElNotification.success({
+      title: response.message,
+      position: 'bottom-right'
+    })
   } catch (e) {
-    ElMessage.error(e.response.data.message)
+    ElNotification.error({
+      title: e.response.data.message,
+      position: 'bottom-right'
+    })
   }
 }
 
@@ -69,9 +75,15 @@ const registration = async () => {
   try {
     const response = await AuthAPI.register(inputInfo.login, inputInfo.password)
     store.commit(userNames.setUser, response.data)
-    ElMessage.success(response.message)
+    ElNotification.success({
+      title: response.message,
+      position: 'bottom-right'
+    })
   } catch (e) {
-    ElMessage.error(e.response.data.message)
+    ElNotification.error({
+      title: e.response.data.message,
+      position: 'bottom-right'
+    })
   }
 }
 
@@ -79,9 +91,15 @@ const logout = async () => {
   try {
     const response = await AuthAPI.logout()
     store.commit(userNames.resetUser)
-    ElMessage.success(response.message)
+    ElNotification.success({
+      title: response.message,
+      position: 'bottom-right'
+    })
   } catch (e) {
-    ElMessage.error(e.response.data.message)
+    ElNotification.error({
+      title: e.response.data.message,
+      position: 'bottom-right'
+    })
   }
 }
 </script>

@@ -107,7 +107,12 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button type="success" @click="confirmAppend(formRef)">Подтвердить</el-button>
+      <el-button
+        type="success"
+        @click="target === 'create' ? confirmAppend(formRef) : confirmUpdate(formRef)"
+      >
+        Подтвердить
+      </el-button>
     </template>
   </el-dialog>
 </template>
@@ -207,25 +212,51 @@ const confirmAppend = async (form) => {
       const response = await ItemsAPI.add(item)
       dialog.value = false
       refetch()
-      ElNotification({
+      ElNotification.success({
         title: response.message,
-        type: 'success',
         position: 'bottom-right'
       })
     } catch (e) {
-      ElNotification({
+      ElNotification.error({
         title: e.response.data.message,
-        type: 'error',
         position: 'bottom-right'
       })
     }
   } catch (error) {
-    ElNotification({
+    ElNotification.error({
       title: 'Пожалуйста, заполните все поля',
-      type: 'error',
       position: 'bottom-right'
     })
   }
+}
+
+const confirmUpdate = async (form) => {
+  console.log('update', form)
+  // try {
+  //   await form.validate()
+  //   try {
+  //     const response = await ItemsAPI.update(item)
+  //     dialog.value = false
+  //     refetch()
+  //     ElNotification({
+  //       title: response.message,
+  //       type: 'success',
+  //       position: 'bottom-right'
+  //     })
+  //   } catch (e) {
+  //     ElNotification({
+  //       title: e.response.data.message,
+  //       type: 'error',
+  //       position: 'bottom-right'
+  //     })
+  //   }
+  // } catch (error) {
+  //   ElNotification({
+  //     title: 'Пожалуйста, заполните все поля',
+  //     type: 'error',
+  //     position: 'bottom-right'
+  //   })
+  // }
 }
 </script>
 

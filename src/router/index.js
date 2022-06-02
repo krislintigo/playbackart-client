@@ -30,6 +30,11 @@ const routes = [
     name: 'books',
     component: () => import('../views/MainView.vue'),
     meta: { mainHeader: 'Список книг', type: 'book' }
+  },
+  {
+    path: '/items/:id',
+    name: 'item',
+    component: () => import('../views/ItemDetails.vue')
   }
 ]
 
