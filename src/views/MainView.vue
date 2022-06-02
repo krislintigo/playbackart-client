@@ -1,5 +1,9 @@
 <template>
-  <h2>Полный список</h2>
+  <div style="display: flex; align-items: center; column-gap: 10px">
+    <h2>{{route.meta.mainHeader}}</h2>
+    <el-button circle plain :icon="Plus" size="small" @click="dialog = true"></el-button>
+  </div>
+  <CreateUpdateModal v-model="dialog" />
   <el-row v-if="!store.state.user._id">
     <h2>Войдите, чтобы продолжить!</h2>
   </el-row>
@@ -22,6 +26,7 @@
 
 <script setup>
 import { provide, ref, watchEffect } from 'vue'
+import { Plus } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { useFilters } from '@/composables/filters'
@@ -30,11 +35,13 @@ import AsideFilters from '@/components/AsideFilters'
 import { ItemsAPI } from '@/api/ItemsAPI'
 import { ElMessage } from 'element-plus'
 import SearchInput from '@/components/SearchInput'
+import CreateUpdateModal from '@/components/CreateUpdateModal'
 
 const store = useStore()
 const route = useRoute()
 
 const loading = ref(true)
+const dialog = ref(false)
 const items = ref([])
 
 const {
