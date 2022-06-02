@@ -54,7 +54,7 @@ const tabs = [
 
 const router = useRouter()
 
-const active = ref('/')
+const active = ref(location.pathname)
 
 const tabClick = (tab) => {
   router.push(tab.props.name)
