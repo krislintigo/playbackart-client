@@ -1,31 +1,16 @@
 [
   {
-    "name":"Attack on Titan",
+    "name":"Атака титанов",
     "image":"https://static.zerochan.net/104th.Trainees.Squad.full.1779661.jpg",
     "rating":10,
     "status":"viewed",
     "type":"series",
     "restriction":"R+",
     "genres":[
-      "Экшен",
-      "Триллер",
-      "Военное"
-    ],
-    "time":{
-      "count":25,
-      "duration":25
-    }
-  },
-  {
-    "name":"Fairy Tail",
-    "rating":10,
-    "status":"postponed",
-    "type":"series",
-    "restriction":"R-17",
-    "genres":[
-      "Экшен",
-      "Психологическое",
-      "Фантастика"
+      "Боевик",
+      "Драма",
+      "Темное фэнтези",
+      "Постапокалипсис"
     ],
     "time":{
       "count":25,
@@ -34,78 +19,40 @@
   },
   {
     "name":"One Piece",
-    "rating":6,
     "status":"planned",
     "type":"series",
-    "restriction":"R-17",
     "genres":[
-      "Экшен",
+      "Фэнтези",
+      "Драма",
       "Приключения",
-      "Фантастика"
+      "Комедия"
     ],
     "time":{
-      "count":25,
-      "duration":25
+      "count":1019,
+      "duration":24
     }
   },
   {
-    "name":"Naruto",
-    "rating":6,
-    "status":"looking",
+    "name":"Наруто: Ураганные хроники",
+    "status":"postponed",
     "type":"series",
     "restriction":"PG-13",
-    "genres":[
-      "Экшен",
-      "Приключения",
-      "Фантастика"
-    ],
     "time":{
-      "count":520,
+      "count":500,
       "duration":23
-    }
-  },
-  {
-    "name":"Bleach",
-    "rating":9,
-    "status":"abandoned",
-    "type":"series",
-    "restriction":"PG-13",
-    "genres":[
-      "Экшен",
-      "Приключения",
-      "Фантастика"
-    ],
-    "time":{
-      "count":24,
-      "duration":25
-    }
-  },
-  {
-    "name":"Dragon Ball",
-    "rating":6,
-    "status":"looking",
-    "type":"series",
-    "restriction":"R-17",
-    "genres":[
-      "Экшен",
-      "Приключения",
-      "Фантастика"
-    ],
-    "time":{
-      "count":25,
-      "duration":25
     }
   },
   {
     "name":"Re:Zero",
     "rating":10,
     "status":"viewed",
-    "type":"movie",
+    "type":"series",
     "restriction":"R-17",
     "genres":[
-      "Экшен",
-      "Приключения",
-      "Фантастика"
+      "Драма",
+      "Триллер",
+      "Фэнтези",
+      "Психологическое"
     ],
     "time":{
       "count":24,
@@ -115,33 +62,14 @@
   {
     "name":"Я встретил вашу маму и очень долго не мог ей ответить на призывы дружбы, и всё-таки это получилось",
     "rating":9,
-    "status":"viewed",
-    "restriction":"G",
+    "status":"abandoned",
+    "restriction":"R-17",
     "type":"series",
     "genres":[
       "Драма",
       "Комедия",
       "Романтика"
-    ],
-    "time":{
-      "count":12,
-      "duration":24
-    }
-  },
-  {
-    "name":"Призрак в костюме",
-    "rating":10,
-    "status":"viewed",
-    "type":"series",
-    "restriction":"G",
-    "genres":[
-      "Экшен",
-      "Фантастика"
-    ],
-    "time":{
-      "count":12,
-      "duration":24
-    }
+    ]
   },
   {
     "name":"Евангелион",
@@ -151,19 +79,19 @@
     "restriction":"R+",
     "genres":[
       "Меха",
-      "Приключения",
-      "Научная фантастика"
+      "Постапокалипсис",
+      "Психологическая драма"
     ],
     "time":{
       "count":24,
-      "duration":25
+      "duration":23
     }
   },
   {
     "name":"Конец Евангелиона",
-    "rating":4,
+    "rating":8,
     "status":"viewed",
-    "type":"series",
+    "type":"movie",
     "restriction":"R+",
     "genres":[
       "Меха",
@@ -182,16 +110,17 @@
     "type":"series",
     "restriction":"R+",
     "genres":[
-      "Трагедия",
-      "Фантастика"
+      "Фэнтези",
+      "Ужасы",
+      "Психологическое"
     ],
     "time":{
-      "count":5,
-      "duration":7
+      "count":12,
+      "duration":4
     }
   },
   {
-    "name":"Interstellar",
+    "name":"Интерстеллар",
     "image":"https://image.tmdb.org/t/p/original/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
     "rating":10,
     "status":"viewed",
@@ -208,9 +137,9 @@
     }
   },
   {
-    "name":"The Martian",
+    "name":"Марсианин",
     "image":"https://www.1c-interes.ru/images/2020/03/29387162_Marsianin_DVD.jpg",
-    "rating":8,
+    "rating":7,
     "status":"abandoned",
     "type":"movie",
     "restriction":"PG-13",
@@ -224,7 +153,7 @@
     }
   },
   {
-    "name":"District 9",
+    "name":"Район №9",
     "image":"https://picfiles.alphacoders.com/147/147334.jpg",
     "rating":9,
     "status":"postponed",
@@ -240,5 +169,84 @@
       "count":1,
       "duration":112
     }
+  },
+  {
+    "name":"Плохие парни",
+    "image":"https://m.media-amazon.com/images/M/MV5BM2JiNmQ1N2EtNzVlYy00MTMwLWIzZGYtYzVkZmQ2ZTRmNTEzXkEyXkFqcGdeQXVyNDM1ODc2NzE@._V1_FMjpg_UX1000_.jpg",
+    "rating":9,
+    "status":"looking",
+    "type":"movie",
+    "restriction":"PG",
+    "genres":[
+      "Комедия",
+      "Криминал",
+      "Приключения",
+      "Семейный"
+    ],
+    "year": "2022"
+  },
+  {
+    "name":"Задача трех тел",
+    "image":"https://pbs.twimg.com/media/FJb6xEiWYAIVI1-.jpg",
+    "rating":10,
+    "status":"viewed",
+    "type":"book",
+    "restriction":"PG-13",
+    "genres":[
+      "Научная фантастика"
+    ],
+    "year": "2006"
+  },
+  {
+    "name":"Темный лес",
+    "image":"https://cdn.book24.ru/v2/ITD000000000886980/COVER/cover3d1.jpg",
+    "rating":10,
+    "status":"viewed",
+    "type":"book",
+    "restriction":"PG-13",
+    "genres":[
+      "Научная фантастика"
+    ],
+    "year": "2008"
+  },
+  {
+    "name":"Вечная жизнь смерти",
+    "image":"https://cdn.eksmo.ru/v2/ITD000000000890145/COVER/cover1.jpg",
+    "rating":9,
+    "status":"looking",
+    "type":"book",
+    "restriction":"PG-13",
+    "genres":[
+      "Научная фантастика"
+    ],
+    "year": "2010"
+  },
+  {
+    "name":"Far Cry 3",
+    "image":"https://www.igroshop.com/images/detailed/2/Far-Cry-3.jpg",
+    "rating":9,
+    "status":"viewed",
+    "type":"game",
+    "restriction":"R+",
+    "genres":[
+      "Шутер от первого лица"
+    ],
+    "year": "2012",
+    "time":{
+      "count":1,
+      "duration":900
+    }
+  },
+  {
+    "name":"Metro 2033 Redux",
+    "image":"https://i.pinimg.com/originals/b8/68/31/b868313ab0bf5c7b0be01f05b2b91ac1.jpg",
+    "rating":10,
+    "status":"viewed",
+    "type":"game",
+    "restriction":"R+",
+    "genres":[
+      "Шутер от первого лица"
+    ],
+    "year": "2014"
   }
 ]

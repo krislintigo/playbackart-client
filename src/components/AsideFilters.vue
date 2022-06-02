@@ -78,11 +78,11 @@ const selectedGenres = computed({
 })
 
 const grades = computed(() =>
-  Array.from(new Set(props.items.map(i => i.rating))).sort((a, b) => b - a))
-const restrictions = computed(() => Array.from(new Set(props.items.map(i => i.restriction))))
+  Array.from(new Set(props.items.filter(i => i.rating).map(i => i.rating))).sort((a, b) => b - a))
+const restrictions = computed(() => Array.from(new Set(props.items.filter(i => i.restriction).map(i => i.restriction))))
 const restrictionsLabels = computed(() =>
   ['G', 'PG', 'PG-13', 'R-17', 'R+'].filter(r => restrictions.value.includes(r)))
-const genres = computed(() => Array.from(new Set(props.items.map(i => i.genres).flat(1))))
+const genres = computed(() => Array.from(new Set(props.items.filter(i => i.genres).map(i => i.genres).flat(1))))
 
 const gradeClick = (gradeIndex) => {
   const grade = grades.value[gradeIndex]
@@ -103,15 +103,18 @@ const restrictionClick = (restrictionIndex) => {
 }
 
 const genreClick = (genre) => {
+  console.log('genreClick', selectedGenres.value.slice(0), genre)
   if (selectedGenres.value.includes(genre)) {
     selectedGenres.value = selectedGenres.value.filter(g => g !== genre)
   } else {
     selectedGenres.value.push(genre)
   }
+  console.log('genreClick', selectedGenres.value.slice(0))
 }
 
 const getGenreTextClass = (genre) => {
-  const percentage = props.items.filter(i => i.genres.includes(genre)).length / props.items.length * 100
+  console.log('getGenreTextClass', selectedGenres.value.slice(0), genre)
+  const percentage = props.items.filter(i => i.genres).filter(i => i.genres.includes(genre)).length / props.items.length * 100
   // fix this later to be more good
   switch (true) {
     case percentage > 50:

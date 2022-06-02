@@ -19,17 +19,25 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column sortable prop="rating" label="Рейтинг" width="150" />
+          <el-table-column sortable prop="rating" label="Рейтинг" width="150" :sort-method="sortByRating">
+            <template #default="scope">
+              <span v-if="!scope.row.rating">-</span>
+              <span v-else>{{scope.row.rating}}</span>
+            </template>
+          </el-table-column>
           <el-table-column sortable prop="time" label="Длительность" :sort-method="sortByDuration">
             <template #default="scope">
-              <span v-if="scope.row.time.count > 1">{{ scope.row.time.count }} x </span>
-              <span>{{formatDuration(scope.row.time.duration)}}</span>
+              <span v-if="!scope.row.time">-</span>
+              <div v-else>
+                <span v-if="scope.row.time.count > 1">{{ scope.row.time.count }} x </span>
+                <span>{{formatDuration(scope.row.time.duration)}}</span>
+              </div>
             </template>
           </el-table-column>
         </el-table>
         <h4 style="margin: 5px 0">
           Общая продолжительность:
-          {{formatDuration(block.items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0))}}
+          {{formatDuration(block.items.reduce((acc, cur) => cur.time ? acc + cur.time.count * cur.time.duration : acc, 0)) || '-'}}
         </h4>
       </el-collapse-item>
     </div>
@@ -79,7 +87,16 @@ const displayedItems = computed(() => [
   }
 ])
 
+const sortByRating = (a, b) => {
+  if (!a.rating || !b.rating) return -1
+  if (a.rating === b.rating) {
+    return 0
+  }
+  return a.rating > b.rating ? -1 : 1
+}
+
 const sortByDuration = (a, b) => {
+  if (!a.time || !b.time) return -1
   const totalA = a.time.count * a.time.duration
   const totalB = b.time.count * b.time.duration
   if (totalA === totalB) return 0

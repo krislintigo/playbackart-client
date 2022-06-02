@@ -15,7 +15,7 @@ export function useFilters (allItems) {
       ? gradeFilter.filter(i => selectedRestrictions.value.includes(i.restriction))
       : gradeFilter
     return selectedGenres.value.length
-      ? restrictionFilter.filter(i => selectedGenres.value.some(g => i.genres.includes(g)))
+      ? restrictionFilter.filter(i => selectedGenres.value.some(g => i.genres?.includes(g)))
       : restrictionFilter
   })
 
