@@ -11,7 +11,7 @@
           <el-table-column type="index" label="#" width="40" />
           <el-table-column sortable prop="name" label="Название" width="750">
             <template #default="scope">
-              <el-popover placement="right" :width="420" trigger="hover" :show-after="500" :hide-after="100000">
+              <el-popover placement="right" :width="420" trigger="hover" :show-after="500">
                 <template #reference>
                   <el-link>{{ scope.row.name }}</el-link>
                 </template>

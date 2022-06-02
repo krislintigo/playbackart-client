@@ -47,7 +47,12 @@
             align="middle"
             :class="status.value"
           >
-            <el-button text :icon="status.icon" :style="{fontSize: 'large', color: status.color}">
+            <el-button
+              text
+              :icon="status.icon"
+              :style="{fontSize: 'large', color: status.color}"
+              @click="updateItemStatus(status.value)"
+            >
               <h3 class="set-status-button-text">{{status.title}}</h3>
             </el-button>
           </el-row>
@@ -58,18 +63,32 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, inject } from 'vue'
 import { PictureRounded } from '@element-plus/icons-vue'
 import statuses from '@/data/statuses'
 import { getTypeWord } from '@/utils/getTypeWord'
 import { getDeveloperWordByType } from '@/utils/getDeveloperWordByType'
+import { ItemsAPI } from '@/api/ItemsAPI'
+import { ElMessage } from 'element-plus'
 
-defineProps({
+const props = defineProps({
   item: {
     type: Object,
     required: true
   }
 })
+
+const refetch = inject('refetch')
+
+const updateItemStatus = async (status) => {
+  try {
+    await ItemsAPI.update(props.item.id, { status })
+    refetch()
+    ElMessage.success('Статус изменен!')
+  } catch (error) {
+    console.error(error)
+  }
+}
 </script>
 
 <style scoped>

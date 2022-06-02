@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, ref, watch } from 'vue'
+import { provide, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { useFilters } from '@/composables/filters'
@@ -46,7 +46,7 @@ const {
   queriedItems
 } = useFilters(items)
 
-const getItems = async () => {
+const refetch = async () => {
   if (!store.state.user._id) {
     items.value = []
     loading.value = false
@@ -67,9 +67,9 @@ const getItems = async () => {
   loading.value = false
 }
 
-onBeforeMount(getItems)
+provide('refetch', refetch)
 
-watch([() => store.state.user._id, () => route.path], getItems)
+watchEffect(refetch)
 </script>
 
 <style scoped>
