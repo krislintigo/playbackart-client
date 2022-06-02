@@ -1,9 +1,9 @@
 <template>
   <div style="display: flex; align-items: center; column-gap: 10px">
     <h2>{{route.meta.mainHeader}}</h2>
-    <el-button circle plain :icon="Plus" size="small" @click="dialog = true"></el-button>
+    <el-button circle plain :icon="Plus" size="small" @click="dialog = true; dialogTarget = 'create'"></el-button>
   </div>
-  <CreateUpdateModal v-model="dialog" />
+  <CreateUpdateModal v-model="dialog" :target="dialogTarget" />
   <el-row v-if="!store.state.user._id">
     <h2>Войдите, чтобы продолжить!</h2>
   </el-row>
@@ -42,6 +42,7 @@ const route = useRoute()
 
 const loading = ref(true)
 const dialog = ref(false)
+const dialogTarget = ref('')
 const items = ref([])
 
 const {

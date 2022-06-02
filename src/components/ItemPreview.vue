@@ -64,12 +64,12 @@
 
 <script setup>
 import { defineProps, inject } from 'vue'
+import { ElNotification } from 'element-plus'
 import { PictureRounded } from '@element-plus/icons-vue'
-import statuses from '@/data/statuses'
 import { getTypeWord } from '@/utils/getTypeWord'
 import { getDeveloperWordByType } from '@/utils/getDeveloperWordByType'
 import { ItemsAPI } from '@/api/ItemsAPI'
-import { ElNotification } from 'element-plus'
+import { statuses } from '@/data/static'
 
 const props = defineProps({
   item: {

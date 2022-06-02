@@ -116,61 +116,17 @@
 import { defineProps, defineEmits, computed, reactive, ref, inject, watch } from 'vue'
 import { ElNotification } from 'element-plus'
 import { Close } from '@element-plus/icons-vue'
-import statuses from '@/data/statuses'
+import { statuses, rules, types, rating, restrictions } from '@/data/static'
 import { getDeveloperWordByType } from '@/utils/getDeveloperWordByType'
 import { ItemsAPI } from '@/api/ItemsAPI'
-
-const rating = {
-  texts: ['Хуже некуда', 'Ужасно', 'Очень плохо', 'Плохо', 'Более-менее',
-    'Нормально', 'Хорошо', 'Отлично', 'Великолепно', 'Эпик вин!'],
-  colors: {
-    1: '#f56c6c',
-    2: '#f1755f',
-    3: '#ed8153',
-    4: '#e99047',
-    5: '#e6a23c',
-    6: '#dec03b',
-    7: '#d2d73b',
-    8: '#add03b',
-    9: '#89c93a',
-    10: '#67c23a'
-  }
-}
-const types = [
-  {
-    value: 'movie',
-    title: 'Фильм'
-  },
-  {
-    value: 'series',
-    title: 'Сериал'
-  },
-  {
-    value: 'game',
-    title: 'Игра'
-  },
-  {
-    value: 'book',
-    title: 'Книга'
-  }
-]
-const restrictions = ['G', 'PG', 'PG-13', 'R-17', 'R+']
-
-const rules = {
-  name: [
-    { required: true, message: 'Пожалуйста, введите название', trigger: 'blur' }
-  ],
-  status: [
-    { required: true, message: 'Пожалуйста, выберите статус', trigger: 'change' }
-  ],
-  type: [
-    { required: true, message: 'Пожалуйста, выберите тип', trigger: 'change' }
-  ]
-}
 
 const props = defineProps({
   modelValue: {
     type: Boolean,
+    required: true
+  },
+  target: {
+    type: String,
     required: true
   }
 })
@@ -204,9 +160,19 @@ const dialog = computed({
 })
 
 watch(() => dialog.value, open => {
+  // fix html scroll
   document.documentElement.style.paddingRight =
     open ? window.innerWidth - document.documentElement.clientWidth + 'px' : ''
   document.documentElement.style.overflowY = open ? 'hidden' : 'auto'
+
+  // set target
+  if (open) {
+    if (props.target === 'create') {
+      item.type = types.find(type => type.path === location.pathname)?.value ?? ''
+    } else {
+      console.log('update')
+    }
+  }
 })
 
 const inputGenre = ref('')
