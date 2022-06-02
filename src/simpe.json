@@ -15,7 +15,8 @@
     "time":{
       "count":25,
       "duration":25
-    }
+    },
+    "developers": ["WIT studio"]
   },
   {
     "name":"One Piece",
@@ -57,7 +58,8 @@
     "time":{
       "count":24,
       "duration":24
-    }
+    },
+    "developer": ["White Fox Studio"]
   },
   {
     "name":"Я встретил вашу маму и очень долго не мог ей ответить на призывы дружбы, и всё-таки это получилось",
@@ -85,7 +87,8 @@
     "time":{
       "count":24,
       "duration":23
-    }
+    },
+    "developers": ["Gainax", "Tatsunoko"]
   },
   {
     "name":"Конец Евангелиона",
@@ -101,7 +104,8 @@
     "time":{
       "count":1,
       "duration":48
-    }
+    },
+    "developers": ["Gainax", "Production I.G."]
   },
   {
     "name":"Куколка",
@@ -134,7 +138,8 @@
     "time":{
       "count":1,
       "duration":169
-    }
+    },
+    "developers": ["Paramount Pictures", "Warner Bros. Pictures", "Legendary Pictures", "Syncopy Films", "Lynda Obst Productions"]
   },
   {
     "name":"Марсианин",
@@ -168,7 +173,8 @@
     "time":{
       "count":1,
       "duration":112
-    }
+    },
+    "developers": ["Key Creatives", "QED International", "WigNut Films"]
   },
   {
     "name":"Плохие парни",
@@ -183,7 +189,8 @@
       "Приключения",
       "Семейный"
     ],
-    "year": "2022"
+    "year": "2022",
+    "developers": ["DreamWorks Animation", "Scholastic Entertainment"]
   },
   {
     "name":"Задача трех тел",
@@ -195,7 +202,8 @@
     "genres":[
       "Научная фантастика"
     ],
-    "year": "2006"
+    "year": "2006",
+    "developers": ["Лю Цысинь"]
   },
   {
     "name":"Темный лес",
@@ -207,7 +215,8 @@
     "genres":[
       "Научная фантастика"
     ],
-    "year": "2008"
+    "year": "2008",
+    "developers": ["Лю Цысинь"]
   },
   {
     "name":"Вечная жизнь смерти",
@@ -219,7 +228,8 @@
     "genres":[
       "Научная фантастика"
     ],
-    "year": "2010"
+    "year": "2010",
+    "developers": ["Лю Цысинь"]
   },
   {
     "name":"Far Cry 3",
@@ -235,7 +245,8 @@
     "time":{
       "count":1,
       "duration":900
-    }
+    },
+    "developers": ["Ubisoft"]
   },
   {
     "name":"Metro 2033 Redux",
@@ -247,6 +258,7 @@
     "genres":[
       "Шутер от первого лица"
     ],
-    "year": "2014"
+    "year": "2014",
+    "developers": ["4A Games"]
   }
 ]
