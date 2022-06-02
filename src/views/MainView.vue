@@ -33,7 +33,7 @@ import { useFilters } from '@/composables/filters'
 import MainDisplayLayout from '@/components/MainDisplayLayout'
 import AsideFilters from '@/components/AsideFilters'
 import { ItemsAPI } from '@/api/ItemsAPI'
-import { ElMessage } from 'element-plus'
+import { ElNotification } from 'element-plus'
 import SearchInput from '@/components/SearchInput'
 import CreateUpdateModal from '@/components/CreateUpdateModal'
 
@@ -69,7 +69,11 @@ const refetch = async () => {
       items.value = response.data
     }
   } catch (e) {
-    ElMessage.error(e.response.data.message)
+    ElNotification({
+      title: e.response.data.message,
+      type: 'error',
+      position: 'bottom-right'
+    })
   }
   loading.value = false
 }

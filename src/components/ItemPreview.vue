@@ -69,7 +69,7 @@ import statuses from '@/data/statuses'
 import { getTypeWord } from '@/utils/getTypeWord'
 import { getDeveloperWordByType } from '@/utils/getDeveloperWordByType'
 import { ItemsAPI } from '@/api/ItemsAPI'
-import { ElMessage } from 'element-plus'
+import { ElNotification } from 'element-plus'
 
 const props = defineProps({
   item: {
@@ -84,9 +84,17 @@ const updateItemStatus = async (status) => {
   try {
     await ItemsAPI.update(props.item.id, { status })
     refetch()
-    ElMessage.success('Статус изменен!')
+    ElNotification({
+      title: 'Статус изменен',
+      type: 'success',
+      position: 'bottom-right'
+    })
   } catch (error) {
-    console.error(error)
+    ElNotification({
+      title: error.response.data.message,
+      type: 'error',
+      position: 'bottom-right'
+    })
   }
 }
 </script>

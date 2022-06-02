@@ -1,9 +1,9 @@
 <template>
-  <el-dialog v-model="dialog" width="95%">
+  <el-dialog v-model="dialog" width="95%" :lock-scroll="false">
     <template #header>
       <h3>Добавить элемент</h3>
     </template>
-    <el-form v-model="item" label-position="right" :label-width="110">
+    <el-form :model="item" ref="formRef" label-position="right" :label-width="110" :rules="rules">
       <el-form-item label="Название:" prop="name">
         <el-input v-model="item.name" />
       </el-form-item>
@@ -107,16 +107,18 @@
       </el-form-item>
     </el-form>
     <template #footer>
-      <el-button type="success" @click="confirmAppend">Подтвердить</el-button>
+      <el-button type="success" @click="confirmAppend(formRef)">Подтвердить</el-button>
     </template>
   </el-dialog>
 </template>
 
 <script setup>
-import { defineProps, defineEmits, computed, reactive, ref } from 'vue'
+import { defineProps, defineEmits, computed, reactive, ref, inject, watch } from 'vue'
+import { ElNotification } from 'element-plus'
 import { Close } from '@element-plus/icons-vue'
 import statuses from '@/data/statuses'
 import { getDeveloperWordByType } from '@/utils/getDeveloperWordByType'
+import { ItemsAPI } from '@/api/ItemsAPI'
 
 const rating = {
   texts: ['Хуже некуда', 'Ужасно', 'Очень плохо', 'Плохо', 'Более-менее',
@@ -154,6 +156,18 @@ const types = [
 ]
 const restrictions = ['G', 'PG', 'PG-13', 'R-17', 'R+']
 
+const rules = {
+  name: [
+    { required: true, message: 'Пожалуйста, введите название', trigger: 'blur' }
+  ],
+  status: [
+    { required: true, message: 'Пожалуйста, выберите статус', trigger: 'change' }
+  ],
+  type: [
+    { required: true, message: 'Пожалуйста, выберите тип', trigger: 'change' }
+  ]
+}
+
 const props = defineProps({
   modelValue: {
     type: Boolean,
@@ -161,10 +175,13 @@ const props = defineProps({
   }
 })
 
+const refetch = inject('refetch')
+
 const emit = defineEmits({
   'update:modelValue': _ => true
 })
 
+const formRef = ref(null)
 const item = reactive({
   name: '',
   image: '',
@@ -184,6 +201,12 @@ const item = reactive({
 const dialog = computed({
   get: () => props.modelValue,
   set: value => emit('update:modelValue', value)
+})
+
+watch(() => dialog.value, open => {
+  document.documentElement.style.paddingRight =
+    open ? window.innerWidth - document.documentElement.clientWidth + 'px' : ''
+  document.documentElement.style.overflowY = open ? 'hidden' : 'auto'
 })
 
 const inputGenre = ref('')
@@ -211,10 +234,32 @@ const handleDeveloperConfirm = () => {
   inputDeveloper.value = ''
 }
 
-const confirmAppend = () => {
-  console.log('confirmAppend')
-  console.log(item)
-  // dialog.value = false
+const confirmAppend = async (form) => {
+  try {
+    await form.validate()
+    try {
+      const response = await ItemsAPI.add(item)
+      dialog.value = false
+      refetch()
+      ElNotification({
+        title: response.message,
+        type: 'success',
+        position: 'bottom-right'
+      })
+    } catch (e) {
+      ElNotification({
+        title: e.response.data.message,
+        type: 'error',
+        position: 'bottom-right'
+      })
+    }
+  } catch (error) {
+    ElNotification({
+      title: 'Пожалуйста, заполните все поля',
+      type: 'error',
+      position: 'bottom-right'
+    })
+  }
 }
 </script>
 
