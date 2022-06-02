@@ -213,7 +213,8 @@ const handleDeveloperConfirm = () => {
 
 const confirmAppend = () => {
   console.log('confirmAppend')
-  dialog.value = false
+  console.log(item)
+  // dialog.value = false
 }
 </script>
 
