@@ -4,27 +4,32 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/AllView.vue')
+    component: () => import('../views/MainView.vue'),
+    meta: { mainHeader: 'Полный список', type: 'all' }
   },
   {
     path: '/movies',
-    name: 'films',
-    component: () => import('../views/FilmsView.vue')
+    name: 'movies',
+    component: () => import('../views/MainView.vue'),
+    meta: { mainHeader: 'Список фильмов', type: 'movie' }
   },
   {
     path: '/series',
     name: 'series',
-    component: () => import('../views/SeriesView.vue')
+    component: () => import('../views/MainView.vue'),
+    meta: { mainHeader: 'Список сериалов', type: 'series' }
   },
   {
     path: '/games',
     name: 'games',
-    component: () => import('../views/GamesView.vue')
+    component: () => import('../views/MainView.vue'),
+    meta: { mainHeader: 'Список игр', type: 'game' }
   },
   {
     path: '/books',
     name: 'books',
-    component: () => import('../views/BooksView.vue')
+    component: () => import('../views/MainView.vue'),
+    meta: { mainHeader: 'Список книг', type: 'book' }
   }
 ]
 

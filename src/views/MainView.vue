@@ -1,5 +1,5 @@
 <template>
-  <h2>Список сериалов</h2>
+  <h2>Полный список</h2>
   <el-row v-if="!store.state.user._id">
     <h2>Войдите, чтобы продолжить!</h2>
   </el-row>
@@ -10,10 +10,11 @@
     </el-col>
     <el-col :span="5" :push="1">
       <AsideFilters
-        :items="series"
+        :items="items"
         v-model:selected-grades="selectedGrades"
         v-model:selected-restrictions="selectedRestrictions"
         v-model:selected-genres="selectedGenres"
+        v-model:selected-developers="selectedDevelopers"
       />
     </el-col>
   </el-row>
@@ -21,6 +22,7 @@
 
 <script setup>
 import { onBeforeMount, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { useFilters } from '@/composables/filters'
 import MainDisplayLayout from '@/components/MainDisplayLayout'
@@ -30,28 +32,35 @@ import { ElMessage } from 'element-plus'
 import SearchInput from '@/components/SearchInput'
 
 const store = useStore()
+const route = useRoute()
 
 const loading = ref(true)
-const series = ref([])
+const items = ref([])
 
 const {
   searchQuery,
   selectedGrades,
   selectedRestrictions,
   selectedGenres,
+  selectedDevelopers,
   queriedItems
-} = useFilters(series)
+} = useFilters(items)
 
 const getItems = async () => {
   if (!store.state.user._id) {
-    series.value = []
+    items.value = []
     loading.value = false
     return
   }
   loading.value = true
   try {
-    const response = await ItemsAPI.getByType('series')
-    series.value = response.data
+    if (route.meta.type === 'all') {
+      const response = await ItemsAPI.getAll()
+      items.value = response.data
+    } else {
+      const response = await ItemsAPI.getByType(route.meta.type)
+      items.value = response.data
+    }
   } catch (e) {
     ElMessage.error(e.response.data.message)
   }
@@ -60,7 +69,7 @@ const getItems = async () => {
 
 onBeforeMount(getItems)
 
-watch(() => store.state.user._id, getItems)
+watch([() => store.state.user._id, () => route.path], getItems)
 </script>
 
 <style scoped>
