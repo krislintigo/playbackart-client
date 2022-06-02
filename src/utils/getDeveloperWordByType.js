@@ -9,5 +9,8 @@ export const getDeveloperWordByType = (type, count) => {
 
     case 'book':
       return count === 1 ? 'Автор' : 'Авторы'
+
+    default:
+      return count === 1 ? 'Создатель' : 'Создатели'
   }
 }

@@ -11,7 +11,19 @@
         <el-input v-model="item.image" />
       </el-form-item>
       <el-form-item label="Рейтинг:">
-        <el-rate v-model="item.rating" :max="10" show-text :texts="ratings" :colors="colors" />
+        <el-rate v-model="item.rating" :max="10" show-text :texts="rating.texts" :colors="rating.colors" />
+      </el-form-item>
+      <el-form-item label="Статус:">
+        <el-radio-group v-model="item.status">
+          <el-radio-button
+            v-for="status in statuses"
+            :key="status.value"
+            :label="status.value"
+            :style="{'--el-radio-button-checked-bg-color': status.color}"
+          >
+            {{status.title}}
+          </el-radio-button>
+        </el-radio-group>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -22,11 +34,24 @@
 
 <script setup>
 import { defineProps, defineEmits, computed, reactive } from 'vue'
+import statuses from '@/data/statuses'
 
-const ratings = ['Хуже некуда', 'Ужасно', 'Очень плохо', 'Плохо', 'Более-менее',
-  'Нормально', 'Хорошо', 'Отлично', 'Великолепно', 'Эпик вин!']
-// const colors = ['#f56c6c', '#e6a23c', '#67c23a']
-const colors = { 1: '#f56c6c', 2: '#f1755f', 3: '#ed8153', 4: '#e99047', 5: '#e6a23c' }
+const rating = {
+  texts: ['Хуже некуда', 'Ужасно', 'Очень плохо', 'Плохо', 'Более-менее',
+    'Нормально', 'Хорошо', 'Отлично', 'Великолепно', 'Эпик вин!'],
+  colors: {
+    1: '#f56c6c',
+    2: '#f1755f',
+    3: '#ed8153',
+    4: '#e99047',
+    5: '#e6a23c',
+    6: '#dec03b',
+    7: '#d2d73b',
+    8: '#add03b',
+    9: '#89c93a',
+    10: '#67c23a'
+  }
+}
 
 const props = defineProps({
   modelValue: {
@@ -72,5 +97,14 @@ const confirmAppend = () => {
 <style>
 .el-dialog__body {
   padding-top: 0;
+}
+
+.el-rate__item {
+  line-height: 0;
+}
+
+.el-radio-button__original-radio:checked+.el-radio-button__inner {
+  border-color: transparent;
+  box-shadow: none;
 }
 </style>
