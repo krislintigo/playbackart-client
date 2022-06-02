@@ -1,7 +1,13 @@
 <template>
   <el-row>
     <el-col :span="10">
-      <el-image :src="item.image" />
+      <el-image :src="item.image">
+        <template #error>
+          <el-row class="image-placeholder">
+            <el-icon :size="175"><picture-rounded /></el-icon>
+          </el-row>
+        </template>
+      </el-image>
     </el-col>
     <el-col :span="13" :push="1">
       <h2 class="item-header">{{ item.name }}</h2>
@@ -43,6 +49,7 @@
 
 <script setup>
 import { defineProps } from 'vue'
+import { PictureRounded } from '@element-plus/icons-vue'
 import statuses from '@/data/statuses'
 import { getTypeWord } from '@/utils/getTypeWord'
 
