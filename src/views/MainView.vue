@@ -3,14 +3,14 @@
     <h2>{{route.meta.mainHeader}}</h2>
     <el-button circle plain :icon="Plus" size="small" @click="dialog = true; dialogTarget = 'create'" />
   </div>
-  <CreateUpdateModal v-model="dialog" :target="dialogTarget" />
+  <CreateUpdateModal v-model="dialog" :target="dialogTarget" :updated-item="updatedItem" />
   <el-row v-if="!store.state.user._id">
     <h2>Войдите, чтобы продолжить!</h2>
   </el-row>
   <el-row v-else v-loading="loading">
     <el-col :span="18">
       <SearchInput v-model="searchQuery" />
-      <MainDisplayLayout :items="queriedItems" />
+      <MainDisplayLayout :items="queriedItems" @update-item="updateItem" @delete-item="deleteItem" />
     </el-col>
     <el-col :span="5" :push="1">
       <AsideFilters
@@ -43,6 +43,7 @@ const route = useRoute()
 const loading = ref(true)
 const dialog = ref(false)
 const dialogTarget = ref('')
+const updatedItem = ref({})
 const items = ref([])
 
 const {
@@ -76,6 +77,28 @@ const refetch = async () => {
     })
   }
   loading.value = false
+}
+
+const updateItem = async (item) => {
+  dialog.value = true
+  dialogTarget.value = 'update'
+  updatedItem.value = item
+}
+
+const deleteItem = async id => {
+  try {
+    const response = await ItemsAPI.delete(id)
+    ElNotification.success({
+      title: response.message,
+      position: 'bottom-right'
+    })
+    await refetch()
+  } catch (e) {
+    ElNotification.error({
+      title: e.response.data.message,
+      position: 'bottom-right'
+    })
+  }
 }
 
 provide('refetch', refetch)

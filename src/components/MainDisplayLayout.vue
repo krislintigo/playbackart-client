@@ -9,7 +9,7 @@
         </template>
         <el-table :data="block.items">
           <el-table-column type="index" label="#" width="40" />
-          <el-table-column sortable prop="name" label="Название" width="750">
+          <el-table-column sortable prop="name" label="Название" width="650">
             <template #default="scope">
               <el-popover placement="right" :width="420" trigger="hover" :show-after="500">
                 <template #reference>
@@ -19,19 +19,34 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column sortable prop="rating" label="Рейтинг" width="150" :sort-method="sortByRating">
+          <el-table-column sortable prop="rating" label="Рейтинг" :sort-method="sortByRating">
             <template #default="scope">
               <span v-if="!scope.row.rating">-</span>
               <span v-else>{{scope.row.rating}}</span>
             </template>
           </el-table-column>
-          <el-table-column sortable prop="time" label="Длительность" :sort-method="sortByDuration">
+          <el-table-column sortable prop="time" label="Длительность" width="170" :sort-method="sortByDuration">
             <template #default="scope">
               <span v-if="!scope.row.time">-</span>
               <div v-else>
                 <span v-if="scope.row.time.count > 1">{{ scope.row.time.count }} x </span>
                 <span>{{formatDuration(scope.row.time.duration)}}</span>
               </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="Операции" width="100">
+            <template #default="scope">
+              <el-button :icon="EditPen" type="warning" circle size="small" text @click="emit('update-item', scope.row)" />
+              <el-popconfirm
+                title="Вы действительно хотите удалить?"
+                confirm-button-text="Да"
+                cancel-button-text="Нет"
+                @confirm="emit('delete-item', scope.row.id)"
+              >
+                <template #reference>
+                  <el-button :icon="Delete" type="danger" circle size="small" text />
+                </template>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -45,7 +60,8 @@
 </template>
 
 <script setup>
-import { computed, ref, defineProps } from 'vue'
+import { computed, ref, defineProps, defineEmits } from 'vue'
+import { Delete, EditPen } from '@element-plus/icons-vue'
 import formatDuration from '@/utils/formatDuration'
 import ItemPreview from '@/components/ItemPreview'
 
@@ -54,6 +70,11 @@ const props = defineProps({
     type: Array,
     required: true
   }
+})
+
+const emit = defineEmits({
+  'update-item': _ => true,
+  'delete-item': _ => true
 })
 
 const activeItems = ref([0, 1, 2, 3, 4])

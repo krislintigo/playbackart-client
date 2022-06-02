@@ -76,7 +76,7 @@
           </el-col>
           <el-col :push="2">
             <el-input-number v-model="item.time.duration" />
-            <h4 style="margin: 0">Длительность</h4>
+            <h4 style="margin: 0">Длительность (мин)</h4>
           </el-col>
         </div>
       </el-form-item>
@@ -133,6 +133,10 @@ const props = defineProps({
   target: {
     type: String,
     required: true
+  },
+  updatedItem: {
+    type: Object,
+    required: true
   }
 })
 
@@ -175,7 +179,9 @@ watch(() => dialog.value, open => {
     if (props.target === 'create') {
       item.type = types.find(type => type.path === location.pathname)?.value ?? ''
     } else {
-      console.log('update')
+      for (const key in item) {
+        item[key] = props.updatedItem[key]
+      }
     }
   }
 })
