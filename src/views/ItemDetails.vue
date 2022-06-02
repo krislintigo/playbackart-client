@@ -3,7 +3,7 @@
     <h2>Войдите, чтобы продолжить!</h2>
   </el-row>
   <el-row v-else-if="item.id">
-    <el-col :span="5" :xs="24">
+    <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="10">
       <el-image :src="item.image">
         <template #error>
           <el-row class="image-placeholder">
@@ -103,6 +103,7 @@ watchEffect(async () => {
 
 <style scoped>
 .item-header {
+  font-size: 40px;
   word-break: normal;
   text-align: left;
 }
