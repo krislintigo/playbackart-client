@@ -49,6 +49,62 @@
         </el-radio-group>
         <el-button style="margin-left: 5px;" :icon="Close" size="small" circle text @click="item.restriction = ''" />
       </el-form-item>
+      <el-form-item label="Жанры:" prop="genres">
+        <el-input
+          v-model="inputGenre"
+          style="width: 300px;"
+          @keyup.enter="handleGenreConfirm"
+        />
+        <el-button text style="margin: 0 10px" @click="handleGenreConfirm">Добавить</el-button>
+        <el-tag
+          v-for="genre in item.genres"
+          :key="genre"
+          size="large"
+          type="info"
+          style="margin-right: 10px;"
+          closable
+          @close="handleGenreDelete(genre)"
+        >
+          {{ genre }}
+        </el-tag>
+      </el-form-item>
+      <el-form-item label="Длительность:" prop="time">
+        <div>
+          <el-col>
+            <el-input-number v-model="item.time.count" />
+            <h4 style="margin: 0;">Кол-во элементов</h4>
+          </el-col>
+          <el-col :push="2">
+            <el-input-number v-model="item.time.duration" />
+            <h4 style="margin: 0">Длительность</h4>
+          </el-col>
+        </div>
+      </el-form-item>
+      <el-form-item label="Год выхода:" prop="year">
+        <el-date-picker
+          v-model="item.year"
+          type="year"
+        />
+      </el-form-item>
+      <el-form-item :label="getDeveloperWordByType(item.type, 2) + ':'" prop="developers">
+        <el-input
+          v-model="inputDeveloper"
+          style="width: 300px;"
+          @keyup.enter="handleDeveloperConfirm"
+        />
+        <el-button text style="margin: 0 10px" @click="handleDeveloperConfirm">Добавить</el-button>
+        <el-tag
+          v-for="developer in item.developers"
+          :key="developer"
+          size="large"
+          type="info"
+          style="margin-right: 10px;"
+          closable
+          @close="handleDeveloperDelete(developer)"
+        >
+          {{ developer }}
+        </el-tag>
+      </el-form-item>
     </el-form>
     <template #footer>
       <el-button type="success" @click="confirmAppend">Подтвердить</el-button>
@@ -57,9 +113,10 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, computed, reactive } from 'vue'
+import { defineProps, defineEmits, computed, reactive, ref } from 'vue'
 import { Close } from '@element-plus/icons-vue'
 import statuses from '@/data/statuses'
+import { getDeveloperWordByType } from '@/utils/getDeveloperWordByType'
 
 const rating = {
   texts: ['Хуже некуда', 'Ужасно', 'Очень плохо', 'Плохо', 'Более-менее',
@@ -128,6 +185,31 @@ const dialog = computed({
   get: () => props.modelValue,
   set: value => emit('update:modelValue', value)
 })
+
+const inputGenre = ref('')
+const inputDeveloper = ref('')
+
+const handleGenreDelete = (tag) => {
+  item.genres.splice(item.genres.indexOf(tag), 1)
+}
+
+const handleGenreConfirm = () => {
+  if (inputGenre.value) {
+    item.genres.push(inputGenre.value)
+  }
+  inputGenre.value = ''
+}
+
+const handleDeveloperDelete = (tag) => {
+  item.developers.splice(item.developers.indexOf(tag), 1)
+}
+
+const handleDeveloperConfirm = () => {
+  if (inputDeveloper.value) {
+    item.developers.push(inputDeveloper.value)
+  }
+  inputDeveloper.value = ''
+}
 
 const confirmAppend = () => {
   console.log('confirmAppend')
