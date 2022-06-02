@@ -14,6 +14,7 @@
         v-model:selected-grades="selectedGrades"
         v-model:selected-restrictions="selectedRestrictions"
         v-model:selected-genres="selectedGenres"
+        v-model:selected-developers="selectedDevelopers"
       />
     </el-col>
   </el-row>
@@ -39,6 +40,7 @@ const {
   selectedGrades,
   selectedRestrictions,
   selectedGenres,
+  selectedDevelopers,
   queriedItems
 } = useFilters(allItems)
 

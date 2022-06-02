@@ -22,13 +22,27 @@
       <h3 class="back-header">Жанры</h3>
       <el-row>
         <el-link
-          class="genre-item"
+          class="item"
           :class="{[getGenreTextClass(genre)]: true, 'genre-selected': selectedGenres.includes(genre)}"
           v-for="genre in genres"
           :key="genre"
           @click="genreClick(genre)"
         >
           {{genre}}
+        </el-link>
+      </el-row>
+    </el-col>
+    <el-col>
+      <h3 class="back-header">Создатели</h3>
+      <el-row>
+        <el-link
+          class="item"
+          :class="{[getDeveloperTextClass(developer)]: true, 'item-selected': selectedDevelopers.includes(developer)}"
+          v-for="developer in developers"
+          :key="developer"
+          @click="developerClick(developer)"
+        >
+          {{developer}}
         </el-link>
       </el-row>
     </el-col>
@@ -55,13 +69,18 @@ const props = defineProps({
   selectedGenres: {
     type: Array,
     required: true
+  },
+  selectedDevelopers: {
+    type: Array,
+    required: true
   }
 })
 
 const emit = defineEmits({
   'update:selectedGrades': _ => true,
   'update:selectedRestrictions': _ => true,
-  'update:selectedGenres': _ => true
+  'update:selectedGenres': _ => true,
+  'update:selectedDevelopers': _ => true
 })
 
 const selectedGrades = computed({
@@ -76,6 +95,10 @@ const selectedGenres = computed({
   get: () => props.selectedGenres,
   set: value => emit('update:selectedGenres', value)
 })
+const selectedDevelopers = computed({
+  get: () => props.selectedDevelopers,
+  set: value => emit('update:selectedDevelopers', value)
+})
 
 const grades = computed(() =>
   Array.from(new Set(props.items.filter(i => i.rating).map(i => i.rating))).sort((a, b) => b - a))
@@ -85,6 +108,8 @@ const restrictionsLabels = computed(() =>
   ['G', 'PG', 'PG-13', 'R-17', 'R+'].filter(r => restrictions.value.includes(r)))
 const genres = computed(() =>
   Array.from(new Set(props.items.filter(i => i.genres).map(i => i.genres).flat(1))))
+const developers = computed(() =>
+  Array.from(new Set(props.items.filter(i => i.developers).map(i => i.developers).flat(1))))
 
 const gradeClick = (gradeIndex) => {
   const grade = grades.value[gradeIndex]
@@ -112,8 +137,15 @@ const genreClick = (genre) => {
   }
 }
 
-const getGenreTextClass = (genre) => {
-  const percentage = props.items.filter(i => i.genres).filter(i => i.genres.includes(genre)).length / props.items.length * 100
+const developerClick = (developer) => {
+  if (selectedDevelopers.value.includes(developer)) {
+    selectedDevelopers.value = selectedDevelopers.value.filter(d => d !== developer)
+  } else {
+    selectedDevelopers.value.push(developer)
+  }
+}
+
+const getCommonClass = (percentage) => {
   // fix this later to be more good
   switch (true) {
     case percentage > 50:
@@ -127,6 +159,18 @@ const getGenreTextClass = (genre) => {
     default:
       return 'text0'
   }
+}
+
+const getGenreTextClass = (genre) => {
+  const percentage = props.items.filter(i => i.genres).filter(i => i.genres.includes(genre)).length /
+    props.items.length * 100
+  return getCommonClass(percentage)
+}
+
+const getDeveloperTextClass = (developer) => {
+  const percentage = props.items.filter(i => i.developers).filter(i => i.developers.includes(developer)).length /
+    props.items.length * 100
+  return getCommonClass(percentage)
 }
 </script>
 
@@ -147,11 +191,11 @@ const getGenreTextClass = (genre) => {
   text-transform: uppercase;
 }
 
-.genre-item {
+.item {
   margin: 4px 8px;
 }
 
-.genre-selected {
+.item-selected {
   color: #409eff;
 }
 

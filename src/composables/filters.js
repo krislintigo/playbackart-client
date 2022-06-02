@@ -5,6 +5,7 @@ export function useFilters (allItems) {
   const selectedGrades = ref([])
   const selectedRestrictions = ref([])
   const selectedGenres = ref([])
+  const selectedDevelopers = ref([])
 
   const queriedItems = computed(() => {
     const searchFilter = allItems.value.filter(i => i.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
@@ -14,10 +15,13 @@ export function useFilters (allItems) {
     const restrictionFilter = selectedRestrictions.value.length
       ? gradeFilter.filter(i => selectedRestrictions.value.includes(i.restriction))
       : gradeFilter
-    return selectedGenres.value.length
+    const genresFilter = selectedGenres.value.length
       ? restrictionFilter.filter(i => selectedGenres.value.some(g => i.genres?.includes(g)))
       : restrictionFilter
+    return selectedDevelopers.value.length
+      ? genresFilter.filter(i => selectedDevelopers.value.some(d => i.developers?.includes(d)))
+      : genresFilter
   })
 
-  return { searchQuery, selectedGrades, selectedRestrictions, selectedGenres, queriedItems }
+  return { searchQuery, selectedGrades, selectedRestrictions, selectedGenres, selectedDevelopers, queriedItems }
 }
