@@ -1,7 +1,7 @@
 <template>
   <el-dialog v-model="dialog" width="95%" :lock-scroll="false">
     <template #header>
-      <h3>Добавить элемент</h3>
+      <h3>{{target === 'create' ? 'Добавить' : 'Обновить'}} элемент</h3>
     </template>
     <el-form :model="item" ref="formRef" label-position="right" :label-width="110" :rules="rules">
       <el-form-item label="Название:" prop="name">

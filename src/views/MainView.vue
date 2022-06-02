@@ -1,7 +1,7 @@
 <template>
   <div style="display: flex; align-items: center; column-gap: 10px">
     <h2>{{route.meta.mainHeader}}</h2>
-    <el-button circle plain :icon="Plus" size="small" @click="dialog = true; dialogTarget = 'create'"></el-button>
+    <el-button circle plain :icon="Plus" size="small" @click="dialog = true; dialogTarget = 'create'" />
   </div>
   <CreateUpdateModal v-model="dialog" :target="dialogTarget" />
   <el-row v-if="!store.state.user._id">
