@@ -3,7 +3,7 @@
     <h2>Войдите, чтобы продолжить!</h2>
   </el-row>
   <el-row v-else-if="item.id">
-    <el-col :span="5">
+    <el-col :span="5" :xs="24">
       <el-image :src="item.image">
         <template #error>
           <el-row class="image-placeholder">
@@ -12,16 +12,16 @@
         </template>
       </el-image>
     </el-col>
-    <el-col :span="13" :push="1">
+    <el-col :span="13" :push="1" :xs="{span: 24, push: 0}">
       <h2 class="item-header">{{ item.name }}</h2>
-      <h3 style="margin-bottom: 5px;">Информация:</h3>
+      <h3 style="margin-bottom: 10px;">Информация:</h3>
       <div style="display: flex; row-gap: 5px; column-gap: 7px; flex-wrap: wrap; margin-bottom: 20px;">
         <el-tag type="info">{{ getTypeWord(item.type) }}</el-tag>
         <el-tag v-if="item.year" type="info">{{ item.year }}</el-tag>
         <el-tag v-if="item.restriction" type="info">{{ item.restriction }}</el-tag>
       </div>
       <div v-if="item.developers">
-        <h3 style="margin-bottom: 5px;">{{getDeveloperWordByType(item.type, item.developers.length)}}:</h3>
+        <h3 style="margin-bottom: 10px;">{{getDeveloperWordByType(item.type, item.developers.length)}}:</h3>
         <div style="display: flex; row-gap: 5px; column-gap: 7px; flex-wrap: wrap; margin-bottom: 20px;">
           <el-tag v-for="(developer, i) in item.developers" :key="i" type="info">
             {{ developer }}
@@ -29,14 +29,14 @@
         </div>
       </div>
       <div v-if="item.genres">
-        <h3 style="margin-bottom: 5px;">Жанры:</h3>
+        <h3 style="margin-bottom: 10px;">Жанры:</h3>
         <div style="display: flex; row-gap: 5px; column-gap: 7px; flex-wrap: wrap; margin-bottom: 20px;">
           <el-tag v-for="(genre, i) in item.genres" :key="i" type="info">
             {{ genre }}
           </el-tag>
         </div>
       </div>
-      <el-collapse>
+      <el-collapse style="width: 300px;">
         <el-collapse-item :class="['set-status', item.status]">
           <template #title>
             <el-row align="middle" style="column-gap: 10px">
@@ -92,7 +92,6 @@ watchEffect(async () => {
   try {
     const response = await ItemsAPI.getOne(route.params.id)
     item.value = response.data
-    console.log(item.value)
   } catch (e) {
     ElNotification.error({
       title: e.response.data.message,
@@ -103,5 +102,50 @@ watchEffect(async () => {
 </script>
 
 <style scoped>
+.item-header {
+  word-break: normal;
+  text-align: left;
+}
 
+.set-status-button-text {
+  font-size: 16px;
+}
+</style>
+<style>
+.set-status .el-collapse-item__header {
+  padding: 0 20px;
+  border-bottom: 0;
+}
+
+.el-collapse-item__content {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0 0 2px;
+  row-gap: 10px;
+}
+
+.looking .el-collapse-item__header {
+  background: #79bbff;
+  border-left: 10px solid #a0cfff;
+}
+
+.planned .el-collapse-item__header {
+  background: #f7b954;
+  border-left: 10px solid #f7c9a7;
+}
+
+.viewed .el-collapse-item__header {
+  background: #95d475;
+  border-left: 10px solid #b3e19d;
+}
+
+.postponed .el-collapse-item__header {
+  background: #b1b3b8;
+  border-left: 10px solid #c8c9cc;
+}
+
+.abandoned .el-collapse-item__header {
+  background: #f56c6c;
+  border-left: 10px solid #fab6b6;
+}
 </style>
