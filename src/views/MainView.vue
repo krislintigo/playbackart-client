@@ -1,18 +1,33 @@
 <template>
-  <div style="display: flex; align-items: center; column-gap: 10px">
-    <h2>{{route.meta.mainHeader}}</h2>
-    <el-button circle plain :icon="Plus" size="small" @click="dialog = true; dialogTarget = 'create'" />
-  </div>
-  <CreateUpdateModal v-model="dialog" :target="dialogTarget" :updated-item="updatedItem" />
   <el-row v-if="!store.state.user._id">
     <h2>Войдите, чтобы продолжить!</h2>
   </el-row>
-  <el-row v-else v-loading="loading" style="margin-bottom: 30px;">
-    <el-col :span="18">
-      <SearchInput v-model="searchQuery" />
+  <el-row v-else v-loading="loading" justify="center" :gutter="30" style="margin-bottom: 30px;">
+    <el-col :span="24" :lg="17">
+      <div style="display: flex; align-items: center; column-gap: 10px">
+        <h2>{{route.meta.mainHeader}}</h2>
+        <el-button circle plain :icon="Plus" size="small" @click="dialog = true; dialogTarget = 'create'" />
+      </div>
+      <CreateUpdateModal v-model="dialog" :target="dialogTarget" :updated-item="updatedItem" />
+      <el-drawer v-model="drawer" size="390px" title="Фильтры">
+        <el-scrollbar>
+          <AsideFilters
+            :items="items"
+            v-model:selected-grades="selectedGrades"
+            v-model:selected-restrictions="selectedRestrictions"
+            v-model:selected-genres="selectedGenres"
+            v-model:selected-developers="selectedDevelopers"
+            v-model:selected-franchises="selectedFranchises"
+          />
+        </el-scrollbar>
+      </el-drawer>
+      <div style="display: flex; column-gap: 10px; margin-bottom: 20px;">
+        <el-button class="shown-1500-and-down" :icon="Filter" text circle @click="drawer = true" />
+        <SearchInput v-model="searchQuery" />
+      </div>
       <MainDisplayLayout :items="queriedItems" @update-item="updateItem" @delete-item="deleteItem" />
     </el-col>
-    <el-col :span="5" :push="1">
+    <el-col :span="6" class="hidden-1500-and-down">
       <AsideFilters
         :items="items"
         v-model:selected-grades="selectedGrades"
@@ -26,8 +41,8 @@
 </template>
 
 <script setup>
-import { provide, ref, watchEffect } from 'vue'
-import { Plus } from '@element-plus/icons-vue'
+import { provide, ref, watch, watchEffect } from 'vue'
+import { Plus, Filter } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { useFilters } from '@/composables/filters'
@@ -45,6 +60,7 @@ const loading = ref(true)
 const dialog = ref(false)
 const dialogTarget = ref('')
 const updatedItem = ref({})
+const drawer = ref(false)
 const items = ref([])
 
 const {
@@ -106,8 +122,25 @@ const deleteItem = async id => {
 provide('refetch', refetch)
 
 watchEffect(refetch)
+
+watch(() => drawer.value, (open) => {
+  document.documentElement.style.paddingRight =
+    open ? window.innerWidth - document.documentElement.clientWidth + 'px' : ''
+  document.documentElement.style.overflowY = open ? 'hidden' : 'scroll'
+})
 </script>
 
 <style scoped>
+@media (max-width: 1500px) {
+  .hidden-1500-and-down {
+    display: none;
+  }
+}
+
+@media (min-width: 1500px) {
+  .shown-1500-and-down {
+    display: none;
+  }
+}
 
 </style>

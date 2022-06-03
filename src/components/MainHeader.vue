@@ -60,7 +60,7 @@ const tabClick = (tab) => {
 
 @media (max-width: 992px) {
   .header {
-    --el-header-height: 150px
+    --el-header-height: 130px
   }
 }
 

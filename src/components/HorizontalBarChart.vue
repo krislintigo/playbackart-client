@@ -32,7 +32,7 @@ const emit = defineEmits({
 })
 
 const chartStyles = computed(() => ({
-  height: props.labels.length > 5 ? 60 * props.labels.length : 300 + 'px',
+  height: '300px',
   position: 'relative'
 }))
 
@@ -49,7 +49,7 @@ const simpleData = computed(() => ({
 
 const options = {
   indexAxis: 'y',
-  responsive: true,
+  maintainAspectRatio: false,
   onClick: (e, arr) => {
     if (!arr.length) return
     emit('click', arr[0].index)

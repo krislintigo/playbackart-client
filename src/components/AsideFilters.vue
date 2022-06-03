@@ -221,6 +221,7 @@ const getFranchiseTextClass = (franchise) => {
   display: flex;
   flex-direction: column;
   row-gap: 30px;
+  width: 350px;
 }
 
 .back-header {

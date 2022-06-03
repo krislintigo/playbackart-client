@@ -1,6 +1,6 @@
 <template>
   <el-input v-model="searchQuery" placeholder="Поиск по названию..." clearable />
-  <el-divider />
+<!--  <el-divider />-->
 </template>
 
 <script setup>

@@ -9,7 +9,7 @@
         </template>
         <el-table :data="block.items">
           <el-table-column type="index" label="#" width="40" />
-          <el-table-column sortable prop="name" label="Название">
+          <el-table-column sortable prop="name" label="Название" min-width="350">
             <template #default="scope">
               <el-popover placement="right" :width="420" trigger="hover" :show-after="500" :persistent="false">
                 <template #reference>
