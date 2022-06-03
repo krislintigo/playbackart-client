@@ -9,25 +9,12 @@
         <el-button circle plain :icon="Plus" size="small" @click="dialog = true; dialogTarget = 'create'" />
       </div>
       <CreateUpdateModal v-model="dialog" :target="dialogTarget" :updated-item="updatedItem" />
-      <el-drawer v-model="drawer" size="390px" title="Фильтры">
-        <el-scrollbar>
-          <AsideFilters
-            :items="items"
-            v-model:selected-grades="selectedGrades"
-            v-model:selected-restrictions="selectedRestrictions"
-            v-model:selected-genres="selectedGenres"
-            v-model:selected-developers="selectedDevelopers"
-            v-model:selected-franchises="selectedFranchises"
-          />
-        </el-scrollbar>
-      </el-drawer>
-      <div style="display: flex; column-gap: 10px; margin-bottom: 20px;">
-        <el-button class="shown-1500-and-down" :icon="Filter" text circle @click="drawer = true" />
+      <div style="margin-bottom: 20px;">
         <SearchInput v-model="searchQuery" />
       </div>
       <MainDisplayLayout :items="queriedItems" @update-item="updateItem" @delete-item="deleteItem" />
     </el-col>
-    <el-col :span="6" class="hidden-1500-and-down">
+    <el-col :span="24" :lg="6" style="margin-top: 68px;">
       <AsideFilters
         :items="items"
         v-model:selected-grades="selectedGrades"
@@ -41,8 +28,8 @@
 </template>
 
 <script setup>
-import { provide, ref, watch, watchEffect } from 'vue'
-import { Plus, Filter } from '@element-plus/icons-vue'
+import { provide, ref, watchEffect } from 'vue'
+import { Plus } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { useFilters } from '@/composables/filters'
@@ -60,7 +47,6 @@ const loading = ref(true)
 const dialog = ref(false)
 const dialogTarget = ref('')
 const updatedItem = ref({})
-const drawer = ref(false)
 const items = ref([])
 
 const {
@@ -122,25 +108,8 @@ const deleteItem = async id => {
 provide('refetch', refetch)
 
 watchEffect(refetch)
-
-watch(() => drawer.value, (open) => {
-  document.documentElement.style.paddingRight =
-    open ? window.innerWidth - document.documentElement.clientWidth + 'px' : ''
-  document.documentElement.style.overflowY = open ? 'hidden' : 'scroll'
-})
 </script>
 
 <style scoped>
-@media (max-width: 1500px) {
-  .hidden-1500-and-down {
-    display: none;
-  }
-}
-
-@media (min-width: 1500px) {
-  .shown-1500-and-down {
-    display: none;
-  }
-}
 
 </style>
