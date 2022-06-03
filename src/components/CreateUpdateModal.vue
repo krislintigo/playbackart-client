@@ -25,7 +25,6 @@
             {{status.title}}
           </el-radio-button>
         </el-radio-group>
-        <el-button style="margin-left: 5px;" :icon="Close" size="small" circle text @click="item.status = ''" />
       </el-form-item>
       <el-form-item label="Тип:" prop="type">
         <el-radio-group v-model="item.type">
@@ -37,7 +36,6 @@
             {{type.title}}
           </el-radio-button>
         </el-radio-group>
-        <el-button style="margin-left: 5px;" :icon="Close" size="small" circle text @click="item.type = ''" />
       </el-form-item>
       <el-form-item label="Ограничение:" prop="restriction">
         <el-radio-group v-model="item.restriction">
@@ -83,6 +81,7 @@
       <el-form-item label="Год выхода:" prop="year">
         <el-date-picker
           v-model="item.year"
+          value-format="YYYY"
           type="year"
         />
       </el-form-item>
@@ -120,6 +119,7 @@
 <script setup>
 import { defineProps, defineEmits, computed, reactive, ref, inject, watch } from 'vue'
 import { ElNotification } from 'element-plus'
+import _ from 'lodash'
 import { Close } from '@element-plus/icons-vue'
 import { statuses, rules, types, rating, restrictions } from '@/data/static'
 import { getDeveloperWordByType } from '@/utils/getDeveloperWordByType'
@@ -172,17 +172,20 @@ watch(() => dialog.value, open => {
   // fix html scroll
   document.documentElement.style.paddingRight =
     open ? window.innerWidth - document.documentElement.clientWidth + 'px' : ''
-  document.documentElement.style.overflowY = open ? 'hidden' : 'auto'
+  document.documentElement.style.overflowY = open ? 'hidden' : 'scroll'
 
   // set target
   if (open) {
     if (props.target === 'create') {
+      resetItem()
       item.type = types.find(type => type.path === location.pathname)?.value ?? ''
     } else {
       for (const key in item) {
         item[key] = props.updatedItem[key]
       }
-      item.time = props.updatedItem?.time ?? { count: 0, duration: 0 }
+      item.genres = props.updatedItem.genres?.slice(0) ?? []
+      item.time = _.cloneDeep(props.updatedItem?.time ?? { count: 0, duration: 0 })
+      item.developers = props.updatedItem.developers?.slice(0) ?? []
     }
   }
 })
@@ -238,32 +241,47 @@ const confirmAppend = async (form) => {
 }
 
 const confirmUpdate = async (form) => {
-  console.log('update', form)
-  // try {
-  //   await form.validate()
-  //   try {
-  //     const response = await ItemsAPI.update(item)
-  //     dialog.value = false
-  //     refetch()
-  //     ElNotification({
-  //       title: response.message,
-  //       type: 'success',
-  //       position: 'bottom-right'
-  //     })
-  //   } catch (e) {
-  //     ElNotification({
-  //       title: e.response.data.message,
-  //       type: 'error',
-  //       position: 'bottom-right'
-  //     })
-  //   }
-  // } catch (error) {
-  //   ElNotification({
-  //     title: 'Пожалуйста, заполните все поля',
-  //     type: 'error',
-  //     position: 'bottom-right'
-  //   })
-  // }
+  try {
+    await form.validate()
+    try {
+      const response = await ItemsAPI.update(props.updatedItem.id, item)
+      dialog.value = false
+      refetch()
+      ElNotification({
+        title: response.message,
+        type: 'success',
+        position: 'bottom-right'
+      })
+    } catch (e) {
+      ElNotification({
+        title: e.response.data.message,
+        type: 'error',
+        position: 'bottom-right'
+      })
+    }
+  } catch (error) {
+    ElNotification({
+      title: 'Пожалуйста, заполните все поля',
+      type: 'error',
+      position: 'bottom-right'
+    })
+  }
+}
+
+const resetItem = () => {
+  item.name = ''
+  item.image = ''
+  item.rating = 0
+  item.status = ''
+  item.type = ''
+  item.restriction = ''
+  item.genres = []
+  item.time = {
+    count: 0,
+    duration: 0
+  }
+  item.year = ''
+  item.developers = []
 }
 </script>
 

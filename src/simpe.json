@@ -16,35 +16,47 @@
       "count":25,
       "duration":25
     },
+    "year": "2012",
     "developers": ["WIT studio"]
   },
   {
     "name":"One Piece",
+    "image":"",
+    "rating":0,
     "status":"planned",
     "type":"series",
+    "restriction":"",
     "genres":[
       "Фэнтези",
       "Драма",
       "Приключения",
       "Комедия"
     ],
+    "year": "1999",
     "time":{
       "count":1019,
       "duration":24
-    }
+    },
+    "developers": []
   },
   {
     "name":"Наруто: Ураганные хроники",
+    "image":"",
+    "rating":0,
     "status":"postponed",
     "type":"series",
     "restriction":"PG-13",
+    "genres": [],
+    "year": "",
     "time":{
       "count":500,
       "duration":23
-    }
+    },
+    "developers": []
   },
   {
     "name":"Re:Zero",
+    "image":"",
     "rating":10,
     "status":"viewed",
     "type":"series",
@@ -59,10 +71,12 @@
       "count":24,
       "duration":24
     },
+    "year": "2016",
     "developers": ["White Fox Studio"]
   },
   {
     "name":"Я встретил вашу маму и очень долго не мог ей ответить на призывы дружбы, и всё-таки это получилось",
+    "image":"",
     "rating":9,
     "status":"abandoned",
     "restriction":"R-17",
@@ -71,10 +85,17 @@
       "Драма",
       "Комедия",
       "Романтика"
-    ]
+    ],
+    "time":{
+      "count":0,
+      "duration":0
+    },
+    "year": "",
+    "developers": []
   },
   {
     "name":"Евангелион",
+    "image":"",
     "rating":10,
     "status":"viewed",
     "type":"series",
@@ -88,10 +109,12 @@
       "count":24,
       "duration":23
     },
+    "year": "1995",
     "developers": ["Gainax", "Tatsunoko"]
   },
   {
     "name":"Конец Евангелиона",
+    "image":"",
     "rating":8,
     "status":"viewed",
     "type":"movie",
@@ -105,10 +128,12 @@
       "count":1,
       "duration":48
     },
+    "year": "1997",
     "developers": ["Gainax", "Production I.G."]
   },
   {
     "name":"Куколка",
+    "image":"",
     "rating":3,
     "status":"viewed",
     "type":"series",
@@ -118,10 +143,12 @@
       "Ужасы",
       "Психологическое"
     ],
+    "year": "",
     "time":{
       "count":12,
       "duration":4
-    }
+    },
+    "developers": []
   },
   {
     "name":"Интерстеллар",
@@ -139,6 +166,7 @@
       "count":1,
       "duration":169
     },
+    "year": "2014",
     "developers": ["Paramount Pictures", "Warner Bros. Pictures", "Legendary Pictures", "Syncopy Films", "Lynda Obst Productions"]
   },
   {
@@ -152,10 +180,12 @@
       "Приключения",
       "Фантастика"
     ],
+    "year": "",
     "time":{
       "count":1,
       "duration":144
-    }
+    },
+    "developers": []
   },
   {
     "name":"Район №9",
@@ -174,6 +204,7 @@
       "count":1,
       "duration":112
     },
+    "year": "2009",
     "developers": ["Key Creatives", "QED International", "WigNut Films"]
   },
   {
@@ -189,6 +220,10 @@
       "Приключения",
       "Семейный"
     ],
+    "time":{
+      "count":0,
+      "duration":0
+    },
     "year": "2022",
     "developers": ["DreamWorks Animation", "Scholastic Entertainment"]
   },
@@ -203,6 +238,10 @@
       "Научная фантастика"
     ],
     "year": "2006",
+    "time":{
+      "count":1,
+      "duration":600
+    },
     "developers": ["Лю Цысинь"]
   },
   {
@@ -215,6 +254,10 @@
     "genres":[
       "Научная фантастика"
     ],
+    "time":{
+      "count":0,
+      "duration":0
+    },
     "year": "2008",
     "developers": ["Лю Цысинь"]
   },
@@ -229,6 +272,10 @@
       "Научная фантастика"
     ],
     "year": "2010",
+    "time":{
+      "count":0,
+      "duration":0
+    },
     "developers": ["Лю Цысинь"]
   },
   {
@@ -259,6 +306,10 @@
       "Шутер от первого лица"
     ],
     "year": "2014",
+    "time":{
+      "count":0,
+      "duration":0
+    },
     "developers": ["4A Games"]
   }
 ]
