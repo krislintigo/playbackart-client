@@ -7,7 +7,7 @@
   <el-row v-if="!store.state.user._id">
     <h2>Войдите, чтобы продолжить!</h2>
   </el-row>
-  <el-row v-else v-loading="loading">
+  <el-row v-else v-loading="loading" style="margin-bottom: 30px;">
     <el-col :span="18">
       <SearchInput v-model="searchQuery" />
       <MainDisplayLayout :items="queriedItems" @update-item="updateItem" @delete-item="deleteItem" />
