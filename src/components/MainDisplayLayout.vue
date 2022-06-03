@@ -9,7 +9,7 @@
         </template>
         <el-table :data="block.items">
           <el-table-column type="index" label="#" width="40" />
-          <el-table-column sortable prop="name" label="Название" width="650">
+          <el-table-column sortable prop="name" label="Название">
             <template #default="scope">
               <el-popover placement="right" :width="420" trigger="hover" :show-after="500">
                 <template #reference>
@@ -19,7 +19,7 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column sortable prop="rating" label="Рейтинг" :sort-method="sortByRating">
+          <el-table-column sortable prop="rating" label="Рейтинг" width="120" :sort-method="sortByRating">
             <template #default="scope">
               <span v-if="!scope.row.rating">-</span>
               <span v-else>{{scope.row.rating}}</span>
@@ -142,5 +142,9 @@ const sortByDuration = (a, b) => {
 
 .el-table .el-table__cell {
   padding: 3px 0;
+}
+
+.el-link__inner {
+  word-break: normal;
 }
 </style>

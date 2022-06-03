@@ -182,6 +182,7 @@ watch(() => dialog.value, open => {
       for (const key in item) {
         item[key] = props.updatedItem[key]
       }
+      item.time = props.updatedItem?.time ?? { count: 0, duration: 0 }
     }
   }
 })

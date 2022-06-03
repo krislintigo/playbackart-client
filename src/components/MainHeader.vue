@@ -2,6 +2,8 @@
   <el-header style="padding: 0 30px">
     <el-row justify="space-between" align="middle">
       <h1>PlaybackArt</h1>
+      <h2 class="hidden-md-and-up">For mobile</h2>
+      <h2 class="hidden-md-and-down">For PC</h2>
       <div class="right-container">
         <el-tabs v-model="active" @tab-click="tabClick">
           <el-tab-pane v-for="tab in tabs" :key="tab.label" :name="tab.label">

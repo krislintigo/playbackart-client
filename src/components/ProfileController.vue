@@ -1,7 +1,7 @@
 <template>
   <el-popover placement="bottom" :width="300" trigger="click">
     <template #reference>
-      <el-avatar :size="50" :icon="Avatar" />
+      <el-avatar :size="50" :icon="store.state.user._id ? User : Failed" />
     </template>
     <h2>Профиль</h2>
     <div v-if="store.state.user.login">
@@ -32,7 +32,7 @@
 <script setup>
 import { onBeforeMount, reactive } from 'vue'
 import { useStore } from 'vuex'
-import { Avatar } from '@element-plus/icons-vue'
+import { User, Failed } from '@element-plus/icons-vue'
 import { AuthAPI } from '@/api/AuthAPI'
 import { userNames } from '@/store/modules/user'
 import { ElNotification } from 'element-plus'
