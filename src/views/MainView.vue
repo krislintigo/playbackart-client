@@ -12,7 +12,11 @@
       <div style="margin-bottom: 20px;">
         <SearchInput v-model="searchQuery" />
       </div>
-      <MainDisplayLayout :items="queriedItems" @update-item="updateItem" @delete-item="deleteItem" />
+      <MainDisplayLayout
+        :items="queriedItems"
+        @update-item="updateItem"
+        @delete-item="deleteItem"
+      />
     </el-col>
     <el-col :span="24" :lg="6" style="margin-top: 68px;">
       <AsideFilters
