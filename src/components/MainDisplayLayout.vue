@@ -11,7 +11,7 @@
           <el-table-column type="index" label="#" width="40" />
           <el-table-column sortable prop="name" label="Название">
             <template #default="scope">
-              <el-popover placement="right" :width="420" trigger="hover" :show-after="500">
+              <el-popover placement="right" :width="420" trigger="hover" :show-after="500" :persistent="false">
                 <template #reference>
                   <el-link>{{ scope.row.name }}</el-link>
                 </template>
@@ -87,7 +87,7 @@ const abandonedItems = computed(() => props.items.filter(item => item.status ===
 
 const displayedItems = computed(() => [
   {
-    title: 'СМОТРЮ',
+    title: 'В ПРОЦЕССЕ',
     items: lookingItems.value
   },
   {
@@ -95,7 +95,7 @@ const displayedItems = computed(() => [
     items: plannedItems.value
   },
   {
-    title: 'ПРОСМОТРЕНО',
+    title: 'ЗАВЕРШЕНО',
     items: viewedItems.value
   },
   {

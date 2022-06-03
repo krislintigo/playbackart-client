@@ -102,7 +102,7 @@ const selectedDevelopers = computed({
 })
 
 const grades = computed(() =>
-  Array.from(new Set(props.items.map(i => i.rating))).sort((a, b) => b - a))
+  Array.from(new Set(props.items.filter(i => i.rating).map(i => i.rating))).sort((a, b) => b - a))
 const restrictionsComputed = computed(() =>
   Array.from(new Set(props.items.map(i => i.restriction))))
 const restrictionsLabels = computed(() =>
@@ -176,6 +176,8 @@ const getDeveloperTextClass = (developer) => {
 </script>
 
 <style scoped>
+@import "../assets/textSizes.css";
+
 .aside {
   display: flex;
   flex-direction: column;
@@ -198,23 +200,5 @@ const getDeveloperTextClass = (developer) => {
 
 .item-selected {
   color: #409eff;
-}
-
-.text0 {
-  font-size: 10px;
-}
-.text1 {
-  font-size: 12px;
-}
-.text2 {
-  font-size: 13px;
-}
-.text3 {
-  font-size: 14px;
-  font-weight: bold;
-}
-.text4 {
-  font-size: 16px;
-  font-weight: bold;
 }
 </style>

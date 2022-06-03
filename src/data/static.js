@@ -1,8 +1,8 @@
-import { CloseBold, Plus, Select, VideoPause, VideoPlay } from '@element-plus/icons-vue'
+import { CloseBold, Plus, Select, VideoPause, VideoPlay, Collection, Film, List, Monitor, VideoCameraFilled } from '@element-plus/icons-vue'
 
 export const statuses = [
   {
-    title: 'Смотрю',
+    title: 'В процессе',
     icon: VideoPlay,
     value: 'looking',
     color: '#79bbff'
@@ -14,7 +14,7 @@ export const statuses = [
     color: '#f7b954'
   },
   {
-    title: 'Просмотрено',
+    title: 'Завершено',
     icon: Select,
     value: 'viewed',
     color: '#95d475'
@@ -30,6 +30,34 @@ export const statuses = [
     icon: CloseBold,
     value: 'abandoned',
     color: '#f56c6c'
+  }
+]
+
+export const navigationTabs = [
+  {
+    label: '/',
+    icon: List,
+    name: 'Все'
+  },
+  {
+    label: '/movies',
+    icon: VideoCameraFilled,
+    name: 'Фильмы'
+  },
+  {
+    label: '/series',
+    icon: Film,
+    name: 'Сериалы'
+  },
+  {
+    label: '/games',
+    icon: Monitor,
+    name: 'Игры'
+  },
+  {
+    label: '/books',
+    icon: Collection,
+    name: 'Книги'
   }
 ]
 

@@ -1,0 +1,28 @@
+.el-collapse-item__header {
+    border-left: 10px solid;
+}
+
+.looking .el-collapse-item__header {
+    background: #79bbff;
+    border-left-color: #a0cfff;
+}
+
+.planned .el-collapse-item__header {
+    background: #f7b954;
+    border-left-color: #facd84;
+}
+
+.viewed .el-collapse-item__header {
+    background: #95d475;
+    border-left-color: #b3e19d;
+}
+
+.postponed .el-collapse-item__header {
+    background: #b1b3b8;
+    border-left-color: #c8c9cc;
+}
+
+.abandoned .el-collapse-item__header {
+    background: #f56c6c;
+    border-left-color: #fab6b6;
+}

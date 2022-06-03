@@ -108,7 +108,7 @@
     <template #footer>
       <el-button
         type="success"
-        @click="target === 'create' ? confirmAppend(formRef) : confirmUpdate(formRef)"
+        @click="target === 'create' ? confirmAction('create') : confirmAction('update')"
       >
         Подтвердить
       </el-button>
@@ -210,11 +210,13 @@ const handleDeveloperConfirm = () => {
   inputDeveloper.value = ''
 }
 
-const confirmAppend = async (form) => {
+const confirmAction = async (action) => {
   try {
-    await form.validate()
+    await formRef.value.validate()
     try {
-      const response = await ItemsAPI.add(item)
+      const response = action === 'create'
+        ? await ItemsAPI.add(item)
+        : await ItemsAPI.update(props.updatedItem.id, item)
       dialog.value = false
       refetch()
       ElNotification.success({
@@ -230,34 +232,6 @@ const confirmAppend = async (form) => {
   } catch (error) {
     ElNotification.error({
       title: 'Пожалуйста, заполните все поля',
-      position: 'bottom-right'
-    })
-  }
-}
-
-const confirmUpdate = async (form) => {
-  try {
-    await form.validate()
-    try {
-      const response = await ItemsAPI.update(props.updatedItem.id, item)
-      dialog.value = false
-      refetch()
-      ElNotification({
-        title: response.message,
-        type: 'success',
-        position: 'bottom-right'
-      })
-    } catch (e) {
-      ElNotification({
-        title: e.response.data.message,
-        type: 'error',
-        position: 'bottom-right'
-      })
-    }
-  } catch (error) {
-    ElNotification({
-      title: 'Пожалуйста, заполните все поля',
-      type: 'error',
       position: 'bottom-right'
     })
   }

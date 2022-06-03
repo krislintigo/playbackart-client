@@ -34,7 +34,9 @@
         </div>
       </div>
       <el-collapse>
-        <el-collapse-item :class="['set-status', item.status]">
+        <el-collapse-item
+          :class="['set-status', item.status]"
+        >
           <template #title>
             <el-row align="middle" style="column-gap: 10px">
               <el-icon size="large"><component :is="statuses.find(s => s.value === item.status).icon" /></el-icon>
@@ -116,6 +118,8 @@ const updateItemStatus = async (status) => {
 }
 </style>
 <style>
+@import "../assets/setStatusColors.css";
+
 .set-status .el-collapse-item__header {
   padding: 0 20px;
   border-bottom: 0;
@@ -126,30 +130,5 @@ const updateItemStatus = async (status) => {
   flex-direction: column;
   padding: 10px 0 0 2px;
   row-gap: 10px;
-}
-
-.looking .el-collapse-item__header {
-  background: #79bbff;
-  border-left: 10px solid #a0cfff;
-}
-
-.planned .el-collapse-item__header {
-  background: #f7b954;
-  border-left: 10px solid #f7c9a7;
-}
-
-.viewed .el-collapse-item__header {
-  background: #95d475;
-  border-left: 10px solid #b3e19d;
-}
-
-.postponed .el-collapse-item__header {
-  background: #b1b3b8;
-  border-left: 10px solid #c8c9cc;
-}
-
-.abandoned .el-collapse-item__header {
-  background: #f56c6c;
-  border-left: 10px solid #fab6b6;
 }
 </style>

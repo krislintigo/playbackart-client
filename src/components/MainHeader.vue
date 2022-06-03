@@ -6,7 +6,7 @@
       <h2 class="hidden-md-and-down">For PC</h2>
       <div class="right-container">
         <el-tabs v-model="active" @tab-click="tabClick">
-          <el-tab-pane v-for="tab in tabs" :key="tab.label" :name="tab.label">
+          <el-tab-pane v-for="tab in navigationTabs" :key="tab.label" :name="tab.label">
             <template #label>
               <el-icon><component :is="tab.icon"/></el-icon>
               {{ tab.name }}
@@ -23,36 +23,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { List, Collection, Film, Monitor, VideoCameraFilled } from '@element-plus/icons-vue'
+import { navigationTabs } from '@/data/static'
 import ProfileController from '@/components/ProfileController'
-
-const tabs = [
-  {
-    label: '/',
-    icon: List,
-    name: 'Все'
-  },
-  {
-    label: '/movies',
-    icon: VideoCameraFilled,
-    name: 'Фильмы'
-  },
-  {
-    label: '/series',
-    icon: Film,
-    name: 'Сериалы'
-  },
-  {
-    label: '/games',
-    icon: Monitor,
-    name: 'Игры'
-  },
-  {
-    label: '/books',
-    icon: Collection,
-    name: 'Книги'
-  }
-]
 
 const router = useRouter()
 
