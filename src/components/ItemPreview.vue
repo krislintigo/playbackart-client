@@ -12,22 +12,22 @@
     <el-col :span="13" :push="1">
       <h2 class="item-header">{{ item.name }}</h2>
       <h3 style="margin-bottom: 5px;">Информация:</h3>
-      <div style="display: flex; row-gap: 5px; column-gap: 7px; flex-wrap: wrap; margin-bottom: 20px;">
+      <div class="tags-container">
         <el-tag type="info">{{ getTypeWord(item.type) }}</el-tag>
         <el-tag v-if="item.year" type="info">{{ item.year }}</el-tag>
         <el-tag v-if="item.restriction" type="info">{{ item.restriction }}</el-tag>
       </div>
-      <div v-if="item.developers">
+      <div v-if="item.developers.length">
         <h3 style="margin-bottom: 5px;">{{getDeveloperWordByType(item.type, item.developers.length)}}:</h3>
-        <div style="display: flex; row-gap: 5px; column-gap: 7px; flex-wrap: wrap; margin-bottom: 20px;">
+        <div class="tags-container">
           <el-tag v-for="(developer, i) in item.developers" :key="i" type="info">
             {{ developer }}
           </el-tag>
         </div>
       </div>
-      <div v-if="item.genres">
+      <div v-if="item.genres.length">
         <h3 style="margin-bottom: 5px;">Жанры:</h3>
-        <div style="display: flex; row-gap: 5px; column-gap: 7px; flex-wrap: wrap; margin-bottom: 20px;">
+        <div class="tags-container">
           <el-tag v-for="(genre, i) in item.genres" :key="i" type="info">
             {{ genre }}
           </el-tag>
@@ -101,6 +101,14 @@ const updateItemStatus = async (status) => {
 .item-header {
   word-break: normal;
   text-align: left;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 5px;
+  column-gap: 7px;
+  margin-bottom: 20px;
 }
 
 .set-status-button-text {

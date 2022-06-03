@@ -69,7 +69,7 @@
       <el-form-item label="Длительность:" prop="time">
         <div>
           <el-col>
-            <el-input-number v-model="item.time.count" />
+            <el-input-number v-model="item.time.count" :min="1" />
             <h4 style="margin: 0;">Кол-во элементов</h4>
           </el-col>
           <el-col :push="2">
@@ -180,12 +180,7 @@ watch(() => dialog.value, open => {
       resetItem()
       item.type = types.find(type => type.path === location.pathname)?.value ?? ''
     } else {
-      for (const key in item) {
-        item[key] = props.updatedItem[key]
-      }
-      item.genres = props.updatedItem.genres?.slice(0) ?? []
-      item.time = _.cloneDeep(props.updatedItem?.time ?? { count: 0, duration: 0 })
-      item.developers = props.updatedItem.developers?.slice(0) ?? []
+      Object.assign(item, _.cloneDeep(props.updatedItem))
     }
   }
 })

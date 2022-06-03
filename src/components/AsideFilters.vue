@@ -23,7 +23,7 @@
       <el-row>
         <el-link
           class="item"
-          :class="{[getGenreTextClass(genre)]: true, 'genre-selected': selectedGenres.includes(genre)}"
+          :class="{[getGenreTextClass(genre)]: true, 'item-selected': selectedGenres.includes(genre)}"
           v-for="genre in genres"
           :key="genre"
           @click="genreClick(genre)"
@@ -52,6 +52,7 @@
 <script setup>
 import { computed, defineProps, defineEmits } from 'vue'
 import HorizontalBarChart from '@/components/HorizontalBarChart'
+import { restrictions } from '@/data/static'
 
 const props = defineProps({
   items: {
@@ -101,15 +102,15 @@ const selectedDevelopers = computed({
 })
 
 const grades = computed(() =>
-  Array.from(new Set(props.items.filter(i => i.rating).map(i => i.rating))).sort((a, b) => b - a))
-const restrictions = computed(() =>
-  Array.from(new Set(props.items.filter(i => i.restriction).map(i => i.restriction))))
+  Array.from(new Set(props.items.map(i => i.rating))).sort((a, b) => b - a))
+const restrictionsComputed = computed(() =>
+  Array.from(new Set(props.items.map(i => i.restriction))))
 const restrictionsLabels = computed(() =>
-  ['G', 'PG', 'PG-13', 'R-17', 'R+'].filter(r => restrictions.value.includes(r)))
+  restrictions.filter(r => restrictionsComputed.value.includes(r)))
 const genres = computed(() =>
-  Array.from(new Set(props.items.filter(i => i.genres).map(i => i.genres).flat(1))))
+  Array.from(new Set(props.items.map(i => i.genres).flat(1))))
 const developers = computed(() =>
-  Array.from(new Set(props.items.filter(i => i.developers).map(i => i.developers).flat(1))))
+  Array.from(new Set(props.items.map(i => i.developers).flat(1))))
 
 const gradeClick = (gradeIndex) => {
   const grade = grades.value[gradeIndex]

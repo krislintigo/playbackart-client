@@ -27,7 +27,7 @@
           </el-table-column>
           <el-table-column sortable prop="time" label="Длительность" width="170" :sort-method="sortByDuration">
             <template #default="scope">
-              <span v-if="!scope.row.time">-</span>
+              <span v-if="!scope.row.time.duration">-</span>
               <div v-else>
                 <span v-if="scope.row.time.count > 1">{{ scope.row.time.count }} x </span>
                 <span>{{formatDuration(scope.row.time.duration)}}</span>
@@ -52,7 +52,7 @@
         </el-table>
         <h4 style="margin: 5px 0">
           Общая продолжительность:
-          {{formatDuration(block.items.reduce((acc, cur) => cur.time ? acc + cur.time.count * cur.time.duration : acc, 0)) || '-'}}
+          {{formatDuration(block.items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || '-'}}
         </h4>
       </el-collapse-item>
     </div>

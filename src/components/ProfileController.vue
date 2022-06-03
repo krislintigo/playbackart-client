@@ -7,21 +7,21 @@
     <div v-if="store.state.user.login">
       <h3 >Добро пожаловать, {{store.state.user.login}}!</h3>
       <el-row justify="end">
-        <el-button type="danger" @click="logout">Выход</el-button>
+        <el-button type="danger" @click="handleUserAction('logout')">Выход</el-button>
       </el-row>
     </div>
     <div v-else>
       <h3>Войдите в аккаунт!</h3>
-      <el-form v-model="inputInfo" label-position="right" :label-width="65">
+      <el-form v-model="authData" label-position="right" :label-width="65">
         <el-form-item label="Логин">
-          <el-input v-model="inputInfo.login" />
+          <el-input v-model="authData.login" />
         </el-form-item>
         <el-form-item label="Пароль">
-          <el-input v-model="inputInfo.password" type="password" show-password />
+          <el-input v-model="authData.password" type="password" show-password />
         </el-form-item>
         <el-row justify="end">
-          <el-button type="success" @click="login">Вход</el-button>
-          <el-button type="warning" @click="registration">Регистрация</el-button>
+          <el-button type="success" @click="handleUserAction('login')">Вход</el-button>
+          <el-button type="warning" @click="handleUserAction('register')">Регистрация</el-button>
         </el-row>
       </el-form>
     </div>
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, reactive } from 'vue'
+import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { User, Failed } from '@element-plus/icons-vue'
 import { AuthAPI } from '@/api/AuthAPI'
@@ -40,12 +40,12 @@ import { UserAPI } from '@/api/UserAPI'
 
 const store = useStore()
 
-const inputInfo = reactive({
+const authData = reactive({
   login: '',
   password: ''
-})
+});
 
-onBeforeMount(async () => {
+(async () => {
   try {
     const validateResponse = await AuthAPI.validate()
     const userResponse = await UserAPI.getOneShort(validateResponse.data.id)
@@ -53,44 +53,13 @@ onBeforeMount(async () => {
   } catch (e) {
     console.error('Invalid token')
   }
-})
+})()
 
-const login = async () => {
+const handleUserAction = async (action) => {
   try {
-    const response = await AuthAPI.login(inputInfo.login, inputInfo.password)
-    store.commit(userNames.setUser, response.data)
-    ElNotification.success({
-      title: response.message,
-      position: 'bottom-right'
-    })
-  } catch (e) {
-    ElNotification.error({
-      title: e.response.data.message,
-      position: 'bottom-right'
-    })
-  }
-}
-
-const registration = async () => {
-  try {
-    const response = await AuthAPI.register(inputInfo.login, inputInfo.password)
-    store.commit(userNames.setUser, response.data)
-    ElNotification.success({
-      title: response.message,
-      position: 'bottom-right'
-    })
-  } catch (e) {
-    ElNotification.error({
-      title: e.response.data.message,
-      position: 'bottom-right'
-    })
-  }
-}
-
-const logout = async () => {
-  try {
-    const response = await AuthAPI.logout()
-    store.commit(userNames.resetUser)
+    const response = await AuthAPI[action](authData)
+    if (action === 'logout') store.commit(userNames.resetUser)
+    else store.commit(userNames.setUser, response.data)
     ElNotification.success({
       title: response.message,
       position: 'bottom-right'
