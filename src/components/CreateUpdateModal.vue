@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="dialog" width="95%" :lock-scroll="false">
+  <el-dialog v-model="dialog" width="95%" :lock-scroll="false" custom-class="dialog">
     <template #header>
       <h3>{{target === 'create' ? 'Добавить' : 'Обновить'}} элемент</h3>
     </template>
@@ -104,6 +104,9 @@
           {{ developer }}
         </el-tag>
       </el-form-item>
+      <el-form-item label="Франшиза:" prop="franchise">
+        <el-input v-model="item.franchise" />
+      </el-form-item>
     </el-form>
     <template #footer>
       <el-button
@@ -160,7 +163,8 @@ const item = reactive({
     duration: 0
   },
   year: '',
-  developers: []
+  developers: [],
+  franchise: ''
 })
 
 const dialog = computed({
@@ -251,13 +255,19 @@ const resetItem = () => {
   }
   item.year = ''
   item.developers = []
+  item.franchise = ''
 }
 </script>
 
 <style scoped>
 
 </style>
+
 <style>
+.dialog {
+  max-width: 1300px;
+}
+
 .el-dialog__body {
   padding-top: 0;
 }

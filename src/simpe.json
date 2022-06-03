@@ -17,7 +17,8 @@
       "duration":25
     },
     "year": "2012",
-    "developers": ["WIT studio"]
+    "developers": ["WIT studio"],
+    "franchise": "Атака титанов"
   },
   {
     "name":"One Piece",
@@ -37,7 +38,8 @@
       "count":1019,
       "duration":24
     },
-    "developers": []
+    "developers": [],
+    "franchise": ""
   },
   {
     "name":"Наруто: Ураганные хроники",
@@ -52,7 +54,8 @@
       "count":500,
       "duration":23
     },
-    "developers": []
+    "developers": [],
+    "franchise": ""
   },
   {
     "name":"Re:Zero",
@@ -72,7 +75,8 @@
       "duration":24
     },
     "year": "2016",
-    "developers": ["White Fox Studio"]
+    "developers": ["White Fox Studio"],
+    "franchise": "Re:Zero"
   },
   {
     "name":"Я встретил вашу маму и очень долго не мог ей ответить на призывы дружбы, и всё-таки это получилось",
@@ -87,11 +91,12 @@
       "Романтика"
     ],
     "time":{
-      "count":0,
+      "count":1,
       "duration":0
     },
     "year": "",
-    "developers": []
+    "developers": [],
+    "franchise": ""
   },
   {
     "name":"Евангелион",
@@ -110,7 +115,8 @@
       "duration":23
     },
     "year": "1995",
-    "developers": ["Gainax", "Tatsunoko"]
+    "developers": ["Gainax", "Tatsunoko"],
+    "franchise": "Евангелион"
   },
   {
     "name":"Конец Евангелиона",
@@ -129,7 +135,8 @@
       "duration":48
     },
     "year": "1997",
-    "developers": ["Gainax", "Production I.G."]
+    "developers": ["Gainax", "Production I.G."],
+    "franchise": "Евангелион"
   },
   {
     "name":"Куколка",
@@ -148,7 +155,8 @@
       "count":12,
       "duration":4
     },
-    "developers": []
+    "developers": [],
+    "franchise": ""
   },
   {
     "name":"Интерстеллар",
@@ -167,7 +175,8 @@
       "duration":169
     },
     "year": "2014",
-    "developers": ["Paramount Pictures", "Warner Bros. Pictures", "Legendary Pictures", "Syncopy Films", "Lynda Obst Productions"]
+    "developers": ["Paramount Pictures", "Warner Bros. Pictures", "Legendary Pictures", "Syncopy Films", "Lynda Obst Productions"],
+    "franchise": ""
   },
   {
     "name":"Марсианин",
@@ -185,7 +194,8 @@
       "count":1,
       "duration":144
     },
-    "developers": []
+    "developers": [],
+    "franchise": ""
   },
   {
     "name":"Район №9",
@@ -205,7 +215,8 @@
       "duration":112
     },
     "year": "2009",
-    "developers": ["Key Creatives", "QED International", "WigNut Films"]
+    "developers": ["Key Creatives", "QED International", "WigNut Films"],
+    "franchise": ""
   },
   {
     "name":"Плохие парни",
@@ -221,11 +232,12 @@
       "Семейный"
     ],
     "time":{
-      "count":0,
+      "count":1,
       "duration":0
     },
     "year": "2022",
-    "developers": ["DreamWorks Animation", "Scholastic Entertainment"]
+    "developers": ["DreamWorks Animation", "Scholastic Entertainment"],
+    "franchise": ""
   },
   {
     "name":"Задача трех тел",
@@ -242,7 +254,8 @@
       "count":1,
       "duration":600
     },
-    "developers": ["Лю Цысинь"]
+    "developers": ["Лю Цысинь"],
+    "franchise": "Память о прошлом Земли"
   },
   {
     "name":"Темный лес",
@@ -255,11 +268,12 @@
       "Научная фантастика"
     ],
     "time":{
-      "count":0,
+      "count":1,
       "duration":0
     },
     "year": "2008",
-    "developers": ["Лю Цысинь"]
+    "developers": ["Лю Цысинь"],
+    "franchise": "Память о прошлом Земли"
   },
   {
     "name":"Вечная жизнь смерти",
@@ -273,10 +287,11 @@
     ],
     "year": "2010",
     "time":{
-      "count":0,
+      "count":1,
       "duration":0
     },
-    "developers": ["Лю Цысинь"]
+    "developers": ["Лю Цысинь"],
+    "franchise": "Память о прошлом Земли"
   },
   {
     "name":"Far Cry 3",
@@ -293,7 +308,8 @@
       "count":1,
       "duration":900
     },
-    "developers": ["Ubisoft"]
+    "developers": ["Ubisoft"],
+    "franchise": "Far Cry"
   },
   {
     "name":"Metro 2033 Redux",
@@ -307,9 +323,10 @@
     ],
     "year": "2014",
     "time":{
-      "count":0,
+      "count":1,
       "duration":0
     },
-    "developers": ["4A Games"]
+    "developers": ["4A Games"],
+    "franchise": "Metro"
   }
 ]

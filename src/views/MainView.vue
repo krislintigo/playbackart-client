@@ -19,6 +19,7 @@
         v-model:selected-restrictions="selectedRestrictions"
         v-model:selected-genres="selectedGenres"
         v-model:selected-developers="selectedDevelopers"
+        v-model:selected-franchises="selectedFranchises"
       />
     </el-col>
   </el-row>
@@ -52,6 +53,7 @@ const {
   selectedRestrictions,
   selectedGenres,
   selectedDevelopers,
+  selectedFranchises,
   queriedItems
 } = useFilters(items)
 

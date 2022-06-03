@@ -46,6 +46,20 @@
         </el-link>
       </el-row>
     </el-col>
+    <el-col>
+      <h3 class="back-header">Франшизы</h3>
+      <el-row>
+        <el-link
+          class="item"
+          :class="{[getFranchiseTextClass(franchise)]: true, 'item-selected': selectedFranchises.includes(franchise)}"
+          v-for="franchise in franchises"
+          :key="franchise"
+          @click="franchiseClick(franchise)"
+        >
+          {{franchise}}
+        </el-link>
+      </el-row>
+    </el-col>
   </el-aside>
 </template>
 
@@ -74,6 +88,10 @@ const props = defineProps({
   selectedDevelopers: {
     type: Array,
     required: true
+  },
+  selectedFranchises: {
+    type: Array,
+    required: true
   }
 })
 
@@ -81,7 +99,8 @@ const emit = defineEmits({
   'update:selectedGrades': _ => true,
   'update:selectedRestrictions': _ => true,
   'update:selectedGenres': _ => true,
-  'update:selectedDevelopers': _ => true
+  'update:selectedDevelopers': _ => true,
+  'update:selectedFranchises': _ => true
 })
 
 const selectedGrades = computed({
@@ -100,6 +119,10 @@ const selectedDevelopers = computed({
   get: () => props.selectedDevelopers,
   set: value => emit('update:selectedDevelopers', value)
 })
+const selectedFranchises = computed({
+  get: () => props.selectedFranchises,
+  set: value => emit('update:selectedFranchises', value)
+})
 
 const grades = computed(() =>
   Array.from(new Set(props.items.filter(i => i.rating).map(i => i.rating))).sort((a, b) => b - a))
@@ -111,6 +134,8 @@ const genres = computed(() =>
   Array.from(new Set(props.items.map(i => i.genres).flat(1))))
 const developers = computed(() =>
   Array.from(new Set(props.items.map(i => i.developers).flat(1))))
+const franchises = computed(() =>
+  Array.from(new Set(props.items.filter(i => i.franchise).map(i => i.franchise))))
 
 const gradeClick = (gradeIndex) => {
   const grade = grades.value[gradeIndex]
@@ -146,6 +171,14 @@ const developerClick = (developer) => {
   }
 }
 
+const franchiseClick = (franchise) => {
+  if (selectedFranchises.value.includes(franchise)) {
+    selectedFranchises.value = selectedFranchises.value.filter(f => f !== franchise)
+  } else {
+    selectedFranchises.value.push(franchise)
+  }
+}
+
 const getCommonClass = (percentage) => {
   // fix this later to be more good
   switch (true) {
@@ -163,14 +196,20 @@ const getCommonClass = (percentage) => {
 }
 
 const getGenreTextClass = (genre) => {
-  const percentage = props.items.filter(i => i.genres).filter(i => i.genres.includes(genre)).length /
+  const percentage = props.items.filter(i => i.genres.length).filter(i => i.genres.includes(genre)).length /
     props.items.length * 100
   return getCommonClass(percentage)
 }
 
 const getDeveloperTextClass = (developer) => {
-  const percentage = props.items.filter(i => i.developers).filter(i => i.developers.includes(developer)).length /
+  const percentage = props.items.filter(i => i.developers.length).filter(i => i.developers.includes(developer)).length /
     props.items.length * 100
+  return getCommonClass(percentage)
+}
+
+const getFranchiseTextClass = (franchise) => {
+  const percentage = props.items.filter(i => i.franchise).filter(i => i.franchise === franchise).length /
+    franchises.value.length * 100
   return getCommonClass(percentage)
 }
 </script>
