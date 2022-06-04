@@ -6,26 +6,17 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, defineProps, defineEmits } from 'vue'
 import { BarChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
 Chart.register(...registerables)
 
-const props = defineProps({
-  labels: {
-    type: Array,
-    required: true
-  },
-  data: {
-    type: Array,
-    required: true
-  },
-  selected: {
-    type: Array,
-    required: true
-  }
-})
+const props = defineProps<{
+  labels: Array<string | number>,
+  data: Array<number>,
+  selected: Array<string | number>
+}>()
 
 const emit = defineEmits({
   click: null
@@ -50,7 +41,7 @@ const simpleData = computed(() => ({
 const options = {
   indexAxis: 'y',
   maintainAspectRatio: false,
-  onClick: (e, arr) => {
+  onClick: (e: any, arr: any[]) => {
     if (!arr.length) return
     emit('click', arr[0].index)
   },
@@ -63,7 +54,7 @@ const options = {
       titleColor: 'dimgray',
       bodyColor: 'black',
       callbacks: {
-        beforeBody: function (tooltipItem) {
+        beforeBody: function (tooltipItem: any[]) {
           const value = tooltipItem[0].formattedValue
           tooltipItem[0].formattedValue = ` ${value}`
         }

@@ -19,17 +19,17 @@
   </el-header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { navigationTabs } from '@/data/static'
-import ProfileController from '@/components/ProfileController'
+import ProfileController from '@/components/ProfileController.vue'
 
 const router = useRouter()
 
-const active = ref(location.pathname)
+const active = ref<string>(location.pathname)
 
-const tabClick = (tab) => {
+const tabClick = (tab: any) => {
   router.push(tab.props.name)
 }
 </script>

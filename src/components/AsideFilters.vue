@@ -4,7 +4,7 @@
       <h3 class="back-header">Оценки</h3>
       <HorizontalBarChart
         :labels="grades"
-        :data="grades.map(grade => items.filter(item => item.rating === grade).length)"
+        :data="grades.map(grade => items.filter(i => i.rating === grade).length)"
         :selected="selectedGrades"
         @click="gradeClick"
       />
@@ -13,7 +13,7 @@
       <h3 class="back-header">Возрастные ограничения</h3>
       <HorizontalBarChart
         :labels="restrictionsLabels"
-        :data="restrictionsLabels.map(r => items.filter(item => item.restriction === r).length)"
+        :data="restrictionsLabels.map(r => items.filter(i => i.restriction === r).length)"
         :selected="selectedRestrictions"
         @click="restrictionClick"
       />
@@ -65,12 +65,12 @@
 
 <script setup lang="ts">
 import { computed, defineProps, defineEmits } from 'vue'
-import HorizontalBarChart from '@/components/HorizontalBarChart'
+import HorizontalBarChart from '@/components/HorizontalBarChart.vue'
 import { restrictions } from '@/data/static'
-import { Item } from '@/interfaces/item'
+import { CreateItem } from '@/interfaces/create-item'
 
 const props = defineProps<{
-  items: Array<Item>,
+  items: Array<CreateItem>,
   selectedGrades: Array<number>,
   selectedRestrictions: Array<string>,
   selectedGenres: Array<string>,
@@ -78,7 +78,6 @@ const props = defineProps<{
   selectedFranchises: Array<string>,
 }>()
 
-// eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
   (e: 'update:selectedGrades', value: number[]): void,
   (e: 'update:selectedRestrictions', value: string[]): void,

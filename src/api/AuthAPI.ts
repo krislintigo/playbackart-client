@@ -1,15 +1,11 @@
 import { authClient } from '@/api/clients'
+import { AuthData } from '@/interfaces/auth-data'
 
 const endpoints = {
   login: '/login',
   register: '/register',
   validate: '/validate',
   logout: '/logout'
-}
-
-interface AuthData {
-  login: string
-  password: string
 }
 
 export class AuthAPI {

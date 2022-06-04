@@ -34,9 +34,7 @@
         </div>
       </div>
       <el-collapse>
-        <el-collapse-item
-          :class="['set-status', item.status]"
-        >
+        <el-collapse-item :class="['set-status', item.status]">
           <template #title>
             <el-row align="middle" style="column-gap: 10px">
               <el-icon size="large"><component :is="statuses.find(s => s.value === item.status).icon" /></el-icon>
@@ -64,7 +62,7 @@
   </el-row>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { defineProps, inject } from 'vue'
 import { ElNotification } from 'element-plus'
 import { PictureRounded } from '@element-plus/icons-vue'
@@ -72,25 +70,23 @@ import { getTypeWord } from '@/utils/getTypeWord'
 import { getDeveloperWordByType } from '@/utils/getDeveloperWordByType'
 import { ItemsAPI } from '@/api/ItemsAPI'
 import { statuses } from '@/data/static'
+import { Item } from '@/interfaces/item'
 
-const props = defineProps({
-  item: {
-    type: Object,
-    required: true
-  }
-})
+const props = defineProps<{
+  item: Item
+}>()
 
-const refetch = inject('refetch')
+const refetch: Function | undefined = inject('refetch')
 
-const updateItemStatus = async (status) => {
+const updateItemStatus = async (status: string) => {
   try {
-    await ItemsAPI.update(props.item.id, { status })
-    refetch()
+    await ItemsAPI.update(props.item.id, { status } as Item)
+    refetch?.()
     ElNotification.success({
       title: 'Статус изменен',
       position: 'bottom-right'
     })
-  } catch (error) {
+  } catch (error: any) {
     ElNotification.error({
       title: error.response.data.message,
       position: 'bottom-right'

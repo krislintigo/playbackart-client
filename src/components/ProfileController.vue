@@ -12,12 +12,12 @@
     </div>
     <div v-else>
       <h3>Войдите в аккаунт!</h3>
-      <el-form v-model="authData" label-position="right" :label-width="65">
+      <el-form v-model="auth" label-position="right" :label-width="65">
         <el-form-item label="Логин">
-          <el-input v-model="authData.login" />
+          <el-input v-model="auth.login" />
         </el-form-item>
         <el-form-item label="Пароль">
-          <el-input v-model="authData.password" type="password" show-password />
+          <el-input v-model="auth.password" type="password" show-password />
         </el-form-item>
         <el-row justify="end">
           <el-button type="success" @click="handleUserAction('login')">Вход</el-button>
@@ -28,7 +28,7 @@
   </el-popover>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { reactive } from 'vue'
 import { useStore } from 'vuex'
 import { User, Failed } from '@element-plus/icons-vue'
@@ -36,10 +36,11 @@ import { AuthAPI } from '@/api/AuthAPI'
 import { userNames } from '@/store/modules/user'
 import { ElNotification } from 'element-plus'
 import { UserAPI } from '@/api/UserAPI'
+import { AuthData } from '@/interfaces/auth-data'
 
 const store = useStore()
 
-const authData = reactive({
+const auth: AuthData = reactive({
   login: '',
   password: ''
 });
@@ -54,16 +55,16 @@ const authData = reactive({
   }
 })()
 
-const handleUserAction = async (action) => {
+const handleUserAction = async (action: string) => {
   try {
-    const response = await AuthAPI[action](authData)
+    const response = await AuthAPI[action](auth)
     if (action === 'logout') store.commit(userNames.resetUser)
     else store.commit(userNames.setUser, response.data)
     ElNotification.success({
       title: response.message,
       position: 'bottom-right'
     })
-  } catch (e) {
+  } catch (e: any) {
     ElNotification.error({
       title: e.response.data.message,
       position: 'bottom-right'

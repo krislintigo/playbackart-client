@@ -59,31 +59,29 @@
   </el-collapse>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref, defineProps, defineEmits } from 'vue'
 import { Delete, EditPen } from '@element-plus/icons-vue'
+import ItemPreview from '@/components/ItemPreview.vue'
 import formatDuration from '@/utils/formatDuration'
-import ItemPreview from '@/components/ItemPreview'
+import { Item } from '@/interfaces/item'
 
-const props = defineProps({
-  items: {
-    type: Array,
-    required: true
-  }
-})
+const props = defineProps<{
+  items: Array<Item>
+}>()
 
-const emit = defineEmits({
-  'update-item': _ => true,
-  'delete-item': _ => true
-})
+const emit = defineEmits<{
+  (e: 'update-item', item: Item): void,
+  (e: 'delete-item', id: number): void
+}>()
 
 const activeItems = ref([0, 1, 2, 3, 4])
 
-const lookingItems = computed(() => props.items.filter(item => item.status === 'looking'))
-const plannedItems = computed(() => props.items.filter(item => item.status === 'planned'))
-const viewedItems = computed(() => props.items.filter(item => item.status === 'viewed'))
-const postponedItems = computed(() => props.items.filter(item => item.status === 'postponed'))
-const abandonedItems = computed(() => props.items.filter(item => item.status === 'abandoned'))
+const lookingItems = computed<Item[]>(() => props.items.filter(item => item.status === 'looking'))
+const plannedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'planned'))
+const viewedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'viewed'))
+const postponedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'postponed'))
+const abandonedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'abandoned'))
 
 const displayedItems = computed(() => [
   {
@@ -108,7 +106,7 @@ const displayedItems = computed(() => [
   }
 ])
 
-const sortByRating = (a, b) => {
+const sortByRating = (a: Item, b: Item) => {
   if (!a.rating || !b.rating) return -1
   if (a.rating === b.rating) {
     return 0
@@ -116,7 +114,7 @@ const sortByRating = (a, b) => {
   return a.rating > b.rating ? -1 : 1
 }
 
-const sortByDuration = (a, b) => {
+const sortByDuration = (a: Item, b: Item) => {
   if (!a.time || !b.time) return -1
   const totalA = a.time.count * a.time.duration
   const totalB = b.time.count * b.time.duration

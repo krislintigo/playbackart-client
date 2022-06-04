@@ -17,6 +17,7 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
-    'vue/no-v-model-argument': 'off'
+    'vue/no-v-model-argument': 'off',
+    'func-call-spacing': 'off'
   }
 }

@@ -1,7 +1,6 @@
 import { Time } from '@/interfaces/time'
 
-export interface Item {
-  id: string;
+export interface CreateItem {
   name: string;
   image: string;
   rating: number;

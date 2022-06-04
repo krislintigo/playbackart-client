@@ -2,12 +2,12 @@ import { ref, computed, Ref } from 'vue'
 import { Item } from '@/interfaces/item'
 
 export const useFilters = (allItems: Ref<Item[]>) => {
-  const searchQuery = ref('')
-  const selectedGrades: Ref<number[]> = ref([])
-  const selectedRestrictions: Ref<string[]> = ref([])
-  const selectedGenres: Ref<string[]> = ref([])
-  const selectedDevelopers: Ref<string[]> = ref([])
-  const selectedFranchises: Ref<string[]> = ref([])
+  const searchQuery = ref<string>('')
+  const selectedGrades = ref<number[]>([])
+  const selectedRestrictions = ref<string[]>([])
+  const selectedGenres = ref<string[]>([])
+  const selectedDevelopers = ref<string[]>([])
+  const selectedFranchises = ref<string[]>([])
 
   const queriedItems = computed<Item[]>(() => {
     const searchFilter: Item[] = allItems.value

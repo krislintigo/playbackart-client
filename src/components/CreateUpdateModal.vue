@@ -119,7 +119,7 @@
   </el-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { defineProps, defineEmits, computed, reactive, ref, inject, watch } from 'vue'
 import { ElNotification } from 'element-plus'
 import _ from 'lodash'
@@ -127,30 +127,23 @@ import { Close } from '@element-plus/icons-vue'
 import { statuses, rules, types, rating, restrictions } from '@/data/static'
 import { getDeveloperWordByType } from '@/utils/getDeveloperWordByType'
 import { ItemsAPI } from '@/api/ItemsAPI'
+import { CreateItem } from '@/interfaces/create-item'
+import { Item } from '@/interfaces/item'
 
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true
-  },
-  target: {
-    type: String,
-    required: true
-  },
-  updatedItem: {
-    type: Object,
-    required: true
-  }
-})
+const props = defineProps<{
+  modelValue: boolean,
+  target: string,
+  updatedItem: Item
+}>()
 
-const refetch = inject('refetch')
+const refetch: Function | undefined = inject('refetch')
 
-const emit = defineEmits({
-  'update:modelValue': _ => true
-})
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: boolean): void
+}>()
 
-const formRef = ref(null)
-const item = reactive({
+const formRef = ref<HTMLFormElement | null>(null)
+const item: CreateItem | Item = reactive({
   name: '',
   image: '',
   rating: 0,
@@ -167,7 +160,7 @@ const item = reactive({
   franchise: ''
 })
 
-const dialog = computed({
+const dialog = computed<boolean>({
   get: () => props.modelValue,
   set: value => emit('update:modelValue', value)
 })
@@ -192,7 +185,7 @@ watch(() => dialog.value, open => {
 const inputGenre = ref('')
 const inputDeveloper = ref('')
 
-const handleGenreDelete = (tag) => {
+const handleGenreDelete = (tag: string) => {
   item.genres.splice(item.genres.indexOf(tag), 1)
 }
 
@@ -203,7 +196,7 @@ const handleGenreConfirm = () => {
   inputGenre.value = ''
 }
 
-const handleDeveloperDelete = (tag) => {
+const handleDeveloperDelete = (tag: string) => {
   item.developers.splice(item.developers.indexOf(tag), 1)
 }
 
@@ -214,20 +207,20 @@ const handleDeveloperConfirm = () => {
   inputDeveloper.value = ''
 }
 
-const confirmAction = async (action) => {
+const confirmAction = async (action: string) => {
   try {
-    await formRef.value.validate()
+    await formRef.value?.validate()
     try {
       const response = action === 'create'
-        ? await ItemsAPI.add(item)
-        : await ItemsAPI.update(props.updatedItem.id, item)
+        ? await ItemsAPI.add(item as CreateItem)
+        : await ItemsAPI.update(props.updatedItem.id, item as Item)
       dialog.value = false
-      refetch()
+      refetch?.()
       ElNotification.success({
         title: response.message,
         position: 'bottom-right'
       })
-    } catch (e) {
+    } catch (e: any) {
       ElNotification.error({
         title: e.response.data.message,
         position: 'bottom-right'

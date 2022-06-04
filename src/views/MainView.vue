@@ -45,7 +45,7 @@ import SearchInput from '@/components/SearchInput'
 import CreateUpdateModal from '@/components/CreateUpdateModal'
 import { ItemsAPI } from '@/api/ItemsAPI'
 import { ElNotification } from 'element-plus'
-import { Item } from '@/interfaces/item'
+import { CreateItem } from '@/interfaces/create-item'
 
 const store = useStore()
 const route = useRoute()
@@ -90,7 +90,7 @@ const refetch = async () => {
   loading.value = false
 }
 
-const updateItem = async (item: Item) => {
+const updateItem = async (item: CreateItem) => {
   dialog.value = true
   dialogTarget.value = 'update'
   updatedItem.value = item

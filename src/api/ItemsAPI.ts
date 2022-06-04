@@ -1,6 +1,6 @@
 import { itemsClient } from '@/api/clients'
+import { CreateItem } from '@/interfaces/create-item'
 import { Item } from '@/interfaces/item'
-import { UpdateItem } from '@/interfaces/update-item'
 
 const endpoints = {
   addItem: '',
@@ -12,7 +12,7 @@ const endpoints = {
 }
 
 export class ItemsAPI {
-  static async add (item: Item) {
+  static async add (item: CreateItem) {
     const response = await itemsClient.post(endpoints.addItem, item)
     return response.data
   }
@@ -32,7 +32,7 @@ export class ItemsAPI {
     return response.data
   }
 
-  static async update (id: string, item: UpdateItem) {
+  static async update (id: string, item: Item) {
     const response = await itemsClient.put(endpoints.updateItem(id), item)
     return response.data
   }
