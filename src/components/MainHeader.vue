@@ -17,7 +17,6 @@
       </div>
     </el-row>
   </el-header>
-  <el-divider />
 </template>
 
 <script setup>

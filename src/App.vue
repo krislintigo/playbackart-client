@@ -1,6 +1,7 @@
 <template>
   <el-main class="main">
     <MainHeader />
+    <el-divider />
     <router-view />
   </el-main>
 </template>
