@@ -67,6 +67,7 @@
 import { computed, defineProps, defineEmits } from 'vue'
 import HorizontalBarChart from '@/components/HorizontalBarChart.vue'
 import { restrictions } from '@/data/static'
+import { getTextSizeClass } from '@/utils/getTextSizeClass'
 import { CreateItem } from '@/interfaces/create-item'
 
 const props = defineProps<{
@@ -162,37 +163,21 @@ const franchiseClick = (franchise: string) => {
   }
 }
 
-const getCommonClass = (percentage: number) => {
-  // fix this later to be more good
-  switch (true) {
-    case percentage > 50:
-      return 'text4'
-    case percentage > 35:
-      return 'text3'
-    case percentage > 20:
-      return 'text2'
-    case percentage > 10:
-      return 'text1'
-    default:
-      return 'text0'
-  }
-}
-
 const getGenreTextClass = (genre: string) => {
   const percentage = props.items.filter(i => i.genres.includes(genre)).length / props.items.length * 100
-  return getCommonClass(percentage)
+  return getTextSizeClass(percentage, 'genre')
 }
 
 const getDeveloperTextClass = (developer: string) => {
   const percentage = props.items.filter(i => i.developers.includes(developer)).length /
     props.items.length * 100
-  return getCommonClass(percentage)
+  return getTextSizeClass(percentage, 'developer')
 }
 
 const getFranchiseTextClass = (franchise: string) => {
   const percentage = props.items.filter(i => i.franchise === franchise).length /
     franchises.value.length * 100
-  return getCommonClass(percentage)
+  return getTextSizeClass(percentage, 'franchise')
 }
 </script>
 
