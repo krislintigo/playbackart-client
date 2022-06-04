@@ -53,6 +53,7 @@
           style="width: 300px;"
           @keyup.enter="handleGenreConfirm"
         />
+        <el-button text circle :icon="More" style="margin-left: 5px;" @click="splitAndWrite('genre')" />
         <el-button text style="margin: 0 10px" @click="handleGenreConfirm">Добавить</el-button>
         <el-tag
           v-for="genre in item.genres"
@@ -91,6 +92,7 @@
           style="width: 300px;"
           @keyup.enter="handleDeveloperConfirm"
         />
+        <el-button text circle :icon="More" style="margin-left: 5px;" @click="splitAndWrite('developer')" />
         <el-button text style="margin: 0 10px" @click="handleDeveloperConfirm">Добавить</el-button>
         <el-tag
           v-for="developer in item.developers"
@@ -123,7 +125,7 @@
 import { defineProps, defineEmits, computed, reactive, ref, inject, watch } from 'vue'
 import { ElNotification } from 'element-plus'
 import _ from 'lodash'
-import { Close } from '@element-plus/icons-vue'
+import { Close, More } from '@element-plus/icons-vue'
 import { statuses, rules, types, rating, restrictions } from '@/data/static'
 import { getDeveloperWordByType } from '@/utils/getDeveloperWordByType'
 import { ItemsAPI } from '@/api/ItemsAPI'
@@ -205,6 +207,18 @@ const handleDeveloperConfirm = () => {
     item.developers.push(inputDeveloper.value)
   }
   inputDeveloper.value = ''
+}
+
+const splitAndWrite = (type: string) => {
+  if (type === 'genre') {
+    const array = inputGenre.value.split(', ')
+    item.genres.push(...array.map(i => i[0].toUpperCase() + i.slice(1)))
+    inputGenre.value = ''
+  } else if (type === 'developer') {
+    const array = inputDeveloper.value.split(', ')
+    item.developers.push(...array.map(i => i[0].toUpperCase() + i.slice(1)))
+    inputDeveloper.value = ''
+  }
 }
 
 const confirmAction = async (action: string) => {
