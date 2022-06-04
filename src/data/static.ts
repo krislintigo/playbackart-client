@@ -101,7 +101,7 @@ export const types = [
   }
 ]
 
-export const restrictions = ['G', 'PG', 'PG-13', 'R-17', 'R+']
+export const restrictions = ['G', 'PG', 'PG-13', 'R', 'NC-17']
 
 export const rules = {
   name: [

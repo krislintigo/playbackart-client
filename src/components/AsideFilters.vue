@@ -179,19 +179,18 @@ const getCommonClass = (percentage: number) => {
 }
 
 const getGenreTextClass = (genre: string) => {
-  const percentage = props.items.filter(i => i.genres.length).filter(i => i.genres.includes(genre)).length /
-    props.items.length * 100
+  const percentage = props.items.filter(i => i.genres.includes(genre)).length / props.items.length * 100
   return getCommonClass(percentage)
 }
 
 const getDeveloperTextClass = (developer: string) => {
-  const percentage = props.items.filter(i => i.developers.length).filter(i => i.developers.includes(developer)).length /
+  const percentage = props.items.filter(i => i.developers.includes(developer)).length /
     props.items.length * 100
   return getCommonClass(percentage)
 }
 
 const getFranchiseTextClass = (franchise: string) => {
-  const percentage = props.items.filter(i => i.franchise).filter(i => i.franchise === franchise).length /
+  const percentage = props.items.filter(i => i.franchise === franchise).length /
     franchises.value.length * 100
   return getCommonClass(percentage)
 }

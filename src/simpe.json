@@ -5,7 +5,7 @@
     "rating":10,
     "status":"viewed",
     "type":"series",
-    "restriction":"R+",
+    "restriction":"NC-17",
     "genres":[
       "Боевик",
       "Драма",
@@ -63,7 +63,7 @@
     "rating":10,
     "status":"viewed",
     "type":"series",
-    "restriction":"R-17",
+    "restriction":"R",
     "genres":[
       "Драма",
       "Триллер",
@@ -83,7 +83,7 @@
     "image":"",
     "rating":9,
     "status":"abandoned",
-    "restriction":"R-17",
+    "restriction":"R",
     "type":"series",
     "genres":[
       "Драма",
@@ -104,7 +104,7 @@
     "rating":10,
     "status":"viewed",
     "type":"series",
-    "restriction":"R+",
+    "restriction":"NC-17",
     "genres":[
       "Меха",
       "Постапокалипсис",
@@ -124,7 +124,7 @@
     "rating":8,
     "status":"viewed",
     "type":"movie",
-    "restriction":"R+",
+    "restriction":"NC-17",
     "genres":[
       "Меха",
       "Приключения",
@@ -144,7 +144,7 @@
     "rating":3,
     "status":"viewed",
     "type":"series",
-    "restriction":"R+",
+    "restriction":"NC-17",
     "genres":[
       "Фэнтези",
       "Ужасы",
@@ -203,7 +203,7 @@
     "rating":9,
     "status":"postponed",
     "type":"movie",
-    "restriction":"R-17",
+    "restriction":"R",
     "genres":[
       "Триллер",
       "Боевик",
@@ -299,7 +299,7 @@
     "rating":9,
     "status":"viewed",
     "type":"game",
-    "restriction":"R+",
+    "restriction":"NC-17",
     "genres":[
       "Шутер от первого лица"
     ],
@@ -317,7 +317,7 @@
     "rating":10,
     "status":"viewed",
     "type":"game",
-    "restriction":"R+",
+    "restriction":"NC-17",
     "genres":[
       "Шутер от первого лица"
     ],

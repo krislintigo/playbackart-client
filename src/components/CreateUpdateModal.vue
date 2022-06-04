@@ -73,7 +73,7 @@
             <h4 style="margin: 0;">Кол-во элементов</h4>
           </el-col>
           <el-col :span="12" :push="1">
-            <el-input-number v-model="item.time.duration" />
+            <el-input-number v-model="item.time.duration" :min="0" />
             <h4 style="margin: 0">Длительность (мин)</h4>
           </el-col>
         </el-row>

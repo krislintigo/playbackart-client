@@ -1,10 +1,10 @@
 <template>
-  <el-row>
+  <div>
     <el-row v-if="!store.state.user._id">
       <h2>Войдите, чтобы продолжить!</h2>
     </el-row>
-    <el-row v-else v-loading="loading" justify="center" :gutter="30" style="margin-bottom: 30px;">
-      <el-col :span="24" :lg="17">
+    <el-row v-else v-loading="loading" justify="center" :gutter="20" style="margin-bottom: 30px;">
+      <el-col :span="24" :lg="18">
         <div style="display: flex; align-items: center; column-gap: 10px">
           <h2>{{route.meta.mainHeader}}</h2>
           <el-button circle plain :icon="Plus" size="small" @click="dialog = true; dialogTarget = 'create'" />
@@ -18,6 +18,13 @@
           @update-item="updateItem"
           @delete-item="deleteItem"
         />
+        <h4 style="text-align: center">
+          <span>Всего: {{items.length}} шт.</span>
+          /
+          <span>
+            {{formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || '-'}}
+          </span>
+        </h4>
       </el-col>
       <el-col :span="24" :lg="6" style="margin-top: 68px;">
         <AsideFilters
@@ -30,7 +37,7 @@
         />
       </el-col>
     </el-row>
-  </el-row>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -39,10 +46,11 @@ import { Plus } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { useFilters } from '@/composables/filters'
-import MainDisplayLayout from '@/components/MainDisplayLayout'
-import AsideFilters from '@/components/AsideFilters'
-import SearchInput from '@/components/SearchInput'
-import CreateUpdateModal from '@/components/CreateUpdateModal'
+import formatDuration from '@/utils/formatDuration'
+import MainDisplayLayout from '@/components/MainDisplayLayout.vue'
+import AsideFilters from '@/components/AsideFilters.vue'
+import SearchInput from '@/components/SearchInput.vue'
+import CreateUpdateModal from '@/components/CreateUpdateModal.vue'
 import { ItemsAPI } from '@/api/ItemsAPI'
 import { ElNotification } from 'element-plus'
 import { CreateItem } from '@/interfaces/create-item'
@@ -78,10 +86,10 @@ const refetch = async () => {
       const response = await ItemsAPI.getAll()
       items.value = response.data
     } else {
-      const response = await ItemsAPI.getByType(route.meta.type)
+      const response = await ItemsAPI.getByType(route.meta.type as string)
       items.value = response.data
     }
-  } catch (e) {
+  } catch (e: any) {
     ElNotification.error({
       title: e.response.data.message,
       position: 'bottom-right'
@@ -96,7 +104,7 @@ const updateItem = async (item: CreateItem) => {
   updatedItem.value = item
 }
 
-const deleteItem = async id => {
+const deleteItem = async (id: string) => {
   try {
     const response = await ItemsAPI.delete(id)
     ElNotification.success({
@@ -104,7 +112,7 @@ const deleteItem = async id => {
       position: 'bottom-right'
     })
     await refetch()
-  } catch (e) {
+  } catch (e: any) {
     ElNotification.error({
       title: e.response.data.message,
       position: 'bottom-right'
