@@ -76,12 +76,12 @@ const props = defineProps<{
   item: Item
 }>()
 
-const refetch: Function | undefined = inject('refetch')
+const refetch = inject('refetch') as Function
 
 const updateItemStatus = async (status: string) => {
   try {
     await ItemsAPI.update(props.item.id, { status } as Item)
-    refetch?.()
+    refetch()
     ElNotification.success({
       title: 'Статус изменен',
       position: 'bottom-right'

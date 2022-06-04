@@ -136,7 +136,7 @@ const props = defineProps<{
   updatedItem: Item
 }>()
 
-const refetch: Function | undefined = inject('refetch')
+const refetch = inject('refetch') as Function
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: boolean): void
@@ -215,7 +215,7 @@ const confirmAction = async (action: string) => {
         ? await ItemsAPI.add(item as CreateItem)
         : await ItemsAPI.update(props.updatedItem.id, item as Item)
       dialog.value = false
-      refetch?.()
+      refetch()
       ElNotification.success({
         title: response.message,
         position: 'bottom-right'
