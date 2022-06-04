@@ -5,10 +5,10 @@
     </template>
     <el-form :model="item" ref="formRef" label-position="right" :label-width="110" :rules="rules">
       <el-form-item label="Название:" prop="name">
-        <el-input v-model="item.name" />
+        <el-input v-model.trim="item.name" />
       </el-form-item>
       <el-form-item label="Фото:" prop="image">
-        <el-input v-model="item.image" />
+        <el-input v-model.trim="item.image" />
       </el-form-item>
       <el-form-item label="Рейтинг:" prop="rating">
         <el-rate v-model="item.rating" :max="10" show-text :texts="rating.texts" :colors="rating.colors" />
@@ -49,7 +49,7 @@
       </el-form-item>
       <el-form-item label="Жанры:" prop="genres">
         <el-input
-          v-model="inputGenre"
+          v-model.trim="inputGenre"
           style="width: 300px;"
           @keyup.enter="handleGenreConfirm"
         />
@@ -87,7 +87,7 @@
       </el-form-item>
       <el-form-item :label="getDeveloperWordByType(item.type, 2) + ':'" prop="developers">
         <el-input
-          v-model="inputDeveloper"
+          v-model.trim="inputDeveloper"
           style="width: 300px;"
           @keyup.enter="handleDeveloperConfirm"
         />
@@ -105,7 +105,7 @@
         </el-tag>
       </el-form-item>
       <el-form-item label="Франшиза:" prop="franchise">
-        <el-input v-model="item.franchise" />
+        <el-input v-model.trim="item.franchise" />
       </el-form-item>
     </el-form>
     <template #footer>
