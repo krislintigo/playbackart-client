@@ -67,16 +67,16 @@
         </el-tag>
       </el-form-item>
       <el-form-item label="Длительность:" prop="time">
-        <div>
-          <el-col>
+        <el-row justify="space-between">
+          <el-col :span="11">
             <el-input-number v-model="item.time.count" :min="1" />
             <h4 style="margin: 0;">Кол-во элементов</h4>
           </el-col>
-          <el-col :push="2">
+          <el-col :span="12" :push="1">
             <el-input-number v-model="item.time.duration" />
             <h4 style="margin: 0">Длительность (мин)</h4>
           </el-col>
-        </div>
+        </el-row>
       </el-form-item>
       <el-form-item label="Год выхода:" prop="year">
         <el-date-picker
