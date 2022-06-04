@@ -31,7 +31,7 @@
   </el-row>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { provide, ref, watchEffect } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { useRoute } from 'vue-router'
@@ -39,10 +39,11 @@ import { useStore } from 'vuex'
 import { useFilters } from '@/composables/filters'
 import MainDisplayLayout from '@/components/MainDisplayLayout'
 import AsideFilters from '@/components/AsideFilters'
-import { ItemsAPI } from '@/api/ItemsAPI'
-import { ElNotification } from 'element-plus'
 import SearchInput from '@/components/SearchInput'
 import CreateUpdateModal from '@/components/CreateUpdateModal'
+import { ItemsAPI } from '@/api/ItemsAPI'
+import { ElNotification } from 'element-plus'
+import { Item } from '@/interfaces/item'
 
 const store = useStore()
 const route = useRoute()
@@ -87,7 +88,7 @@ const refetch = async () => {
   loading.value = false
 }
 
-const updateItem = async (item) => {
+const updateItem = async (item: Item) => {
   dialog.value = true
   dialogTarget.value = 'update'
   updatedItem.value = item

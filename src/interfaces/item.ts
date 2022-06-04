@@ -1,7 +1,4 @@
-interface Time {
-  count: number;
-  duration: number;
-}
+import { Time } from '@/interfaces/time'
 
 export interface Item {
   id?: string;

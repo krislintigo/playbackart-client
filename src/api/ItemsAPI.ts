@@ -1,5 +1,6 @@
 import { itemsClient } from '@/api/clients'
 import { Item } from '@/interfaces/item'
+import { UpdateItem } from '@/interfaces/update-item'
 
 const endpoints = {
   addItem: '',
@@ -31,7 +32,7 @@ export class ItemsAPI {
     return response.data
   }
 
-  static async update (id: string, item: object) {
+  static async update (id: string, item: UpdateItem) {
     const response = await itemsClient.put(endpoints.updateItem(id), item)
     return response.data
   }

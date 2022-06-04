@@ -2,7 +2,7 @@
   <el-input v-model="searchQuery" placeholder="Поиск по названию..." clearable />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { defineProps, defineEmits, computed } from 'vue'
 
 const props = defineProps({

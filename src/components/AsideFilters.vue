@@ -63,45 +63,29 @@
   </el-aside>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, defineProps, defineEmits } from 'vue'
 import HorizontalBarChart from '@/components/HorizontalBarChart'
 import { restrictions } from '@/data/static'
+import { Item } from '@/interfaces/item'
 
-const props = defineProps({
-  items: {
-    type: Array,
-    required: true
-  },
-  selectedGrades: {
-    type: Array,
-    required: true
-  },
-  selectedRestrictions: {
-    type: Array,
-    required: true
-  },
-  selectedGenres: {
-    type: Array,
-    required: true
-  },
-  selectedDevelopers: {
-    type: Array,
-    required: true
-  },
-  selectedFranchises: {
-    type: Array,
-    required: true
-  }
-})
+const props = defineProps<{
+  items: Array<Item>,
+  selectedGrades: Array<number>,
+  selectedRestrictions: Array<string>,
+  selectedGenres: Array<string>,
+  selectedDevelopers: Array<string>,
+  selectedFranchises: Array<string>,
+}>()
 
-const emit = defineEmits({
-  'update:selectedGrades': _ => true,
-  'update:selectedRestrictions': _ => true,
-  'update:selectedGenres': _ => true,
-  'update:selectedDevelopers': _ => true,
-  'update:selectedFranchises': _ => true
-})
+// eslint-disable-next-line func-call-spacing
+const emit = defineEmits<{
+  (e: 'update:selectedGrades', value: number[]): void,
+  (e: 'update:selectedRestrictions', value: string[]): void,
+  (e: 'update:selectedGenres', value: string[]): void,
+  (e: 'update:selectedDevelopers', value: string[]): void,
+  (e: 'update:selectedFranchises', value: string[]): void
+}>()
 
 const selectedGrades = computed({
   get: () => props.selectedGrades,
@@ -137,7 +121,7 @@ const developers = computed(() =>
 const franchises = computed(() =>
   Array.from(new Set(props.items.filter(i => i.franchise).map(i => i.franchise))))
 
-const gradeClick = (gradeIndex) => {
+const gradeClick = (gradeIndex: number) => {
   const grade = grades.value[gradeIndex]
   if (selectedGrades.value.includes(grade)) {
     selectedGrades.value = selectedGrades.value.filter(g => g !== grade)
@@ -146,7 +130,7 @@ const gradeClick = (gradeIndex) => {
   }
 }
 
-const restrictionClick = (restrictionIndex) => {
+const restrictionClick = (restrictionIndex: number) => {
   const restriction = restrictionsLabels.value[restrictionIndex]
   if (selectedRestrictions.value.includes(restriction)) {
     selectedRestrictions.value = selectedRestrictions.value.filter(r => r !== restriction)
@@ -155,7 +139,7 @@ const restrictionClick = (restrictionIndex) => {
   }
 }
 
-const genreClick = (genre) => {
+const genreClick = (genre: string) => {
   if (selectedGenres.value.includes(genre)) {
     selectedGenres.value = selectedGenres.value.filter(g => g !== genre)
   } else {
@@ -163,7 +147,7 @@ const genreClick = (genre) => {
   }
 }
 
-const developerClick = (developer) => {
+const developerClick = (developer: string) => {
   if (selectedDevelopers.value.includes(developer)) {
     selectedDevelopers.value = selectedDevelopers.value.filter(d => d !== developer)
   } else {
@@ -171,7 +155,7 @@ const developerClick = (developer) => {
   }
 }
 
-const franchiseClick = (franchise) => {
+const franchiseClick = (franchise: string) => {
   if (selectedFranchises.value.includes(franchise)) {
     selectedFranchises.value = selectedFranchises.value.filter(f => f !== franchise)
   } else {
@@ -179,7 +163,7 @@ const franchiseClick = (franchise) => {
   }
 }
 
-const getCommonClass = (percentage) => {
+const getCommonClass = (percentage: number) => {
   // fix this later to be more good
   switch (true) {
     case percentage > 50:
@@ -195,19 +179,19 @@ const getCommonClass = (percentage) => {
   }
 }
 
-const getGenreTextClass = (genre) => {
+const getGenreTextClass = (genre: string) => {
   const percentage = props.items.filter(i => i.genres.length).filter(i => i.genres.includes(genre)).length /
     props.items.length * 100
   return getCommonClass(percentage)
 }
 
-const getDeveloperTextClass = (developer) => {
+const getDeveloperTextClass = (developer: string) => {
   const percentage = props.items.filter(i => i.developers.length).filter(i => i.developers.includes(developer)).length /
     props.items.length * 100
   return getCommonClass(percentage)
 }
 
-const getFranchiseTextClass = (franchise) => {
+const getFranchiseTextClass = (franchise: string) => {
   const percentage = props.items.filter(i => i.franchise).filter(i => i.franchise === franchise).length /
     franchises.value.length * 100
   return getCommonClass(percentage)
