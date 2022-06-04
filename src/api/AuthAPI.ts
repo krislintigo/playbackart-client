@@ -7,13 +7,18 @@ const endpoints = {
   logout: '/logout'
 }
 
+interface AuthData {
+  login: string
+  password: string
+}
+
 export class AuthAPI {
-  static async register (authData) {
+  static async register (authData: AuthData) {
     const response = await authClient.post(endpoints.register, authData)
     return response.data
   }
 
-  static async login (authData) {
+  static async login (authData: AuthData) {
     const response = await authClient.post(endpoints.login, authData)
     return response.data
   }

@@ -1,16 +1,17 @@
 import { itemsClient } from '@/api/clients'
+import { Item } from '@/interfaces/item'
 
 const endpoints = {
   addItem: '',
   getItems: '',
-  getItemByType: type => `/types/${type}`,
-  getItem: id => `/${id}`,
-  updateItem: id => `/${id}`,
-  deleteItem: id => `/${id}`
+  getItemByType: (type: string) => `/types/${type}`,
+  getItem: (id: string) => `/${id}`,
+  updateItem: (id: string) => `/${id}`,
+  deleteItem: (id: string) => `/${id}`
 }
 
 export class ItemsAPI {
-  static async add (item) {
+  static async add (item: Item) {
     const response = await itemsClient.post(endpoints.addItem, item)
     return response.data
   }
@@ -20,22 +21,22 @@ export class ItemsAPI {
     return response.data
   }
 
-  static async getByType (type) {
+  static async getByType (type: string) {
     const response = await itemsClient.get(endpoints.getItemByType(type))
     return response.data
   }
 
-  static async getOne (id) {
+  static async getOne (id: string) {
     const response = await itemsClient.get(endpoints.getItem(id))
     return response.data
   }
 
-  static async update (id, item) {
+  static async update (id: string, item: object) {
     const response = await itemsClient.put(endpoints.updateItem(id), item)
     return response.data
   }
 
-  static async delete (id) {
+  static async delete (id: string) {
     const response = await itemsClient.delete(endpoints.deleteItem(id))
     return response.data
   }

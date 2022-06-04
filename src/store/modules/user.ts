@@ -11,10 +11,10 @@ const initialState = {
 export default {
   store: initialState,
   mutations: {
-    [userNames.setUser] (state, user) {
+    [userNames.setUser] (state: any, user: object) {
       Object.assign(state, user)
     },
-    [userNames.resetUser] (state) {
+    [userNames.resetUser] (state: any) {
       Object.assign(state, initialState)
     }
   }

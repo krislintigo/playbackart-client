@@ -1,4 +1,4 @@
-export default function formatDuration (min) {
+export default function formatDuration (min: number) {
   const days = Math.floor(min / 1440)
   const hours = Math.floor((min % 1440) / 60)
   const minutes = min % 60

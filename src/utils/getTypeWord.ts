@@ -1,4 +1,4 @@
-export const getTypeWord = type => {
+export const getTypeWord = (type: string) => {
   switch (type) {
     case 'movie':
       return 'Фильм'
