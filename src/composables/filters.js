@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 
-export function useFilters (allItems) {
+export const useFilters = (allItems) => {
   const searchQuery = ref('')
   const selectedGrades = ref([])
   const selectedRestrictions = ref([])
