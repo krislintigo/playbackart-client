@@ -1,4 +1,4 @@
-export const getDeveloperWordByType = (type: string, count: number) => {
+export const getDeveloperWordByType = (type: string, count: number): string => {
   switch (type) {
     case 'movie':
     case 'series':
