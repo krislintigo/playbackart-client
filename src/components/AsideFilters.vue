@@ -38,12 +38,28 @@
         <el-link
           class="item"
           :class="{[getDeveloperTextClass(developer)]: true, 'item-selected': selectedDevelopers.includes(developer)}"
-          v-for="developer in developers"
+          v-for="developer in dividedDevelopers.primary"
           :key="developer"
           @click="developerClick(developer)"
         >
           {{developer}}
         </el-link>
+        <el-select
+          v-model="selectedDevelopers"
+          filterable
+          multiple
+          collapse-tags
+          collapse-tags-tooltip
+          placeholder="Другие создатели..."
+          style="width: 100%; margin-top: 10px;"
+        >
+          <el-option
+            v-for="item in dividedDevelopers.secondary"
+            :key="item"
+            :label="item"
+            :value="item"
+          />
+        </el-select>
       </el-row>
     </el-col>
     <el-col>
@@ -126,6 +142,23 @@ const developers = computed(() =>
 const franchises = computed(() =>
   Array.from(new Set(props.items.filter(i => i.franchise).map(i => i.franchise))))
 
+const dividedDevelopers = computed(() => {
+  console.time('dividedDevelopers')
+  const primary: string[] = []
+  const secondary: string[] = []
+  developers.value.forEach(d => {
+    const percentage = props.items.filter(i => i.developers.includes(d)).length /
+      props.items.length * 100
+    if (percentage > 1) {
+      primary.push(d)
+    } else {
+      secondary.push(d)
+    }
+  })
+  console.timeEnd('dividedDevelopers')
+  return { primary, secondary }
+})
+
 const gradeClick = (gradeIndex: number) => {
   const grade = grades.value[gradeIndex]
   if (selectedGrades.value.includes(grade)) {
@@ -167,7 +200,7 @@ const getGenreTextClass = (genre: string) => {
 
 const getDeveloperTextClass = (developer: string) => {
   const percentage = props.items.filter(i => i.developers.includes(developer)).length /
-    props.items.length * 100
+    dividedDevelopers.value.primary.length * 100
   return getTextSizeClass(percentage, 'developer')
 }
 </script>
