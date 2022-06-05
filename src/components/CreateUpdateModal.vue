@@ -5,10 +5,10 @@
     </template>
     <el-form :model="item" ref="formRef" label-position="right" :label-width="110" :rules="rules">
       <el-form-item label="Название:" prop="name">
-        <el-input v-model.trim="item.name" />
+        <el-input v-model="item.name" />
       </el-form-item>
       <el-form-item label="Фото:" prop="image">
-        <el-input v-model.trim="item.image" />
+        <el-input v-model="item.image" />
       </el-form-item>
       <el-form-item label="Рейтинг:" prop="rating">
         <el-rate v-model="item.rating" :max="10" show-text :texts="rating.texts" :colors="rating.colors" />
@@ -49,7 +49,7 @@
       </el-form-item>
       <el-form-item label="Жанры:" prop="genres">
         <el-input
-          v-model.trim="inputGenre"
+          v-model="inputGenre"
           style="width: 300px;"
           @keyup.enter="handleGenreConfirm"
         />
@@ -88,7 +88,7 @@
       </el-form-item>
       <el-form-item :label="getDeveloperWordByType(item.type, 2) + ':'" prop="developers">
         <el-input
-          v-model.trim="inputDeveloper"
+          v-model="inputDeveloper"
           style="width: 300px;"
           @keyup.enter="handleDeveloperConfirm"
         />
@@ -107,7 +107,7 @@
         </el-tag>
       </el-form-item>
       <el-form-item label="Франшиза:" prop="franchise">
-        <el-input v-model.trim="item.franchise" />
+        <el-input v-model="item.franchise" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -192,8 +192,8 @@ const handleGenreDelete = (tag: string) => {
 }
 
 const handleGenreConfirm = () => {
-  if (inputGenre.value) {
-    item.genres.push(inputGenre.value)
+  if (inputGenre.value.trim()) {
+    item.genres.push(inputGenre.value.trim())
   }
   inputGenre.value = ''
 }
@@ -203,25 +203,28 @@ const handleDeveloperDelete = (tag: string) => {
 }
 
 const handleDeveloperConfirm = () => {
-  if (inputDeveloper.value) {
-    item.developers.push(inputDeveloper.value)
+  if (inputDeveloper.value.trim()) {
+    item.developers.push(inputDeveloper.value.trim())
   }
   inputDeveloper.value = ''
 }
 
 const splitAndWrite = (type: string) => {
   if (type === 'genre') {
-    const array = inputGenre.value.split(', ')
+    const array = inputGenre.value.trim().split(', ')
     item.genres.push(...array.map(i => i[0].toUpperCase() + i.slice(1)))
     inputGenre.value = ''
   } else if (type === 'developer') {
-    const array = inputDeveloper.value.split(', ')
+    const array = inputDeveloper.value.trim().split(', ')
     item.developers.push(...array.map(i => i[0].toUpperCase() + i.slice(1)))
     inputDeveloper.value = ''
   }
 }
 
 const confirmAction = async (action: string) => {
+  item.name = item.name.trim()
+  item.image = item.image.trim()
+  item.franchise = item.franchise.trim()
   try {
     await formRef.value?.validate()
     try {
