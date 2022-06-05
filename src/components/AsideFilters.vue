@@ -48,17 +48,22 @@
     </el-col>
     <el-col>
       <h3 class="back-header">Франшизы</h3>
-      <el-row>
-        <el-link
-          class="item"
-          :class="{[getFranchiseTextClass(franchise)]: true, 'item-selected': selectedFranchises.includes(franchise)}"
-          v-for="franchise in franchises"
-          :key="franchise"
-          @click="franchiseClick(franchise)"
-        >
-          {{franchise}}
-        </el-link>
-      </el-row>
+      <el-select
+        v-model="selectedFranchises"
+        filterable
+        multiple
+        collapse-tags
+        collapse-tags-tooltip
+        placeholder="Введите название тут"
+        style="width: 100%"
+      >
+        <el-option
+          v-for="item in franchises"
+          :key="item"
+          :label="item"
+          :value="item"
+        />
+      </el-select>
     </el-col>
   </el-aside>
 </template>
@@ -155,14 +160,6 @@ const developerClick = (developer: string) => {
   }
 }
 
-const franchiseClick = (franchise: string) => {
-  if (selectedFranchises.value.includes(franchise)) {
-    selectedFranchises.value = selectedFranchises.value.filter(f => f !== franchise)
-  } else {
-    selectedFranchises.value.push(franchise)
-  }
-}
-
 const getGenreTextClass = (genre: string) => {
   const percentage = props.items.filter(i => i.genres.includes(genre)).length / props.items.length * 100
   return getTextSizeClass(percentage, 'genre')
@@ -172,12 +169,6 @@ const getDeveloperTextClass = (developer: string) => {
   const percentage = props.items.filter(i => i.developers.includes(developer)).length /
     props.items.length * 100
   return getTextSizeClass(percentage, 'developer')
-}
-
-const getFranchiseTextClass = (franchise: string) => {
-  const percentage = props.items.filter(i => i.franchise === franchise).length /
-    franchises.value.length * 100
-  return getTextSizeClass(percentage, 'franchise')
 }
 </script>
 
