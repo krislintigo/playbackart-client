@@ -63,11 +63,6 @@ const {
 } = useFilters(items)
 
 const refetch = async () => {
-  if (!store.state.user._id) {
-    items.value = []
-    loading.value = false
-    return
-  }
   loading.value = true
   try {
     if (route.meta.type === 'all') {

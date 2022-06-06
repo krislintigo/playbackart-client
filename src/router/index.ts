@@ -28,7 +28,7 @@ const routes = [
   },
 
   {
-    path: '/users/:login',
+    path: '/:login',
     component: () => import('../views/DisplayUserView.vue'),
     meta: { mainHeader: 'Полный список', type: 'all' }
   },

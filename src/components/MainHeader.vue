@@ -6,7 +6,7 @@
       </el-col>
       <div style="display: flex; column-gap: 30px">
         <el-tabs v-model="active" @tab-click="tabClick">
-          <el-tab-pane v-for="tab in navigationTabs" :key="tab.label" :name="tab.label">
+          <el-tab-pane v-for="tab in navigationTabs" :key="tab.label" :name="route.params.login ? `/${route.params.login}${tab.label}` : tab.label">
             <template #label>
               <el-icon><component :is="tab.icon"/></el-icon>
               {{ tab.name }}
@@ -21,16 +21,23 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { navigationTabs } from '@/data/static'
 import ProfileController from '@/components/ProfileController.vue'
 
 const router = useRouter()
+const route = useRoute()
 
 const active = ref<string>(location.pathname)
 
 const tabClick = (tab: any) => {
+  console.log(tab.props.name)
   router.push(tab.props.name)
+  // if (route.params.login) {
+  //   router.push(`/${route.params.login}${tab.props.name}`)
+  // } else {
+  //   router.push(tab.props.name)
+  // }
 }
 </script>
 
