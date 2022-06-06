@@ -1,8 +1,6 @@
 <template>
   <div>
-    <el-row v-if="!store.state.user._id">
-      <h2>Войдите, чтобы продолжить!</h2>
-    </el-row>
+    <h2 v-if="!items.length">Нечего отображать :(</h2>
     <el-row v-else v-loading="loading" justify="center" :gutter="20" style="margin-bottom: 30px;">
       <el-col :span="24" :lg="18">
         <div style="display: flex; align-items: center; column-gap: 10px">
@@ -37,7 +35,6 @@
 <script setup lang="ts">
 import { provide, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
-import { useStore } from 'vuex'
 import { useFilters } from '@/composables/filters'
 import formatDuration from '@/utils/formatDuration'
 import MainDisplayLayout from '@/components/MainDisplayLayout.vue'
@@ -46,7 +43,6 @@ import SearchInput from '@/components/SearchInput.vue'
 import { ItemsAPI } from '@/api/ItemsAPI'
 import { ElNotification } from 'element-plus'
 
-const store = useStore()
 const route = useRoute()
 
 const loading = ref(true)
