@@ -143,7 +143,6 @@ const franchises = computed(() =>
   Array.from(new Set(props.items.filter(i => i.franchise).map(i => i.franchise))))
 
 const dividedDevelopers = computed(() => {
-  console.time('dividedDevelopers')
   const primary: string[] = []
   const secondary: string[] = []
   developers.value.forEach(d => {
@@ -155,7 +154,6 @@ const dividedDevelopers = computed(() => {
       secondary.push(d)
     }
   })
-  console.timeEnd('dividedDevelopers')
   return { primary, secondary }
 })
 

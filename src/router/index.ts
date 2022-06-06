@@ -3,32 +3,53 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    name: 'home',
     component: () => import('../views/MainView.vue'),
     meta: { mainHeader: 'Полный список', type: 'all' }
   },
   {
     path: '/movies',
-    name: 'movies',
     component: () => import('../views/MainView.vue'),
     meta: { mainHeader: 'Список фильмов', type: 'movie' }
   },
   {
     path: '/series',
-    name: 'series',
     component: () => import('../views/MainView.vue'),
     meta: { mainHeader: 'Список сериалов', type: 'series' }
   },
   {
     path: '/games',
-    name: 'games',
     component: () => import('../views/MainView.vue'),
     meta: { mainHeader: 'Список игр', type: 'game' }
   },
   {
     path: '/books',
-    name: 'books',
     component: () => import('../views/MainView.vue'),
+    meta: { mainHeader: 'Список книг', type: 'book' }
+  },
+
+  {
+    path: '/users/:login',
+    component: () => import('../views/DisplayUserView.vue'),
+    meta: { mainHeader: 'Полный список', type: 'all' }
+  },
+  {
+    path: '/:login/movies',
+    component: () => import('../views/DisplayUserView.vue'),
+    meta: { mainHeader: 'Список фильмов', type: 'movie' }
+  },
+  {
+    path: '/:login/series',
+    component: () => import('../views/DisplayUserView.vue'),
+    meta: { mainHeader: 'Список сериалов', type: 'series' }
+  },
+  {
+    path: '/:login/games',
+    component: () => import('../views/DisplayUserView.vue'),
+    meta: { mainHeader: 'Список игр', type: 'game' }
+  },
+  {
+    path: '/:login/books',
+    component: () => import('../views/DisplayUserView.vue'),
     meta: { mainHeader: 'Список книг', type: 'book' }
   }
 ]
