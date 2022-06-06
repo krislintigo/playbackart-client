@@ -31,13 +31,7 @@ const route = useRoute()
 const active = ref<string>(location.pathname)
 
 const tabClick = (tab: any) => {
-  console.log(tab.props.name)
   router.push(tab.props.name)
-  // if (route.params.login) {
-  //   router.push(`/${route.params.login}${tab.props.name}`)
-  // } else {
-  //   router.push(tab.props.name)
-  // }
 }
 </script>
 
