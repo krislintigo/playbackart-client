@@ -33,7 +33,7 @@
           </el-tag>
         </div>
       </div>
-      <el-collapse>
+      <el-collapse v-if="editable">
         <el-collapse-item :class="['set-status', item.status]">
           <template #title>
             <el-row align="middle" style="column-gap: 10px">
@@ -73,7 +73,8 @@ import { statuses } from '@/data/static'
 import { Item } from '@/interfaces/item'
 
 const props = defineProps<{
-  item: Item
+  item: Item,
+  editable: boolean,
 }>()
 
 const refetch = inject('refetch') as Function

@@ -15,7 +15,7 @@
                 <template #reference>
                   <el-link>{{ scope.row.name }}</el-link>
                 </template>
-                <ItemPreview :item="scope.row" />
+                <ItemPreview :item="scope.row" :editable="editable" />
               </el-popover>
             </template>
           </el-table-column>
@@ -34,7 +34,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="Операции" width="100">
+          <el-table-column v-if="editable" label="Операции" width="100">
             <template #default="scope">
               <el-button :icon="EditPen" type="warning" circle size="small" text @click="emit('update-item', scope.row)" />
               <el-popconfirm
@@ -67,7 +67,8 @@ import formatDuration from '@/utils/formatDuration'
 import { Item } from '@/interfaces/item'
 
 const props = defineProps<{
-  items: Array<Item>
+  items: Array<Item>,
+  editable: boolean,
 }>()
 
 const emit = defineEmits<{

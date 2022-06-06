@@ -15,6 +15,7 @@
         </div>
         <MainDisplayLayout
           :items="queriedItems"
+          :editable="true"
           @update-item="updateItem"
           @delete-item="deleteItem"
         />
