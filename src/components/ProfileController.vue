@@ -6,7 +6,14 @@
     <h2>Профиль</h2>
     <div v-if="store.state.user.login">
       <h3 >Добро пожаловать, {{store.state.user.login}}!</h3>
-      <el-row justify="end">
+      <h4 style="margin-bottom: 5px">
+        Ваш список слежения:
+        <el-button text circle :type="watchingChanged ? 'warning' : 'success'" size="large" @click="saveWatching">
+          <el-icon :size="20"><CircleCheck /></el-icon>
+        </el-button>
+      </h4>
+      <el-input type="textarea" v-model="watching" @input="watchingChanged = true" :autosize="{minRows: 10, maxRows: 20}" />
+      <el-row justify="end" style="margin-top: 10px;">
         <el-button type="danger" @click="handleUserAction('logout')">Выход</el-button>
       </el-row>
     </div>
@@ -29,9 +36,9 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useStore } from 'vuex'
-import { User, Failed } from '@element-plus/icons-vue'
+import { User, Failed, CircleCheck } from '@element-plus/icons-vue'
 import { AuthAPI } from '@/api/AuthAPI'
 import { userNames } from '@/store/modules/user'
 import { ElNotification } from 'element-plus'
@@ -43,7 +50,12 @@ const store = useStore()
 const auth: AuthData = reactive({
   login: '',
   password: ''
-});
+})
+const watching = computed({
+  get: () => store.state.user.watching,
+  set: value => store.commit(userNames.setWatching, value)
+})
+const watchingChanged = ref<boolean>(false);
 
 (async () => {
   try {
@@ -71,8 +83,31 @@ const handleUserAction = async (action: string) => {
     })
   }
 }
+
+const saveWatching = async () => {
+  try {
+    const response = await UserAPI.updateWatching(watching.value)
+    ElNotification.success({
+      title: response.message,
+      position: 'bottom-right'
+    })
+    watchingChanged.value = false
+  } catch (e: any) {
+    ElNotification.error({
+      title: e.response.data.message,
+      position: 'bottom-right'
+    })
+  }
+}
 </script>
 
 <style scoped>
 
+</style>
+
+<style>
+.el-textarea__inner {
+  resize: none !important;
+  font-family: Avenir, Helvetica, Arial, sans-serif !important;
+}
 </style>

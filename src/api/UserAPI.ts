@@ -3,7 +3,8 @@ import { userClient } from '@/api/clients'
 const endpoints = {
   getAll: '',
   getOne: (id: string) => `/${id}`,
-  getOneShort: (id: string) => `/${id}/short`
+  getOneShort: (id: string) => `/${id}/short`,
+  updateWatching: '/update-watching'
 }
 
 export class UserAPI {
@@ -19,6 +20,11 @@ export class UserAPI {
 
   static async getOneShort (id: string) {
     const response = await userClient.get(endpoints.getOneShort(id))
+    return response.data
+  }
+
+  static async updateWatching (watching: string) {
+    const response = await userClient.put(endpoints.updateWatching, { watching })
     return response.data
   }
 }
