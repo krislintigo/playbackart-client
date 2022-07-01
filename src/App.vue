@@ -3,6 +3,7 @@
     <MainHeader />
     <el-divider />
     <router-view />
+    <el-backtop />
   </el-main>
 </template>
 
@@ -19,6 +20,7 @@ body, input, button, textarea, select {
 
 .main {
   max-width: 1500px;
+  min-width: 1500px;
   margin: 0 auto;
 }
 </style>

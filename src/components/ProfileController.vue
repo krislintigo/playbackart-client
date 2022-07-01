@@ -8,7 +8,7 @@
       <h3 >Добро пожаловать, {{store.state.user.login}}!</h3>
       <h4 style="margin-bottom: 5px">
         Ваш список слежения:
-        <el-button text circle :type="watchingChanged ? 'warning' : 'success'" size="large" @click="saveWatching">
+        <el-button text circle :type="watchingChanged ? 'warning' : 'success'" size="small" @click="saveWatching">
           <el-icon :size="20"><CircleCheck /></el-icon>
         </el-button>
       </h4>

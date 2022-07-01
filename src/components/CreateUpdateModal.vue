@@ -50,7 +50,7 @@
       <el-form-item label="Жанры:" prop="genres">
         <el-input
           v-model="inputGenre"
-          style="width: 300px;"
+          style="width: 300px; margin-bottom: 5px"
           @keyup.enter="handleGenreConfirm"
         />
         <el-button text circle :icon="More" style="margin-left: 5px;" @click="splitAndWrite('genre')" />
@@ -89,7 +89,7 @@
       <el-form-item :label="getDeveloperWordByType(item.type, 2) + ':'" prop="developers">
         <el-input
           v-model="inputDeveloper"
-          style="width: 300px;"
+          style="width: 300px; margin-bottom: 5px"
           @keyup.enter="handleDeveloperConfirm"
         />
         <el-button text circle :icon="More" style="margin-left: 5px;" @click="splitAndWrite('developer')" />
