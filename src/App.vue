@@ -20,7 +20,7 @@ body, input, button, textarea, select {
 
 .main {
   max-width: 1500px;
-  min-width: 1500px;
+  min-width: 1400px;
   margin: 0 auto;
 }
 </style>
