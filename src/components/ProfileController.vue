@@ -1,5 +1,5 @@
 <template>
-  <el-popover placement="bottom" :width="300" trigger="click">
+  <el-popover placement="bottom" :width="351" trigger="click">
     <template #reference>
       <el-avatar :size="50" :icon="store.state.user._id ? User : Failed" />
     </template>
@@ -12,7 +12,7 @@
           <el-icon :size="20"><CircleCheck /></el-icon>
         </el-button>
       </h4>
-      <el-input type="textarea" v-model="watching" @input="watchingChanged = true" :autosize="{minRows: 10, maxRows: 20}" />
+      <TextEditor v-model="watching" @input="watchingChanged = true" />
       <el-row justify="end" style="margin-top: 10px;">
         <el-button type="danger" @click="handleUserAction('logout')">Выход</el-button>
       </el-row>
@@ -44,6 +44,7 @@ import { userNames } from '@/store/modules/user'
 import { ElNotification } from 'element-plus'
 import { UserAPI } from '@/api/UserAPI'
 import { AuthData } from '@/interfaces/auth-data'
+import TextEditor from '@/components/TextEditor.vue'
 
 const store = useStore()
 

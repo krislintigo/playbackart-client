@@ -1,0 +1,100 @@
+<template>
+  <div>
+    <div v-if="editor">
+      <el-button-group style="margin-bottom: 10px;">
+        <el-button @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
+          <strong>Ж</strong>
+        </el-button>
+        <el-button @click="editor.chain().focus().toggleItalic().run()" :disabled="!editor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">
+          <em>К</em>
+        </el-button>
+        <el-button @click="editor.chain().focus().toggleStrike().run()" :disabled="!editor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
+          <del>del</del>
+        </el-button>
+        <el-button @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }">
+          <span style="font-size: 20px">A</span>
+        </el-button>
+        <el-button @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }">
+          <span style="font-size: 17px">A</span>
+        </el-button>
+        <el-button @click="editor.chain().focus().toggleHeading({ level: 3 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }">
+          <span style="font-size: 14px">A</span>
+        </el-button>
+        <el-button @click="editor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': editor.isActive('blockquote') }">
+          <el-icon><Expand /></el-icon>
+        </el-button>
+        <el-button @click="editor.chain().focus().setHorizontalRule().run()">
+          <el-icon><SemiSelect /></el-icon>
+        </el-button>
+      </el-button-group>
+    </div>
+    <EditorContent :editor="editor" />
+  </div>
+</template>
+
+<script setup>
+import { defineProps, defineEmits } from 'vue'
+import { EditorContent, Editor } from '@tiptap/vue-3'
+import { StarterKit } from '@tiptap/starter-kit'
+import { Expand, SemiSelect } from '@element-plus/icons-vue'
+
+const props = defineProps({
+  modelValue: {
+    type: String,
+    required: true
+  }
+})
+
+const emit = defineEmits(['update:modelValue', 'input'])
+
+const editor = new Editor({
+  content: props.modelValue,
+  extensions: [
+    StarterKit
+  ],
+  onUpdate: () => {
+    emit('update:modelValue', editor.getHTML())
+    emit('input')
+  }
+})
+
+</script>
+
+<style>
+.ProseMirror {
+  padding: 5px 10px;
+  outline: 1px solid #dcdfe6;
+  border-radius: 3px;
+  border: 0;
+  transition: outline-color 0.2s ease-in-out;
+}
+
+.ProseMirror:hover {
+  outline-color: darkgrey;
+}
+
+.ProseMirror-focused, .ProseMirror:hover.ProseMirror-focused {
+  outline-color: #409eff;
+}
+
+.ProseMirror p {
+  margin: 3px 0;
+}
+
+.ProseMirror h1, .ProseMirror h2, .ProseMirror h3 {
+  line-height: 1;
+}
+
+.ProseMirror blockquote {
+  margin-left: 20px;
+  padding-left: 10px;
+  border-left: 3px solid darkgrey;
+}
+
+.ProseMirror hr {
+  border: 0;
+  border-top: 1px solid gray;
+  margin: 10px 15px;
+}
+
+</style>
