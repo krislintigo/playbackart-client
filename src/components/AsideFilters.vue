@@ -193,13 +193,14 @@ const developerClick = (developer: string) => {
 
 const getGenreTextClass = (genre: string) => {
   const percentage = props.items.filter(i => i.genres.includes(genre)).length / props.items.length * 100
-  return getTextSizeClass(percentage, 'genre')
+  return getTextSizeClass(percentage, props.items.length, 'genre')
 }
 
 const getDeveloperTextClass = (developer: string) => {
   const percentage = props.items.filter(i => i.developers.includes(developer)).length /
     dividedDevelopers.value.primary.length * 100
-  return getTextSizeClass(percentage, 'developer')
+  // props.items.length * 100
+  return getTextSizeClass(percentage, props.items.length, 'developer')
 }
 </script>
 
