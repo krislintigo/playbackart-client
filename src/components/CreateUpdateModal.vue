@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="dialog" width="95%" :lock-scroll="false" custom-class="dialog">
+  <el-dialog v-model="dialog" width="95%" :lock-scroll="false" class="dialog">
     <template #header>
       <h3>{{target === 'create' ? 'Добавить' : 'Обновить'}} элемент</h3>
     </template>

@@ -1,5 +1,5 @@
 <template>
-  <el-popover placement="bottom" :width="351" trigger="click">
+  <el-popover placement="bottom" :width="378" trigger="click">
     <template #reference>
       <el-avatar :size="50" :icon="store.state.user._id ? User : Failed" />
     </template>
