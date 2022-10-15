@@ -22,7 +22,9 @@
           <el-table-column sortable prop="rating" label="Рейтинг" width="120" :sort-method="sortByRating">
             <template #default="scope">
               <span v-if="!scope.row.rating">-</span>
-              <span v-else>{{scope.row.rating}}</span>
+              <el-tooltip v-else :content="rating.texts.at(scope.row.rating - 1)" placement="left" effect="light" :hide-after="0" transition="">
+                <span style="cursor:pointer;">{{scope.row.rating}}</span>
+              </el-tooltip>
             </template>
           </el-table-column>
           <el-table-column sortable prop="time" label="Длительность" width="170" :sort-method="sortByDuration">
@@ -65,6 +67,7 @@ import { Delete, EditPen } from '@element-plus/icons-vue'
 import ItemPreview from '@/components/ItemPreview.vue'
 import formatDuration from '@/utils/formatDuration'
 import { Item } from '@/interfaces/item'
+import { rating } from '@/data/static'
 
 const props = defineProps<{
   items: Array<Item>,
