@@ -118,7 +118,7 @@ const updateItemStatus = async (status: string) => {
 @import "../assets/setStatusColors.css";
 
 .set-status .el-collapse-item__header {
-  padding: 0 20px;
+  padding: 0 15px;
   border-bottom: 0;
 }
 

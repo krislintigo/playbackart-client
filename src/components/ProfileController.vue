@@ -1,5 +1,5 @@
 <template>
-  <el-popover placement="bottom" :width="378" trigger="click">
+  <el-popover placement="bottom" :width="380" trigger="click">
     <template #reference>
       <el-avatar :size="50" :icon="store.state.user._id ? User : Failed" />
     </template>
@@ -68,7 +68,7 @@ const watchingChanged = ref<boolean>(false);
   }
 })()
 
-const handleUserAction = async (action: string) => {
+const handleUserAction = async (action: 'register' | 'login' | 'logout') => {
   try {
     const response = await AuthAPI[action](auth)
     if (action === 'logout') store.commit(userNames.resetUser)

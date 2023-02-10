@@ -8,13 +8,15 @@
 </template>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400&family=Rubik:wght@300;400&display=swap');
+
 html {
   overflow-y: scroll;
 }
 
 body, input, button, textarea, select {
   box-sizing: border-box;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Rubik, Avenir, Helvetica, Arial, sans-serif;
   color: #2c3e50;
 }
 

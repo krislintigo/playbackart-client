@@ -3,7 +3,7 @@
     <template #header>
       <h3>{{target === 'create' ? 'Добавить' : 'Обновить'}} элемент</h3>
     </template>
-    <el-form :model="item" ref="formRef" label-position="right" :label-width="110" :rules="rules">
+    <el-form :model="item" ref="formRef" label-position="right" :label-width="120" :rules="rules">
       <el-form-item label="Название:" prop="name">
         <el-input v-model="item.name" />
       </el-form-item>

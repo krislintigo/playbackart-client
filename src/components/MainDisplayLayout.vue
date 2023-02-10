@@ -41,6 +41,7 @@
               <el-button :icon="EditPen" type="warning" circle size="small" text @click="emit('update-item', scope.row)" />
               <el-popconfirm
                 title="Вы действительно хотите удалить?"
+                width="200"
                 confirm-button-text="Да"
                 cancel-button-text="Нет"
                 @confirm="emit('delete-item', scope.row.id)"
@@ -144,6 +145,10 @@ const sortByDuration = (a: Item, b: Item) => {
 
 .el-table .el-table__cell {
   padding: 3px 0;
+}
+
+.el-table .el-table__cell .cell {
+  padding-right: 0;
 }
 
 .el-link__inner {
