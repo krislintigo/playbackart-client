@@ -11,7 +11,7 @@
           <el-table-column type="index" label="#" width="50" />
           <el-table-column sortable prop="name" label="Название" min-width="350">
             <template #default="scope">
-              <el-popover placement="right" :width="420" trigger="hover" :show-after="500" :persistent="false">
+              <el-popover placement="right" :width="420" trigger="hover" :show-after="300" :persistent="false">
                 <template #reference>
                   <el-link>{{ scope.row.name }}</el-link>
                 </template>
@@ -21,10 +21,14 @@
           </el-table-column>
           <el-table-column sortable prop="rating" label="Рейтинг" width="120" :sort-method="sortByRating">
             <template #default="scope">
-              <span v-if="!scope.row.rating">-</span>
-              <el-tooltip v-else :content="rating.texts.at(scope.row.rating - 1)" placement="left" effect="light" :hide-after="0" transition="">
-                <span style="cursor:pointer;">{{scope.row.rating}}</span>
-              </el-tooltip>
+              <el-popover placement="right" :width="380" trigger="hover" :show-after="300" :persistent="false">
+                <template #reference>
+                  <el-row style="width: 50%">
+                    {{scope.row.rating || '-'}}
+                  </el-row>
+                </template>
+                <el-rate :model-value="scope.row.rating" :max="10" show-text :texts="rating.texts" :colors="rating.colors" @change="updateItemRating(scope.row, $event)" />
+              </el-popover>
             </template>
           </el-table-column>
           <el-table-column sortable prop="time" label="Длительность" width="170" :sort-method="sortByDuration">
@@ -63,12 +67,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, defineProps, defineEmits } from 'vue'
+import { computed, ref, defineProps, defineEmits, inject } from 'vue'
 import { Delete, EditPen } from '@element-plus/icons-vue'
 import ItemPreview from '@/components/ItemPreview.vue'
 import formatDuration from '@/utils/formatDuration'
 import { Item } from '@/interfaces/item'
 import { rating } from '@/data/static'
+import { ItemsAPI } from '@/api/ItemsAPI'
+import { ElNotification } from 'element-plus'
 
 const props = defineProps<{
   items: Array<Item>,
@@ -79,6 +85,8 @@ const emit = defineEmits<{
   (e: 'update-item', item: Item): void,
   (e: 'delete-item', id: number): void
 }>()
+
+const refetch = inject('refetch') as Function
 
 const activeItems = ref([0, 1, 2, 3, 4])
 
@@ -125,6 +133,22 @@ const sortByDuration = (a: Item, b: Item) => {
   const totalB = b.time.count * b.time.duration
   if (totalA === totalB) return 0
   return totalA > totalB ? 1 : -1
+}
+
+const updateItemRating = async (item: Item, rating: number) => {
+  try {
+    await ItemsAPI.update(item.id, { rating } as Item)
+    refetch()
+    ElNotification.success({
+      title: 'Рейтинг изменен',
+      position: 'bottom-right'
+    })
+  } catch (error: any) {
+    ElNotification.error({
+      title: error.response.data.message,
+      position: 'bottom-right'
+    })
+  }
 }
 </script>
 
