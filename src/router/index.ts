@@ -1,5 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+declare module 'vue-router' {
+  interface RouteMeta {
+    mainHeader: string
+    type: string
+  }
+}
+
 const routes = [
   {
     path: '/',

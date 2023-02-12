@@ -18,6 +18,7 @@ module.exports = {
   ],
   rules: {
     'vue/no-v-model-argument': 'off',
-    'func-call-spacing': 'off'
+    'func-call-spacing': 'off',
+    'no-unused-vars': 'off'
   }
 }

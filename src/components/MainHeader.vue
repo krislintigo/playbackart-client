@@ -6,7 +6,7 @@
       </el-col>
       <div style="display: flex; column-gap: 30px">
         <el-tabs v-model="active" @tab-click="tabClick">
-          <el-tab-pane v-for="tab in navigationTabs" :key="tab.label" :name="route.params.login ? `/${route.params.login}${tab.label}` : tab.label">
+          <el-tab-pane v-for="tab in navigationTabs" :key="tab.label" :name="routePath(tab.label)">
             <template #label>
               <el-icon><component :is="tab.icon"/></el-icon>
               {{ tab.name }}
@@ -29,6 +29,13 @@ const router = useRouter()
 const route = useRoute()
 
 const active = ref<string>(location.pathname)
+
+const routePath = (path: string) => {
+  if (route.params.login) {
+    return `/${route.params.login}${path === '/' ? '' : path}`
+  }
+  return path
+}
 
 const tabClick = (tab: any) => {
   router.push(tab.props.name)

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 v-if="!items.length">Нечего отображать :(</h2>
+    <h2 v-if="!items.length && !loading">Нечего отображать :(</h2>
     <el-row v-else v-loading="loading" justify="center" :gutter="20" style="margin-bottom: 30px;">
       <el-col :span="24" :lg="18">
         <div style="display: flex; align-items: center; column-gap: 10px">
