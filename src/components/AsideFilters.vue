@@ -90,6 +90,7 @@ import HorizontalBarChart from '@/components/HorizontalBarChart.vue'
 import { restrictions } from '@/data/static'
 import { getTextSizeClass } from '@/utils/getTextSizeClass'
 import { CreateItem } from '@/interfaces/create-item'
+import { ratingCoefficient } from '@/utils/ratingCoefficient'
 
 const props = defineProps<{
   items: Array<CreateItem>,
@@ -146,9 +147,11 @@ const dividedDevelopers = computed(() => {
   const primary: string[] = []
   const secondary: string[] = []
   developers.value.forEach(d => {
-    const percentage = props.items.filter(i => i.developers.includes(d)).length /
-      props.items.length * 100
-    if (percentage > 1) {
+    const includedItems = props.items.filter(i => i.developers.includes(d))
+    const percentage = includedItems.reduce((acc, item) => acc + item.time.count * item.time.duration, 0) *
+      includedItems.reduce((acc, item) => acc * ratingCoefficient(item.rating), 1) /
+      props.items.reduce((acc, item) => acc + item.time.count * item.time.duration, 0) * 100
+    if (percentage > 5) {
       primary.push(d)
     } else {
       secondary.push(d)
@@ -192,14 +195,16 @@ const developerClick = (developer: string) => {
 }
 
 const getGenreTextClass = (genre: string) => {
-  const percentage = props.items.filter(i => i.genres.includes(genre)).length / props.items.length * 100
+  // const percentage = props.items.filter(i => i.genres.includes(genre)).length / props.items.length * 100
+  const percentage = props.items.filter(i => i.genres.includes(genre)).reduce((acc, item) => acc + item.time.count * item.time.duration, 0) *
+    props.items.filter(i => i.genres.includes(genre)).reduce((acc, item) => acc * ratingCoefficient(item.rating), 1) /
+    props.items.reduce((acc, item) => acc + item.time.count * item.time.duration, 0)
   return getTextSizeClass(percentage, props.items.length, 'genre')
 }
 
 const getDeveloperTextClass = (developer: string) => {
   const percentage = props.items.filter(i => i.developers.includes(developer)).length /
-    dividedDevelopers.value.primary.length * 100
-  // props.items.length * 100
+  dividedDevelopers.value.primary.length * 100
   return getTextSizeClass(percentage, props.items.length, 'developer')
 }
 </script>
