@@ -235,12 +235,10 @@ const sortByName = (order: Sort['order']) => (a: Item, b: Item) => {
 
 const sortByRating = (order: Sort['order']) => (a: Item, b: Item) => {
   if (!order) return 0
+  console.log(a.rating, b.rating)
   const mult = order === 'ascending' ? 1 : -1
-  if (!a.rating || !b.rating) return -1 * mult
-  if (a.rating === b.rating) {
-    return 0
-  }
-  return a.rating > b.rating ? -1 * mult : 1 * mult
+  if (a.rating === b.rating) return 0
+  return a.rating > b.rating ? 1 * mult : -1 * mult
 }
 
 const sortByDuration = (order: Sort['order']) => (a: Item, b: Item) => {
