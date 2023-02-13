@@ -3,7 +3,13 @@
     <template #reference>
       <el-avatar :size="50" :icon="store.state.user._id ? User : Failed" />
     </template>
-    <h2>Профиль</h2>
+    <el-row justify="space-between" align="middle">
+      <h2>Профиль</h2>
+      <el-button circle text size="large" @click="dark = !dark">
+        <el-icon v-if="dark" :size="24"><Sunny /></el-icon>
+        <el-icon v-else :size="24"><Moon /></el-icon>
+      </el-button>
+    </el-row>
     <div v-if="store.state.user.login">
       <h3 >Добро пожаловать, {{store.state.user.login}}!</h3>
       <h4 style="margin-bottom: 5px">
@@ -36,9 +42,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watchEffect } from 'vue'
 import { useStore } from 'vuex'
-import { User, Failed, CircleCheck } from '@element-plus/icons-vue'
+import { User, Failed, CircleCheck, Sunny, Moon } from '@element-plus/icons-vue'
 import { AuthAPI } from '@/api/AuthAPI'
 import { userNames } from '@/store/modules/user'
 import { ElNotification } from 'element-plus'
@@ -56,7 +62,8 @@ const watching = computed({
   get: () => store.state.user.watching,
   set: value => store.commit(userNames.setWatching, value)
 })
-const watchingChanged = ref<boolean>(false);
+const watchingChanged = ref<boolean>(false)
+const dark = ref(!!localStorage.getItem('theme'));
 
 (async () => {
   try {
@@ -100,15 +107,20 @@ const saveWatching = async () => {
     })
   }
 }
+
+watchEffect(() => {
+  if (dark.value) {
+    localStorage.setItem('theme', 'dark')
+    document.documentElement.classList.add('dark')
+  } else {
+    localStorage.removeItem('theme')
+    document.documentElement.classList.remove('dark')
+  }
+})
 </script>
 
 <style scoped>
 
 </style>
 
-<style>
-.el-textarea__inner {
-  resize: none !important;
-  font-family: Avenir, Helvetica, Arial, sans-serif !important;
-}
-</style>
+<style></style>

@@ -148,6 +148,7 @@ const dividedDevelopers = computed(() => {
   const secondary: string[] = []
   developers.value.forEach(d => {
     const includedItems = props.items.filter(i => i.developers.includes(d))
+    // if (includedItems.length === 1 && includedItems[0].developers.length > 3 && includedItems[0].developers.length < 5) console.log(d)
     const percentage = includedItems.reduce((acc, item) => acc + item.time.count * item.time.duration, 0) *
       includedItems.reduce((acc, item) => acc * ratingCoefficient(item.rating), 1) /
       props.items.reduce((acc, item) => acc + item.time.count * item.time.duration, 0) * 100
@@ -220,11 +221,11 @@ const getDeveloperTextClass = (developer: string) => {
 }
 
 .back-header {
-  background-color: #e8ebef;
+  background-color: var(--el-color-info-light-8);
   padding: 10px;
   margin-top: 0;
   margin-bottom: 10px;
-  border-left: 5px solid black;
+  border-left: 5px solid var(--el-text-color-primary);
   font-size: 16px;
   text-transform: uppercase;
 }
@@ -234,6 +235,6 @@ const getDeveloperTextClass = (developer: string) => {
 }
 
 .item-selected {
-  color: #409eff;
+  color: var(--el-color-primary);
 }
 </style>

@@ -17,7 +17,7 @@ html {
 body, input, button, textarea, select {
   box-sizing: border-box;
   font-family: Rubik, Avenir, Helvetica, Arial, sans-serif;
-  color: #2c3e50;
+  color: var(--el-text-color-primary);
 }
 
 .main {

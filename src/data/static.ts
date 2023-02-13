@@ -5,31 +5,31 @@ export const statuses = [
     title: 'В процессе',
     icon: VideoPlay,
     value: 'looking',
-    color: '#79bbff'
+    color: 'var(--el-color-primary-light-3)'
   },
   {
     title: 'Запланировано',
     icon: Plus,
     value: 'planned',
-    color: '#f7b954'
+    color: 'var(--el-color-warning-light-3)'
   },
   {
     title: 'Завершено',
     icon: Select,
     value: 'viewed',
-    color: '#95d475'
+    color: 'var(--el-color-success-light-3)'
   },
   {
     title: 'Отложено',
     icon: VideoPause,
     value: 'postponed',
-    color: '#b1b3b8'
+    color: 'var(--el-color-info-light-3)'
   },
   {
     title: 'Брошено',
     icon: CloseBold,
     value: 'abandoned',
-    color: '#f56c6c'
+    color: 'var(--el-color-danger)'
   }
 ]
 
