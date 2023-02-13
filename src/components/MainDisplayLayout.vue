@@ -7,9 +7,9 @@
             <h2 style="font-size: 18px">{{block.title}}</h2>
           </el-row>
         </template>
-        <el-table :data="block.paginated">
-          <el-table-column type="index" label="#" width="50" :index="indexHandler(block.pagination)" />
-          <el-table-column sortable prop="name" label="Название" min-width="350">
+        <el-table :data="block.paginated" @sort-change="onSortChange(i, $event)">
+          <el-table-column type="index" label="#" width="50" :index="indexHandler(block.data.pagination)" />
+          <el-table-column sortable="custom" prop="name" label="Название" min-width="350">
             <template #default="scope">
               <el-popover placement="right" :width="420" trigger="hover" :show-after="300" :persistent="false">
                 <template #reference>
@@ -19,7 +19,7 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column sortable prop="rating" label="Рейтинг" width="120" :sort-method="sortByRating">
+          <el-table-column sortable="custom" prop="rating" label="Рейтинг" width="120">
             <template #default="scope">
               <el-popover placement="right" :width="380" trigger="hover" :show-after="300" :persistent="false">
                 <template #reference>
@@ -31,7 +31,7 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column sortable prop="time" label="Длительность" width="170" :sort-method="sortByDuration">
+          <el-table-column sortable="custom" prop="time" label="Длительность" width="170">
             <template #default="scope">
               <span v-if="!scope.row.time.duration">-</span>
               <div v-else>
@@ -58,12 +58,12 @@
           </el-table-column>
         </el-table>
         <el-pagination
-          v-model:current-page="block.pagination.page"
-          v-model:page-size="block.pagination.pageSize"
+          v-model:current-page="block.data.pagination.page"
+          v-model:page-size="block.data.pagination.pageSize"
           hide-on-single-page
           layout="prev, pager, next"
           :page-sizes="[20, 50, 100]"
-          :page-size="block.pagination.pageSize"
+          :page-size="block.data.pagination.pageSize"
           :total="block.total.length"
         />
         <h4 style="margin: 5px 0">
@@ -85,6 +85,11 @@ import { rating } from '@/data/static'
 import { ItemsAPI } from '@/api/ItemsAPI'
 import { ElNotification } from 'element-plus'
 
+type Sort = {
+  prop: 'name' | 'rating' | 'time' | null,
+  order: 'ascending' | 'descending' | null
+}
+
 const props = defineProps<{
   items: Array<Item>,
   editable: boolean,
@@ -99,96 +104,153 @@ const refetch = inject('refetch') as Function
 
 const activeItems = ref([0, 1, 2, 3, 4])
 
-const lookingItems = computed<Item[]>(() => props.items.filter(item => item.status === 'looking'))
-const lookingItemsPagination = reactive({
-  page: 1,
-  pageSize: 50
+const lookingItemsData = reactive({
+  pagination: {
+    page: 1,
+    pageSize: 50
+  },
+  sort: {
+    prop: 'name',
+    order: null
+  } as Sort
 })
-const plannedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'planned'))
-const plannedItemsPagination = reactive({
-  page: 1,
-  pageSize: 50
+const lookingItems = computed<Item[]>(() => props.items.filter(item => item.status === 'looking').sort(sortBy(lookingItemsData.sort)))
+const plannedItemsData = reactive({
+  pagination: {
+    page: 1,
+    pageSize: 50
+  },
+  sort: {
+    prop: 'name',
+    order: null
+  } as Sort
 })
-const viewedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'viewed'))
-const viewedItemsPagination = reactive({
-  page: 1,
-  pageSize: 50
+const plannedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'planned').sort(sortBy(plannedItemsData.sort)))
+const viewedItemsData = reactive({
+  pagination: {
+    page: 1,
+    pageSize: 50
+  },
+  sort: {
+    prop: 'name',
+    order: null
+  } as Sort
 })
-const postponedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'postponed'))
-const postponedItemsPagination = reactive({
-  page: 1,
-  pageSize: 50
+const viewedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'viewed').sort(sortBy(viewedItemsData.sort)))
+const postponedItemsData = reactive({
+  pagination: {
+    page: 1,
+    pageSize: 50
+  },
+  sort: {
+    prop: 'name',
+    order: null
+  } as Sort
 })
-const abandonedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'abandoned'))
-const abandonedItemsPagination = reactive({
-  page: 1,
-  pageSize: 50
+const postponedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'postponed').sort(sortBy(postponedItemsData.sort)))
+const abandonedItemsData = reactive({
+  pagination: {
+    page: 1,
+    pageSize: 50
+  },
+  sort: {
+    prop: 'name',
+    order: null
+  } as Sort
 })
+const abandonedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'abandoned').sort(sortBy(abandonedItemsData.sort)))
 
 const displayedItems = computed(() => [
   {
     title: 'В ПРОЦЕССЕ',
     paginated: lookingItems.value.slice(
-      (lookingItemsPagination.page - 1) * lookingItemsPagination.pageSize,
-      lookingItemsPagination.page * lookingItemsPagination.pageSize
+      (lookingItemsData.pagination.page - 1) * lookingItemsData.pagination.pageSize,
+      lookingItemsData.pagination.page * lookingItemsData.pagination.pageSize
     ),
     total: lookingItems.value,
-    pagination: lookingItemsPagination
+    data: lookingItemsData
   },
   {
     title: 'ЗАПЛАНИРОВАНО',
     paginated: plannedItems.value.slice(
-      (plannedItemsPagination.page - 1) * plannedItemsPagination.pageSize,
-      plannedItemsPagination.page * plannedItemsPagination.pageSize
+      (plannedItemsData.pagination.page - 1) * plannedItemsData.pagination.pageSize,
+      plannedItemsData.pagination.page * plannedItemsData.pagination.pageSize
     ),
     total: plannedItems.value,
-    pagination: plannedItemsPagination
+    data: plannedItemsData
   },
   {
     title: 'ЗАВЕРШЕНО',
     paginated: viewedItems.value.slice(
-      (viewedItemsPagination.page - 1) * viewedItemsPagination.pageSize,
-      viewedItemsPagination.page * viewedItemsPagination.pageSize
+      (viewedItemsData.pagination.page - 1) * viewedItemsData.pagination.pageSize,
+      viewedItemsData.pagination.page * viewedItemsData.pagination.pageSize
     ),
     total: viewedItems.value,
-    pagination: viewedItemsPagination
+    data: viewedItemsData
   },
   {
     title: 'ОТЛОЖЕНО',
     paginated: postponedItems.value.slice(
-      (postponedItemsPagination.page - 1) * postponedItemsPagination.pageSize,
-      postponedItemsPagination.page * postponedItemsPagination.pageSize
+      (postponedItemsData.pagination.page - 1) * postponedItemsData.pagination.pageSize,
+      postponedItemsData.pagination.page * postponedItemsData.pagination.pageSize
     ),
     total: postponedItems.value,
-    pagination: postponedItemsPagination
+    data: postponedItemsData
   },
   {
     title: 'БРОШЕНО',
     paginated: abandonedItems.value.slice(
-      (abandonedItemsPagination.page - 1) * abandonedItemsPagination.pageSize,
-      abandonedItemsPagination.page * abandonedItemsPagination.pageSize
+      (abandonedItemsData.pagination.page - 1) * abandonedItemsData.pagination.pageSize,
+      abandonedItemsData.pagination.page * abandonedItemsData.pagination.pageSize
     ),
     total: abandonedItems.value,
-    pagination: abandonedItemsPagination
+    data: abandonedItemsData
   }
 ])
 
 const indexHandler = (pagination: any) => (index: number) => (pagination.page - 1) * pagination.pageSize + index + 1
 
-const sortByRating = (a: Item, b: Item) => {
-  if (!a.rating || !b.rating) return -1
+const onSortChange = (index: number, { prop, order }: Sort) => {
+  displayedItems.value[index].data.sort.prop = prop
+  displayedItems.value[index].data.sort.order = order
+}
+
+const sortBy = ({ prop, order }: Sort) => {
+  switch (prop) {
+    case 'name':
+      return sortByName(order)
+    case 'rating':
+      return sortByRating(order)
+    case 'time':
+      return sortByDuration(order)
+    default:
+      return sortByName('ascending')
+  }
+}
+
+const sortByName = (order: Sort['order']) => (a: Item, b: Item) => {
+  if (!order) return 0
+  return a.name.localeCompare(b.name) * (order === 'ascending' ? 1 : -1)
+}
+
+const sortByRating = (order: Sort['order']) => (a: Item, b: Item) => {
+  if (!order) return 0
+  const mult = order === 'ascending' ? 1 : -1
+  if (!a.rating || !b.rating) return -1 * mult
   if (a.rating === b.rating) {
     return 0
   }
-  return a.rating > b.rating ? -1 : 1
+  return a.rating > b.rating ? -1 * mult : 1 * mult
 }
 
-const sortByDuration = (a: Item, b: Item) => {
-  if (!a.time || !b.time) return -1
+const sortByDuration = (order: Sort['order']) => (a: Item, b: Item) => {
+  if (!order) return 0
+  const mult = order === 'ascending' ? 1 : -1
+  if (!a.time || !b.time) return -1 * mult
   const totalA = a.time.count * a.time.duration
   const totalB = b.time.count * b.time.duration
   if (totalA === totalB) return 0
-  return totalA > totalB ? 1 : -1
+  return totalA > totalB ? 1 * mult : -1 * mult
 }
 
 const updateItemRating = async (item: Item, rating: number) => {
@@ -213,14 +275,15 @@ const updateItemRating = async (item: Item, rating: number) => {
 </style>
 <style>
 .block-header .el-collapse-item__header {
-  background: #e8ebef;
+  background-color: var(--el-color-info-light-8);
   padding: 0 20px;
-  border-left: 5px solid black;
+  border-left: 5px solid var(--el-text-color-primary);
   border-bottom: 0;
 }
 
 .el-table {
   --el-table-border-color: transparent;
+  --el-table-header-bg-color: transparent;
 }
 
 .el-table .el-table__cell {
