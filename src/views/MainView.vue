@@ -3,7 +3,7 @@
     <el-row v-if="!store.state.user._id">
       <h2>Войдите, чтобы продолжить!</h2>
     </el-row>
-    <el-row v-else v-loading="loading" justify="center" :gutter="20" style="margin-bottom: 30px;">
+    <el-row v-else v-loading.fullscreen.lock="loading" justify="center" :gutter="20" style="margin-bottom: 30px;">
       <el-col :span="24" :lg="18">
         <div style="display: flex; align-items: center; column-gap: 10px">
           <h2>{{route.meta.mainHeader}}</h2>
