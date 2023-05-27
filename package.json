@@ -1,65 +1,42 @@
 {
-  "name": "playbackart-client",
-  "version": "0.1.0",
+  "name": "nuxt-app",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
-  },
-  "dependencies": {
-    "@element-plus/icons-vue": "^2.0.1",
-    "@tiptap/starter-kit": "^2.0.0-beta.199",
-    "@tiptap/vue-3": "^2.0.0-beta.199",
-    "axios": "^0.27.2",
-    "chart.js": "^3.8.0",
-    "core-js": "^3.8.3",
-    "element-plus": "^2.2.2",
-    "lodash": "^4.17.21",
-    "vue": "^3.2.13",
-    "vue-chart-3": "^3.1.8",
-    "vue-router": "^4.0.3",
-    "vuex": "^4.0.0"
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-plugin-router": "~5.0.0",
-    "@vue/cli-plugin-typescript": "~5.0.0",
-    "@vue/cli-plugin-vuex": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "@vue/eslint-config-standard": "^6.1.0",
-    "@vue/eslint-config-typescript": "^9.1.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-vue": "^8.0.3",
-    "typescript": "~4.5.5"
+    "@feathersjs/authentication-client": "^5.0.5",
+    "@feathersjs/feathers": "^5.0.5",
+    "@feathersjs/socketio-client": "^5.0.5",
+    "socket.io-client": "^4.6.1",
+    "@element-plus/nuxt": "^1.0.5",
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@pinia/nuxt": "^0.4.11",
+    "@prettier/plugin-pug": "^2.5.0",
+    "@types/node": "^18",
+    "element-plus": "^2.3.5",
+    "eslint": "^8.41.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-vue": "^9.14.1",
+    "eslint-plugin-vue-pug": "^0.6.0",
+    "nuxt": "^3.5.1",
+    "nuxt-feathers-pinia": "^0.0.3",
+    "ofetch": "^1.0.1",
+    "playbackart-server":  "./server/playbackart-server-0.0.1.tgz",
+    "prettier": "^2.8.8",
+    "pug": "^3.0.2",
+    "pug-plain-loader": "^1.1.0",
+    "typescript": "^5.0.4"
   },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "@vue/standard",
-      "@vue/typescript"
-    ],
-    "parserOptions": {
-      "parser": "@typescript-eslint/parser"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead",
-    "not ie 11"
-  ]
+  "dependencies": {
+    "feathers-pinia": "^3.0.2",
+    "nuxt-lodash": "^2.4.1",
+    "pinia": "^2.1.3"
+
+  }
 }

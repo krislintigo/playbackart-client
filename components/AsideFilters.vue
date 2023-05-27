@@ -211,7 +211,7 @@ const getDeveloperTextClass = (developer: string) => {
 </script>
 
 <style scoped>
-@import "../assets/textSizes.css";
+@import "../OLD/src/assets/textSizes.css";
 
 .aside {
   display: flex;
