@@ -98,7 +98,7 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  items: Array<CreateItem>
+  items: Array<Item>
   selectedGrades: Array<number>
   selectedRestrictions: Array<string>
   selectedGenres: Array<string>

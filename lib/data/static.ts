@@ -1,69 +1,77 @@
-import { CloseBold, Plus, Select, VideoPause, VideoPlay, Collection, Film, List, Monitor, VideoCameraFilled } from '@element-plus/icons-vue'
-
 export const statuses = [
   {
     title: 'В процессе',
-    icon: VideoPlay,
-    value: 'looking',
-    color: 'var(--el-color-primary-light-3)'
+    icon: ElIconVideoPlay,
+    value: 'in-process',
+    color: 'var(--el-color-primary-light-3)',
   },
   {
     title: 'Запланировано',
-    icon: Plus,
+    icon: ElIconPlus,
     value: 'planned',
-    color: 'var(--el-color-warning-light-3)'
+    color: 'var(--el-color-warning-light-3)',
   },
   {
     title: 'Завершено',
-    icon: Select,
-    value: 'viewed',
-    color: 'var(--el-color-success-light-3)'
+    icon: ElIconSelect,
+    value: 'completed',
+    color: 'var(--el-color-success-light-3)',
   },
   {
     title: 'Отложено',
-    icon: VideoPause,
+    icon: ElIconVideoPause,
     value: 'postponed',
-    color: 'var(--el-color-info-light-3)'
+    color: 'var(--el-color-info-light-3)',
   },
   {
     title: 'Брошено',
-    icon: CloseBold,
+    icon: ElIconCloseBold,
     value: 'abandoned',
-    color: 'var(--el-color-danger)'
-  }
+    color: 'var(--el-color-danger)',
+  },
 ]
 
 export const navigationTabs = [
   {
-    label: '/',
-    icon: List,
-    name: 'Все'
+    icon: ElIconList,
+    label: 'Все',
+    searchType: '',
   },
   {
-    label: '/movies',
-    icon: VideoCameraFilled,
-    name: 'Фильмы'
+    icon: ElIconVideoCameraFilled,
+    label: 'Фильмы',
+    searchType: 'movie',
   },
   {
-    label: '/series',
-    icon: Film,
-    name: 'Сериалы'
+    icon: ElIconFilm,
+    label: 'Сериалы',
+    searchType: 'series',
   },
   {
-    label: '/games',
-    icon: Monitor,
-    name: 'Игры'
+    icon: ElIconMonitor,
+    label: 'Игры',
+    searchType: 'game',
   },
   {
-    label: '/books',
-    icon: Collection,
-    name: 'Книги'
-  }
+    icon: ElIconCollection,
+    label: 'Книги',
+    searchType: 'book',
+  },
 ]
 
 export const rating = {
-  texts: ['Отвратительно', 'Ужасно', 'Очень плохо', 'Плохо', 'Так себе',
-    'Средне', 'Нормально', 'Хорошо', 'Отлично', 'Шедевр'],
+  texts: [
+    'Отвратительно',
+    'Ужасно',
+    'Очень плохо',
+    'Плохо',
+    'Так себе',
+    'Средне',
+    'Нормально',
+    'Хорошо',
+    'Отлично',
+    'Шедевр',
+  ],
   colors: {
     1: '#f56c6c',
     2: '#f1755f',
@@ -74,43 +82,51 @@ export const rating = {
     7: '#d2d73b',
     8: '#add03b',
     9: '#89c93a',
-    10: '#67c23a'
-  }
+    10: '#67c23a',
+  },
 }
 
 export const types = [
   {
     value: 'movie',
     path: '/movies',
-    title: 'Фильм'
+    title: 'Фильм',
   },
   {
     value: 'series',
     path: '/series',
-    title: 'Сериал'
+    title: 'Сериал',
   },
   {
     value: 'game',
     path: '/games',
-    title: 'Игра'
+    title: 'Игра',
   },
   {
     value: 'book',
     path: '/books',
-    title: 'Книга'
-  }
+    title: 'Книга',
+  },
 ]
 
 export const restrictions = ['G', 'PG', 'PG-13', 'R', 'NC-17']
 
 export const rules = {
   name: [
-    { required: true, message: 'Пожалуйста, введите название', trigger: 'blur' }
+    {
+      required: true,
+      message: 'Пожалуйста, введите название',
+      trigger: 'blur',
+    },
   ],
   status: [
-    { required: true, message: 'Пожалуйста, выберите статус', trigger: 'change' }
+    {
+      required: true,
+      message: 'Пожалуйста, выберите статус',
+      trigger: 'change',
+    },
   ],
   type: [
-    { required: true, message: 'Пожалуйста, выберите тип', trigger: 'change' }
-  ]
+    { required: true, message: 'Пожалуйста, выберите тип', trigger: 'change' },
+  ],
 }

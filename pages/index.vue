@@ -5,30 +5,29 @@
     </el-row>
     <el-row
       v-else
-      v-loading.fullscreen.lock="loading"
+      v-loading.fullscreen.lock="isPending"
       justify="center"
       :gutter="20"
       style="margin-bottom: 30px"
     >
       <el-col :span="24" :lg="18">
         <div style="display: flex; align-items: center; column-gap: 10px">
-          <h2>{{ route.meta.mainHeader }}</h2>
-          <!--          <el-button-->
-          <!--            circle-->
-          <!--            plain-->
-          <!--            :icon="Plus"-->
-          <!--            size="small"-->
-          <!--            @click="-->
-          <!--              dialog = true-->
-          <!--              dialogTarget = 'create'-->
-          <!--            "-->
-          <!--          />-->
+          <h2>{{ 'Список' }}</h2>
+          <el-button
+            circle
+            plain
+            :icon="ElIconPlus"
+            size="small"
+            @click="createNew"
+          />
         </div>
-        <CreateUpdateModal
-          v-model="dialog"
-          :target="dialogTarget"
-          :updated-item="updatedItem"
-        />
+        <ClientOnly>
+          <CreateUpdateModal
+            v-model="dialog"
+            :target="dialogTarget"
+            :item-for-update="itemForUpdate"
+          />
+        </ClientOnly>
         <div style="margin-bottom: 20px">
           <SearchInput v-model="searchQuery" />
         </div>
@@ -68,10 +67,6 @@
 </template>
 
 <script setup lang="ts">
-import { Plus } from '@element-plus/icons-vue'
-import { ElNotification } from 'element-plus'
-import { definePageMeta } from '#imports'
-
 definePageMeta({
   layout: 'default',
   public: false,
@@ -81,17 +76,21 @@ const { api } = useFeathers()
 const authStore = useAuthStore()
 const route = useRoute()
 
-// const { data: items } = api
-//   .service('items')
-//   .useFind({ query: {} }, { paginateOn: 'server' })
+const query = computed(() => ({
+  query: {
+    ...(route.query.type && { type: route.query.type }),
+  },
+}))
 
-// watchEffect(() => console.log(items))
+const { data: items, isPending } = api
+  .service('items')
+  .useFind(query, { paginateOn: 'server' })
 
-const loading = ref(false)
+watchEffect(() => console.log(items.value))
+
 const dialog = ref(false)
 const dialogTarget = ref('')
-const updatedItem = ref({})
-const items = ref([])
+const itemForUpdate = ref<Item | null>(null)
 
 const {
   searchQuery,
@@ -103,44 +102,24 @@ const {
   queriedItems,
 } = useFilters(items)
 
-const refetch = async () => {
-  if (!authStore.user._id) {
-    items.value = []
-    loading.value = false
-    return
-  }
-  loading.value = true
-  try {
-    if (route.meta.type === 'all') {
-      const response = await ItemsAPI.getAll()
-      items.value = response.data
-    } else {
-      const response = await ItemsAPI.getByType(route.meta.type as string)
-      items.value = response.data
-    }
-  } catch (e: any) {
-    ElNotification.error({
-      title: e.response.data.message,
-      position: 'bottom-right',
-    })
-  }
-  loading.value = false
+const createNew = () => {
+  dialog.value = true
+  dialogTarget.value = 'create'
 }
 
-const updateItem = async (item: CreateItem) => {
+const updateItem = (item: Item) => {
   dialog.value = true
   dialogTarget.value = 'update'
-  updatedItem.value = item
+  itemForUpdate.value = item
 }
 
 const deleteItem = async (id: string) => {
   try {
-    const response = await ItemsAPI.delete(id)
+    const response = await api.service('items').remove(id)
     ElNotification.success({
       title: response.message,
       position: 'bottom-right',
     })
-    await refetch()
   } catch (e: any) {
     ElNotification.error({
       title: e.response.data.message,
@@ -148,10 +127,6 @@ const deleteItem = async (id: string) => {
     })
   }
 }
-
-provide('refetch', refetch)
-
-// watchEffect(refetch)
 </script>
 
 <style scoped></style>

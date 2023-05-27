@@ -91,7 +91,7 @@
           <el-table-column v-if="editable" label="Операции" width="100">
             <template #default="scope">
               <el-button
-                :icon="EditPen"
+                :icon="ElIconEditPen"
                 type="warning"
                 circle
                 size="small"
@@ -107,7 +107,7 @@
               >
                 <template #reference>
                   <el-button
-                    :icon="Delete"
+                    :icon="ElIconDelete"
                     type="danger"
                     circle
                     size="small"
@@ -144,9 +144,6 @@
 </template>
 
 <script setup lang="ts">
-import { Delete, EditPen } from '@element-plus/icons-vue'
-import { ElNotification } from 'element-plus'
-
 type Sort = {
   prop: 'name' | 'rating' | 'time' | null
   order: 'ascending' | 'descending' | null
@@ -178,7 +175,7 @@ const lookingItemsData = reactive({
 })
 const lookingItems = computed<Item[]>(() =>
   props.items
-    .filter((item) => item.status === 'looking')
+    .filter((item) => item.status === 'in-process')
     .sort(sortBy(lookingItemsData.sort))
 )
 const plannedItemsData = reactive({
@@ -208,7 +205,7 @@ const viewedItemsData = reactive({
 })
 const viewedItems = computed<Item[]>(() =>
   props.items
-    .filter((item) => item.status === 'viewed')
+    .filter((item) => item.status === 'completed')
     .sort(sortBy(viewedItemsData.sort))
 )
 const postponedItemsData = reactive({
@@ -325,7 +322,6 @@ const sortByName = (order: Sort['order']) => (a: Item, b: Item) => {
 
 const sortByRating = (order: Sort['order']) => (a: Item, b: Item) => {
   if (!order) return 0
-  console.log(a.rating, b.rating)
   const mult = order === 'ascending' ? 1 : -1
   if (a.rating === b.rating) return 0
   return a.rating > b.rating ? 1 * mult : -1 * mult

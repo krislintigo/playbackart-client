@@ -52,7 +52,7 @@ import { ElNotification } from 'element-plus'
 
 const route = useRoute()
 
-const loading = ref(true)
+const loading = ref(false)
 const items = ref([])
 
 const {
@@ -89,7 +89,7 @@ const refetch = async () => {
 
 provide('refetch', refetch)
 
-watchEffect(refetch)
+// watchEffect(refetch)
 </script>
 
 <style scoped></style>
