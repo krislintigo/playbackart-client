@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row v-if="!authStore.user?._id">
+    <el-row v-if="!authStore.isAuthenticated">
       <h2>Войдите, чтобы продолжить!</h2>
     </el-row>
     <el-row
@@ -70,6 +70,12 @@
 <script setup lang="ts">
 import { Plus } from '@element-plus/icons-vue'
 import { ElNotification } from 'element-plus'
+import { definePageMeta } from '#imports'
+
+definePageMeta({
+  layout: 'default',
+  public: false,
+})
 
 const { api } = useFeathers()
 const authStore = useAuthStore()
@@ -81,7 +87,7 @@ const route = useRoute()
 
 // watchEffect(() => console.log(items))
 
-const loading = ref(true)
+const loading = ref(false)
 const dialog = ref(false)
 const dialogTarget = ref('')
 const updatedItem = ref({})

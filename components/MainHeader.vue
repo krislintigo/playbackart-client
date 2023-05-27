@@ -27,7 +27,7 @@
 const router = useRouter()
 const route = useRoute()
 
-const active = ref<string>(location.pathname)
+const active = ref<string>(route.path)
 
 const routePath = (path: string) => {
   if (route.params.login) {

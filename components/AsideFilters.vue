@@ -251,8 +251,6 @@ const getDeveloperTextClass = (developer: string) => {
 </script>
 
 <style scoped>
-@import '../assets/textSizes.css';
-
 .aside {
   display: flex;
   flex-direction: column;
