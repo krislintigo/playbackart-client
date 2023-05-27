@@ -6,9 +6,13 @@
       </el-col>
       <div style="display: flex; column-gap: 30px">
         <el-tabs v-model="active" @tab-click="tabClick">
-          <el-tab-pane v-for="tab in navigationTabs" :key="tab.label" :name="routePath(tab.label)">
+          <el-tab-pane
+            v-for="tab in navigationTabs"
+            :key="tab.label"
+            :name="routePath(tab.label)"
+          >
             <template #label>
-              <el-icon><component :is="tab.icon"/></el-icon>
+              <el-icon><component :is="tab.icon" /></el-icon>
               {{ tab.name }}
             </template>
           </el-tab-pane>
@@ -20,11 +24,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { navigationTabs } from '@/data/static'
-import ProfileController from '@/components/ProfileController.vue'
-
 const router = useRouter()
 const route = useRoute()
 
@@ -45,12 +44,12 @@ const tabClick = (tab: any) => {
 <style scoped>
 .header {
   --el-header-height: 60px;
-  padding: 0 30px
+  padding: 0 30px;
 }
 
 @media (max-width: 992px) {
   .header {
-    --el-header-height: 130px
+    --el-header-height: 130px;
   }
 }
 </style>

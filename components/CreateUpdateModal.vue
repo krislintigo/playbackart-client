@@ -1,9 +1,15 @@
 <template>
   <el-dialog v-model="dialog" width="95%" :lock-scroll="false" class="dialog">
     <template #header>
-      <h3>{{target === 'create' ? 'Добавить' : 'Обновить'}} элемент</h3>
+      <h3>{{ target === 'create' ? 'Добавить' : 'Обновить' }} элемент</h3>
     </template>
-    <el-form :model="item" ref="formRef" label-position="right" :label-width="120" :rules="rules">
+    <el-form
+      ref="formRef"
+      :model="item"
+      label-position="right"
+      :label-width="120"
+      :rules="rules"
+    >
       <el-form-item label="Название:" prop="name">
         <el-input v-model="item.name" />
       </el-form-item>
@@ -11,8 +17,21 @@
         <el-input v-model="item.image" />
       </el-form-item>
       <el-form-item label="Рейтинг:" prop="rating">
-        <el-rate v-model="item.rating" :max="10" show-text :texts="rating.texts" :colors="rating.colors" />
-        <el-button style="margin-left: 5px;" :icon="Close" size="small" circle text @click="item.rating = 0" />
+        <el-rate
+          v-model="item.rating"
+          :max="10"
+          show-text
+          :texts="rating.texts"
+          :colors="rating.colors"
+        />
+        <el-button
+          style="margin-left: 5px"
+          :icon="Close"
+          size="small"
+          circle
+          text
+          @click="item.rating = 0"
+        />
       </el-form-item>
       <el-form-item label="Статус:" prop="status">
         <el-radio-group v-model="item.status">
@@ -20,9 +39,9 @@
             v-for="status in statuses"
             :key="status.value"
             :label="status.value"
-            :style="{'--el-radio-button-checked-bg-color': status.color}"
+            :style="{ '--el-radio-button-checked-bg-color': status.color }"
           >
-            {{status.title}}
+            {{ status.title }}
           </el-radio-button>
         </el-radio-group>
       </el-form-item>
@@ -33,7 +52,7 @@
             :key="type.value"
             :label="type.value"
           >
-            {{type.title}}
+            {{ type.title }}
           </el-radio-button>
         </el-radio-group>
       </el-form-item>
@@ -43,9 +62,16 @@
             v-for="restriction in restrictions"
             :key="restriction"
             :label="restriction"
-           />
+          />
         </el-radio-group>
-        <el-button style="margin-left: 5px;" :icon="Close" size="small" circle text @click="item.restriction = ''" />
+        <el-button
+          style="margin-left: 5px"
+          :icon="Close"
+          size="small"
+          circle
+          text
+          @click="item.restriction = ''"
+        />
       </el-form-item>
       <el-form-item label="Жанры:" prop="genres">
         <el-input
@@ -53,14 +79,22 @@
           style="width: 300px; margin-bottom: 5px"
           @keyup.enter="handleGenreConfirm"
         />
-        <el-button text circle :icon="More" style="margin-left: 5px;" @click="splitAndWrite('genre')" />
-        <el-button text style="margin: 0 10px" @click="handleGenreConfirm">Добавить</el-button>
+        <el-button
+          text
+          circle
+          :icon="More"
+          style="margin-left: 5px"
+          @click="splitAndWrite('genre')"
+        />
+        <el-button text style="margin: 0 10px" @click="handleGenreConfirm"
+          >Добавить</el-button
+        >
         <el-tag
           v-for="genre in item.genres"
           :key="genre"
           size="large"
           type="info"
-          style="margin-right: 10px;"
+          style="margin-right: 10px"
           closable
           @close="handleGenreDelete(genre)"
         >
@@ -71,7 +105,7 @@
         <el-row justify="space-between">
           <el-col :span="11">
             <el-input-number v-model="item.time.count" :min="1" />
-            <h4 style="margin: 0;">Кол-во элементов</h4>
+            <h4 style="margin: 0">Кол-во элементов</h4>
           </el-col>
           <el-col :span="12" :push="1">
             <el-input-number v-model="item.time.duration" :min="0" />
@@ -80,26 +114,33 @@
         </el-row>
       </el-form-item>
       <el-form-item label="Год выхода:" prop="year">
-        <el-date-picker
-          v-model="item.year"
-          value-format="YYYY"
-          type="year"
-        />
+        <el-date-picker v-model="item.year" value-format="YYYY" type="year" />
       </el-form-item>
-      <el-form-item :label="getDeveloperWordByType(item.type, 2) + ':'" prop="developers">
+      <el-form-item
+        :label="getDeveloperWordByType(item.type, 2) + ':'"
+        prop="developers"
+      >
         <el-input
           v-model="inputDeveloper"
           style="width: 300px; margin-bottom: 5px"
           @keyup.enter="handleDeveloperConfirm"
         />
-        <el-button text circle :icon="More" style="margin-left: 5px;" @click="splitAndWrite('developer')" />
-        <el-button text style="margin: 0 10px" @click="handleDeveloperConfirm">Добавить</el-button>
+        <el-button
+          text
+          circle
+          :icon="More"
+          style="margin-left: 5px"
+          @click="splitAndWrite('developer')"
+        />
+        <el-button text style="margin: 0 10px" @click="handleDeveloperConfirm"
+          >Добавить</el-button
+        >
         <el-tag
           v-for="developer in item.developers"
           :key="developer"
           size="large"
           type="info"
-          style="margin-right: 10px;"
+          style="margin-right: 10px"
           closable
           @close="handleDeveloperDelete(developer)"
         >
@@ -113,7 +154,11 @@
     <template #footer>
       <el-button
         type="success"
-        @click="target === 'create' ? confirmAction('create') : confirmAction('update')"
+        @click="
+          target === 'create'
+            ? confirmAction('create')
+            : confirmAction('update')
+        "
       >
         Подтвердить
       </el-button>
@@ -122,19 +167,12 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed, reactive, ref, inject, watch } from 'vue'
 import { ElNotification } from 'element-plus'
-import _ from 'lodash'
 import { Close, More } from '@element-plus/icons-vue'
-import { statuses, rules, types, rating, restrictions } from '@/data/static'
-import { getDeveloperWordByType } from '@/utils/getDeveloperWordByType'
-import { ItemsAPI } from '@/api/ItemsAPI'
-import { CreateItem } from '@/interfaces/create-item'
-import { Item } from '@/interfaces/item'
 
 const props = defineProps<{
-  modelValue: boolean,
-  target: string,
+  modelValue: boolean
+  target: string
   updatedItem: Item
 }>()
 
@@ -155,34 +193,39 @@ const item: CreateItem | Item = reactive({
   genres: [],
   time: {
     count: 0,
-    duration: 0
+    duration: 0,
   },
   year: '',
   developers: [],
-  franchise: ''
+  franchise: '',
 })
 
 const dialog = computed<boolean>({
   get: () => props.modelValue,
-  set: value => emit('update:modelValue', value)
+  set: (value) => emit('update:modelValue', value),
 })
 
-watch(() => dialog.value, open => {
-  // fix html scroll
-  document.documentElement.style.paddingRight =
-    open ? window.innerWidth - document.documentElement.clientWidth + 'px' : ''
-  document.documentElement.style.overflowY = open ? 'hidden' : 'scroll'
+watch(
+  () => dialog.value,
+  (open) => {
+    // fix html scroll
+    document.documentElement.style.paddingRight = open
+      ? window.innerWidth - document.documentElement.clientWidth + 'px'
+      : ''
+    document.documentElement.style.overflowY = open ? 'hidden' : 'scroll'
 
-  // set target
-  if (open) {
-    if (props.target === 'create') {
-      resetItem()
-      item.type = types.find(type => type.path === location.pathname)?.value ?? ''
-    } else {
-      Object.assign(item, _.cloneDeep(props.updatedItem))
+    // set target
+    if (open) {
+      if (props.target === 'create') {
+        resetItem()
+        item.type =
+          types.find((type) => type.path === location.pathname)?.value ?? ''
+      } else {
+        Object.assign(item, _.cloneDeep(props.updatedItem))
+      }
     }
   }
-})
+)
 
 const inputGenre = ref('')
 const inputDeveloper = ref('')
@@ -212,11 +255,11 @@ const handleDeveloperConfirm = () => {
 const splitAndWrite = (type: string) => {
   if (type === 'genre') {
     const array = inputGenre.value.trim().split(', ')
-    item.genres.push(...array.map(i => i[0].toUpperCase() + i.slice(1)))
+    item.genres.push(...array.map((i) => i[0].toUpperCase() + i.slice(1)))
     inputGenre.value = ''
   } else if (type === 'developer') {
     const array = inputDeveloper.value.trim().split(', ')
-    item.developers.push(...array.map(i => i[0].toUpperCase() + i.slice(1)))
+    item.developers.push(...array.map((i) => i[0].toUpperCase() + i.slice(1)))
     inputDeveloper.value = ''
   }
 }
@@ -228,25 +271,26 @@ const confirmAction = async (action: string) => {
   try {
     await formRef.value?.validate()
     try {
-      const response = action === 'create'
-        ? await ItemsAPI.add(item as CreateItem)
-        : await ItemsAPI.update(props.updatedItem.id, item as Item)
+      const response =
+        action === 'create'
+          ? await ItemsAPI.add(item as CreateItem)
+          : await ItemsAPI.update(props.updatedItem.id, item as Item)
       dialog.value = false
       refetch()
       ElNotification.success({
         title: response.message,
-        position: 'bottom-right'
+        position: 'bottom-right',
       })
     } catch (e: any) {
       ElNotification.error({
         title: e.response.data.message,
-        position: 'bottom-right'
+        position: 'bottom-right',
       })
     }
   } catch (error) {
     ElNotification.error({
       title: 'Пожалуйста, заполните все поля',
-      position: 'bottom-right'
+      position: 'bottom-right',
     })
   }
 }
@@ -261,7 +305,7 @@ const resetItem = () => {
   item.genres = []
   item.time = {
     count: 0,
-    duration: 0
+    duration: 0,
   }
   item.year = ''
   item.developers = []
@@ -269,9 +313,7 @@ const resetItem = () => {
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
 
 <style>
 .dialog {
@@ -286,7 +328,7 @@ const resetItem = () => {
   line-height: 0;
 }
 
-.el-radio-button__original-radio:checked+.el-radio-button__inner {
+.el-radio-button__original-radio:checked + .el-radio-button__inner {
   border-color: transparent;
   box-shadow: none;
 }

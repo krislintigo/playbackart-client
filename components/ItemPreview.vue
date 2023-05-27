@@ -11,22 +11,30 @@
     </el-col>
     <el-col :span="13" :push="1">
       <h2 class="item-header">{{ item.name }}</h2>
-      <h3 style="margin-bottom: 5px;">Информация:</h3>
+      <h3 style="margin-bottom: 5px">Информация:</h3>
       <div class="tags-container">
         <el-tag type="info">{{ getTypeWord(item.type) }}</el-tag>
         <el-tag v-if="item.year" type="info">{{ item.year }}</el-tag>
-        <el-tag v-if="item.restriction" type="info">{{ item.restriction }}</el-tag>
+        <el-tag v-if="item.restriction" type="info">{{
+          item.restriction
+        }}</el-tag>
       </div>
       <div v-if="item.developers.length">
-        <h3 style="margin-bottom: 5px;">{{getDeveloperWordByType(item.type, item.developers.length)}}:</h3>
+        <h3 style="margin-bottom: 5px">
+          {{ getDeveloperWordByType(item.type, item.developers.length) }}:
+        </h3>
         <div class="tags-container">
-          <el-tag v-for="(developer, i) in item.developers" :key="i" type="info">
+          <el-tag
+            v-for="(developer, i) in item.developers"
+            :key="i"
+            type="info"
+          >
             {{ developer }}
           </el-tag>
         </div>
       </div>
       <div v-if="item.genres.length">
-        <h3 style="margin-bottom: 5px;">Жанры:</h3>
+        <h3 style="margin-bottom: 5px">Жанры:</h3>
         <div class="tags-container">
           <el-tag v-for="(genre, i) in item.genres" :key="i" type="info">
             {{ genre }}
@@ -37,8 +45,11 @@
         <el-collapse-item :class="['set-status', item.status]">
           <template #title>
             <el-row align="middle" style="column-gap: 10px">
-              <el-icon size="large"><component :is="statuses.find(s => s.value === item.status).icon" /></el-icon>
-              <h3>{{statuses.find(s => s.value === item.status).title}}</h3>
+              <el-icon size="large"
+                ><component
+                  :is="statuses.find((s) => s.value === item.status).icon"
+              /></el-icon>
+              <h3>{{ statuses.find((s) => s.value === item.status).title }}</h3>
             </el-row>
           </template>
           <el-row
@@ -50,10 +61,10 @@
             <el-button
               text
               :icon="status.icon"
-              :style="{fontSize: 'large', color: status.color}"
+              :style="{ fontSize: 'large', color: status.color }"
               @click="updateItemStatus(status.value)"
             >
-              <h3 class="set-status-button-text">{{status.title}}</h3>
+              <h3 class="set-status-button-text">{{ status.title }}</h3>
             </el-button>
           </el-row>
         </el-collapse-item>
@@ -63,18 +74,12 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, inject } from 'vue'
 import { ElNotification } from 'element-plus'
 import { PictureRounded } from '@element-plus/icons-vue'
-import { getTypeWord } from '@/utils/getTypeWord'
-import { getDeveloperWordByType } from '@/utils/getDeveloperWordByType'
-import { ItemsAPI } from '@/api/ItemsAPI'
-import { statuses } from '@/data/static'
-import { Item } from '@/interfaces/item'
 
 const props = defineProps<{
-  item: Item,
-  editable: boolean,
+  item: Item
+  editable: boolean
 }>()
 
 const refetch = inject('refetch') as Function
@@ -85,12 +90,12 @@ const updateItemStatus = async (status: string) => {
     refetch()
     ElNotification.success({
       title: 'Статус изменен',
-      position: 'bottom-right'
+      position: 'bottom-right',
     })
   } catch (error: any) {
     ElNotification.error({
       title: error.response.data.message,
-      position: 'bottom-right'
+      position: 'bottom-right',
     })
   }
 }
@@ -115,7 +120,7 @@ const updateItemStatus = async (status: string) => {
 }
 </style>
 <style>
-@import "../OLD/src/assets/setStatusColors.css";
+@import '../assets/setStatusColors.css';
 
 .set-status .el-collapse-item__header {
   padding: 0 15px;

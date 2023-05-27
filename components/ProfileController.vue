@@ -11,16 +11,24 @@
       </el-button>
     </el-row>
     <div v-if="store.state.user.login">
-      <h3 >Добро пожаловать, {{store.state.user.login}}!</h3>
+      <h3>Добро пожаловать, {{ store.state.user.login }}!</h3>
       <h4 style="margin-bottom: 5px">
         Ваш список слежения:
-        <el-button text circle :type="watchingChanged ? 'warning' : 'success'" size="small" @click="saveWatching">
+        <el-button
+          text
+          circle
+          :type="watchingChanged ? 'warning' : 'success'"
+          size="small"
+          @click="saveWatching"
+        >
           <el-icon :size="20"><CircleCheck /></el-icon>
         </el-button>
       </h4>
       <TextEditor v-model="watching" @input="watchingChanged = true" />
-      <el-row justify="end" style="margin-top: 10px;">
-        <el-button type="danger" @click="handleUserAction('logout')">Выход</el-button>
+      <el-row justify="end" style="margin-top: 10px">
+        <el-button type="danger" @click="handleUserAction('logout')"
+          >Выход</el-button
+        >
       </el-row>
     </div>
     <div v-else>
@@ -33,8 +41,12 @@
           <el-input v-model="auth.password" type="password" show-password />
         </el-form-item>
         <el-row justify="end">
-          <el-button type="success" @click="handleUserAction('login')">Вход</el-button>
-          <el-button type="warning" @click="handleUserAction('register')">Регистрация</el-button>
+          <el-button type="success" @click="handleUserAction('login')"
+            >Вход</el-button
+          >
+          <el-button type="warning" @click="handleUserAction('register')"
+            >Регистрация</el-button
+          >
         </el-row>
       </el-form>
     </div>
@@ -42,30 +54,23 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref, watchEffect } from 'vue'
-import { useStore } from 'vuex'
 import { User, Failed, CircleCheck, Sunny, Moon } from '@element-plus/icons-vue'
-import { AuthAPI } from '@/api/AuthAPI'
-import { userNames } from '@/store/modules/user'
 import { ElNotification } from 'element-plus'
-import { UserAPI } from '@/api/UserAPI'
-import { AuthData } from '@/interfaces/auth-data'
-import TextEditor from '@/components/TextEditor.vue'
 
-const store = useStore()
+const authStore = useAuthStore()
 
 const auth: AuthData = reactive({
   login: '',
-  password: ''
+  password: '',
 })
 const watching = computed({
-  get: () => store.state.user.watching,
-  set: value => store.commit(userNames.setWatching, value)
+  get: () => authStore.user.watching,
+  set: (value) => store.commit(userNames.setWatching, value),
 })
 const watchingChanged = ref<boolean>(false)
-const dark = ref(!!localStorage.getItem('theme'));
+const dark = ref(!!localStorage.getItem('theme'))
 
-(async () => {
+;(async () => {
   try {
     const validateResponse = await AuthAPI.validate()
     const userResponse = await UserAPI.getOneShort(validateResponse.data.id)
@@ -82,12 +87,12 @@ const handleUserAction = async (action: 'register' | 'login' | 'logout') => {
     else store.commit(userNames.setUser, response.data)
     ElNotification.success({
       title: response.message,
-      position: 'bottom-right'
+      position: 'bottom-right',
     })
   } catch (e: any) {
     ElNotification.error({
       title: e.response.data.message,
-      position: 'bottom-right'
+      position: 'bottom-right',
     })
   }
 }
@@ -97,13 +102,13 @@ const saveWatching = async () => {
     const response = await UserAPI.updateWatching(watching.value)
     ElNotification.success({
       title: response.message,
-      position: 'bottom-right'
+      position: 'bottom-right',
     })
     watchingChanged.value = false
   } catch (e: any) {
     ElNotification.error({
       title: e.response.data.message,
-      position: 'bottom-right'
+      position: 'bottom-right',
     })
   }
 }
@@ -119,8 +124,6 @@ watchEffect(() => {
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
 
 <style></style>

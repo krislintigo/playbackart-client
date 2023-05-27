@@ -1,30 +1,25 @@
 <template>
-  <BarChart
-    :chart-data="simpleData"
-    :options="options"
-    :styles="chartStyles"
-  />
+  <BarChart :chart-data="simpleData" :options="options" :styles="chartStyles" />
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, defineEmits } from 'vue'
 import { BarChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
 Chart.register(...registerables)
 
 const props = defineProps<{
-  labels: Array<string | number>,
-  data: Array<number>,
+  labels: Array<string | number>
+  data: Array<number>
   selected: Array<string | number>
 }>()
 
 const emit = defineEmits({
-  click: null
+  click: null,
 })
 
 const chartStyles = computed(() => ({
   height: '300px',
-  position: 'relative'
+  position: 'relative',
 }))
 
 const simpleData = computed(() => ({
@@ -32,10 +27,12 @@ const simpleData = computed(() => ({
   datasets: [
     {
       data: props.data,
-      backgroundColor: props.labels.map(s => props.selected.includes(s) ? '#004cc7' : '#609eff'),
-      maxBarThickness: 40
-    }
-  ]
+      backgroundColor: props.labels.map((s) =>
+        props.selected.includes(s) ? '#004cc7' : '#609eff'
+      ),
+      maxBarThickness: 40,
+    },
+  ],
 }))
 
 const options = {
@@ -47,7 +44,7 @@ const options = {
   },
   plugins: {
     legend: {
-      display: false
+      display: false,
     },
     tooltip: {
       backgroundColor: '#efefef',
@@ -57,17 +54,17 @@ const options = {
         beforeBody: function (tooltipItem: any[]) {
           const value = tooltipItem[0].formattedValue
           tooltipItem[0].formattedValue = ` ${value}`
-        }
-      }
-    }
+        },
+      },
+    },
   },
   scales: {
     y: {
       grid: {
-        color: 'transparent'
-      }
-    }
-  }
+        color: 'transparent',
+      },
+    },
+  },
 }
 </script>
 

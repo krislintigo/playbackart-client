@@ -17,11 +17,11 @@ export default defineNuxtConfig({
   elementPlus: {
     themes: ['dark'],
   },
-  css: [
-    // 'vuetify/lib/styles/main.sass',
-    // '@mdi/font/css/materialdesignicons.min.css',
-    // '~/assets/css/main.sass',
-  ],
+  // css: [
+  // 'vuetify/lib/styles/main.sass',
+  // '@mdi/font/css/materialdesignicons.min.css',
+  // '~/assets/css/main.sass',
+  // ],
   // build: {
   //   transpile: ['vuetify'],
   // },

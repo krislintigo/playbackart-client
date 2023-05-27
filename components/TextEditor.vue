@@ -1,26 +1,50 @@
 <template>
   <div>
     <div v-if="editor">
-      <el-button-group style="margin-bottom: 10px;">
-        <el-button @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
+      <el-button-group style="margin-bottom: 10px">
+        <el-button
+          :disabled="!editor.can().chain().focus().toggleBold().run()"
+          :class="{ 'is-active': editor.isActive('bold') }"
+          @click="editor.chain().focus().toggleBold().run()"
+        >
           <strong>Ж</strong>
         </el-button>
-        <el-button @click="editor.chain().focus().toggleItalic().run()" :disabled="!editor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">
+        <el-button
+          :disabled="!editor.can().chain().focus().toggleItalic().run()"
+          :class="{ 'is-active': editor.isActive('italic') }"
+          @click="editor.chain().focus().toggleItalic().run()"
+        >
           <em>К</em>
         </el-button>
-        <el-button @click="editor.chain().focus().toggleStrike().run()" :disabled="!editor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
+        <el-button
+          :disabled="!editor.can().chain().focus().toggleStrike().run()"
+          :class="{ 'is-active': editor.isActive('strike') }"
+          @click="editor.chain().focus().toggleStrike().run()"
+        >
           <del>del</del>
         </el-button>
-        <el-button @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }">
+        <el-button
+          :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
+          @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+        >
           <span style="font-size: 20px">A</span>
         </el-button>
-        <el-button @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }">
+        <el-button
+          :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
+          @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+        >
           <span style="font-size: 17px">A</span>
         </el-button>
-        <el-button @click="editor.chain().focus().toggleHeading({ level: 3 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }">
+        <el-button
+          :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
+          @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
+        >
           <span style="font-size: 14px">A</span>
         </el-button>
-        <el-button @click="editor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': editor.isActive('blockquote') }">
+        <el-button
+          :class="{ 'is-active': editor.isActive('blockquote') }"
+          @click="editor.chain().focus().toggleBlockquote().run()"
+        >
           <el-icon><Expand /></el-icon>
         </el-button>
         <el-button @click="editor.chain().focus().setHorizontalRule().run()">
@@ -33,7 +57,6 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
 import { EditorContent, Editor } from '@tiptap/vue-3'
 import { StarterKit } from '@tiptap/starter-kit'
 import { Expand, SemiSelect } from '@element-plus/icons-vue'
@@ -41,23 +64,20 @@ import { Expand, SemiSelect } from '@element-plus/icons-vue'
 const props = defineProps({
   modelValue: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 })
 
 const emit = defineEmits(['update:modelValue', 'input'])
 
 const editor = new Editor({
   content: props.modelValue,
-  extensions: [
-    StarterKit
-  ],
+  extensions: [StarterKit],
   onUpdate: () => {
     emit('update:modelValue', editor.getHTML())
     emit('input')
-  }
+  },
 })
-
 </script>
 
 <style>
@@ -73,7 +93,8 @@ const editor = new Editor({
   outline-color: darkgrey;
 }
 
-.ProseMirror-focused, .ProseMirror:hover.ProseMirror-focused {
+.ProseMirror-focused,
+.ProseMirror:hover.ProseMirror-focused {
   outline-color: #409eff;
 }
 
@@ -81,7 +102,9 @@ const editor = new Editor({
   margin: 3px 0;
 }
 
-.ProseMirror h1, .ProseMirror h2, .ProseMirror h3 {
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3 {
   line-height: 1;
 }
 
@@ -96,5 +119,4 @@ const editor = new Editor({
   border-top: 1px solid gray;
   margin: 10px 15px;
 }
-
 </style>

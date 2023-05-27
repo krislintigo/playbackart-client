@@ -1,17 +1,40 @@
 <template>
   <el-collapse v-model="activeItems">
     <div v-for="(block, i) in displayedItems" :key="block.title">
-      <el-collapse-item v-if="block.paginated.length" :name="i" class="block-header">
+      <el-collapse-item
+        v-if="block.paginated.length"
+        :name="i"
+        class="block-header"
+      >
         <template #title>
           <el-row>
-            <h2 style="font-size: 18px">{{block.title}}</h2>
+            <h2 style="font-size: 18px">{{ block.title }}</h2>
           </el-row>
         </template>
-        <el-table :data="block.paginated" @sort-change="onSortChange(i, $event)">
-          <el-table-column type="index" label="#" width="50" :index="indexHandler(block.data.pagination)" />
-          <el-table-column sortable="custom" prop="name" label="Название" min-width="350">
+        <el-table
+          :data="block.paginated"
+          @sort-change="onSortChange(i, $event)"
+        >
+          <el-table-column
+            type="index"
+            label="#"
+            width="50"
+            :index="indexHandler(block.data.pagination)"
+          />
+          <el-table-column
+            sortable="custom"
+            prop="name"
+            label="Название"
+            min-width="350"
+          >
             <template #default="scope">
-              <el-popover placement="right" :width="420" trigger="hover" :show-after="300" :persistent="false">
+              <el-popover
+                placement="right"
+                :width="420"
+                trigger="hover"
+                :show-after="300"
+                :persistent="false"
+              >
                 <template #reference>
                   <el-link>{{ scope.row.name }}</el-link>
                 </template>
@@ -19,30 +42,62 @@
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column sortable="custom" prop="rating" label="Рейтинг" width="120">
+          <el-table-column
+            sortable="custom"
+            prop="rating"
+            label="Рейтинг"
+            width="120"
+          >
             <template #default="scope">
-              <el-popover placement="right" :width="380" trigger="hover" :show-after="300" :persistent="false">
+              <el-popover
+                placement="right"
+                :width="380"
+                trigger="hover"
+                :show-after="300"
+                :persistent="false"
+              >
                 <template #reference>
                   <el-row style="width: 50%">
-                    {{scope.row.rating || '-'}}
+                    {{ scope.row.rating || '-' }}
                   </el-row>
                 </template>
-                <el-rate :model-value="scope.row.rating" :max="10" show-text :texts="rating.texts" :colors="rating.colors" @change="updateItemRating(scope.row, $event)" />
+                <el-rate
+                  :model-value="scope.row.rating"
+                  :max="10"
+                  show-text
+                  :texts="rating.texts"
+                  :colors="rating.colors"
+                  @change="updateItemRating(scope.row, $event)"
+                />
               </el-popover>
             </template>
           </el-table-column>
-          <el-table-column sortable="custom" prop="time" label="Длительность" width="170">
+          <el-table-column
+            sortable="custom"
+            prop="time"
+            label="Длительность"
+            width="170"
+          >
             <template #default="scope">
               <span v-if="!scope.row.time.duration">-</span>
               <div v-else>
-                <span v-if="scope.row.time.count > 1">{{ scope.row.time.count }} x </span>
-                <span>{{formatDuration(scope.row.time.duration)}}</span>
+                <span v-if="scope.row.time.count > 1"
+                  >{{ scope.row.time.count }} x
+                </span>
+                <span>{{ formatDuration(scope.row.time.duration) }}</span>
               </div>
             </template>
           </el-table-column>
           <el-table-column v-if="editable" label="Операции" width="100">
             <template #default="scope">
-              <el-button :icon="EditPen" type="warning" circle size="small" text @click="emit('update-item', scope.row)" />
+              <el-button
+                :icon="EditPen"
+                type="warning"
+                circle
+                size="small"
+                text
+                @click="emit('update-item', scope.row)"
+              />
               <el-popconfirm
                 title="Вы действительно хотите удалить?"
                 width="200"
@@ -51,7 +106,13 @@
                 @confirm="emit('delete-item', scope.row.id)"
               >
                 <template #reference>
-                  <el-button :icon="Delete" type="danger" circle size="small" text />
+                  <el-button
+                    :icon="Delete"
+                    type="danger"
+                    circle
+                    size="small"
+                    text
+                  />
                 </template>
               </el-popconfirm>
             </template>
@@ -68,7 +129,14 @@
         />
         <h4 style="margin: 5px 0">
           Общая продолжительность:
-          {{formatDuration(block.total.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || '-'}}
+          {{
+            formatDuration(
+              block.total.reduce(
+                (acc, cur) => acc + cur.time.count * cur.time.duration,
+                0
+              )
+            ) || '-'
+          }}
         </h4>
       </el-collapse-item>
     </div>
@@ -76,27 +144,21 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, defineProps, defineEmits, inject, reactive } from 'vue'
 import { Delete, EditPen } from '@element-plus/icons-vue'
-import ItemPreview from '@/components/ItemPreview.vue'
-import formatDuration from '@/utils/formatDuration'
-import { Item } from '@/interfaces/item'
-import { rating } from '@/data/static'
-import { ItemsAPI } from '@/api/ItemsAPI'
 import { ElNotification } from 'element-plus'
 
 type Sort = {
-  prop: 'name' | 'rating' | 'time' | null,
+  prop: 'name' | 'rating' | 'time' | null
   order: 'ascending' | 'descending' | null
 }
 
 const props = defineProps<{
-  items: Array<Item>,
-  editable: boolean,
+  items: Array<Item>
+  editable: boolean
 }>()
 
 const emit = defineEmits<{
-  (e: 'update-item', item: Item): void,
+  (e: 'update-item', item: Item): void
   (e: 'delete-item', id: number): void
 }>()
 
@@ -107,108 +169,136 @@ const activeItems = ref([0, 1, 2, 3, 4])
 const lookingItemsData = reactive({
   pagination: {
     page: 1,
-    pageSize: 50
+    pageSize: 50,
   },
   sort: {
     prop: 'name',
-    order: null
-  } as Sort
+    order: null,
+  } as Sort,
 })
-const lookingItems = computed<Item[]>(() => props.items.filter(item => item.status === 'looking').sort(sortBy(lookingItemsData.sort)))
+const lookingItems = computed<Item[]>(() =>
+  props.items
+    .filter((item) => item.status === 'looking')
+    .sort(sortBy(lookingItemsData.sort))
+)
 const plannedItemsData = reactive({
   pagination: {
     page: 1,
-    pageSize: 50
+    pageSize: 50,
   },
   sort: {
     prop: 'name',
-    order: null
-  } as Sort
+    order: null,
+  } as Sort,
 })
-const plannedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'planned').sort(sortBy(plannedItemsData.sort)))
+const plannedItems = computed<Item[]>(() =>
+  props.items
+    .filter((item) => item.status === 'planned')
+    .sort(sortBy(plannedItemsData.sort))
+)
 const viewedItemsData = reactive({
   pagination: {
     page: 1,
-    pageSize: 50
+    pageSize: 50,
   },
   sort: {
     prop: 'name',
-    order: null
-  } as Sort
+    order: null,
+  } as Sort,
 })
-const viewedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'viewed').sort(sortBy(viewedItemsData.sort)))
+const viewedItems = computed<Item[]>(() =>
+  props.items
+    .filter((item) => item.status === 'viewed')
+    .sort(sortBy(viewedItemsData.sort))
+)
 const postponedItemsData = reactive({
   pagination: {
     page: 1,
-    pageSize: 50
+    pageSize: 50,
   },
   sort: {
     prop: 'name',
-    order: null
-  } as Sort
+    order: null,
+  } as Sort,
 })
-const postponedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'postponed').sort(sortBy(postponedItemsData.sort)))
+const postponedItems = computed<Item[]>(() =>
+  props.items
+    .filter((item) => item.status === 'postponed')
+    .sort(sortBy(postponedItemsData.sort))
+)
 const abandonedItemsData = reactive({
   pagination: {
     page: 1,
-    pageSize: 50
+    pageSize: 50,
   },
   sort: {
     prop: 'name',
-    order: null
-  } as Sort
+    order: null,
+  } as Sort,
 })
-const abandonedItems = computed<Item[]>(() => props.items.filter(item => item.status === 'abandoned').sort(sortBy(abandonedItemsData.sort)))
+const abandonedItems = computed<Item[]>(() =>
+  props.items
+    .filter((item) => item.status === 'abandoned')
+    .sort(sortBy(abandonedItemsData.sort))
+)
 
 const displayedItems = computed(() => [
   {
     title: 'В ПРОЦЕССЕ',
     paginated: lookingItems.value.slice(
-      (lookingItemsData.pagination.page - 1) * lookingItemsData.pagination.pageSize,
+      (lookingItemsData.pagination.page - 1) *
+        lookingItemsData.pagination.pageSize,
       lookingItemsData.pagination.page * lookingItemsData.pagination.pageSize
     ),
     total: lookingItems.value,
-    data: lookingItemsData
+    data: lookingItemsData,
   },
   {
     title: 'ЗАПЛАНИРОВАНО',
     paginated: plannedItems.value.slice(
-      (plannedItemsData.pagination.page - 1) * plannedItemsData.pagination.pageSize,
+      (plannedItemsData.pagination.page - 1) *
+        plannedItemsData.pagination.pageSize,
       plannedItemsData.pagination.page * plannedItemsData.pagination.pageSize
     ),
     total: plannedItems.value,
-    data: plannedItemsData
+    data: plannedItemsData,
   },
   {
     title: 'ЗАВЕРШЕНО',
     paginated: viewedItems.value.slice(
-      (viewedItemsData.pagination.page - 1) * viewedItemsData.pagination.pageSize,
+      (viewedItemsData.pagination.page - 1) *
+        viewedItemsData.pagination.pageSize,
       viewedItemsData.pagination.page * viewedItemsData.pagination.pageSize
     ),
     total: viewedItems.value,
-    data: viewedItemsData
+    data: viewedItemsData,
   },
   {
     title: 'ОТЛОЖЕНО',
     paginated: postponedItems.value.slice(
-      (postponedItemsData.pagination.page - 1) * postponedItemsData.pagination.pageSize,
-      postponedItemsData.pagination.page * postponedItemsData.pagination.pageSize
+      (postponedItemsData.pagination.page - 1) *
+        postponedItemsData.pagination.pageSize,
+      postponedItemsData.pagination.page *
+        postponedItemsData.pagination.pageSize
     ),
     total: postponedItems.value,
-    data: postponedItemsData
+    data: postponedItemsData,
   },
   {
     title: 'БРОШЕНО',
     paginated: abandonedItems.value.slice(
-      (abandonedItemsData.pagination.page - 1) * abandonedItemsData.pagination.pageSize,
-      abandonedItemsData.pagination.page * abandonedItemsData.pagination.pageSize
+      (abandonedItemsData.pagination.page - 1) *
+        abandonedItemsData.pagination.pageSize,
+      abandonedItemsData.pagination.page *
+        abandonedItemsData.pagination.pageSize
     ),
     total: abandonedItems.value,
-    data: abandonedItemsData
-  }
+    data: abandonedItemsData,
+  },
 ])
 
-const indexHandler = (pagination: any) => (index: number) => (pagination.page - 1) * pagination.pageSize + index + 1
+const indexHandler = (pagination: any) => (index: number) =>
+  (pagination.page - 1) * pagination.pageSize + index + 1
 
 const onSortChange = (index: number, { prop, order }: Sort) => {
   displayedItems.value[index].data.sort.prop = prop
@@ -257,20 +347,18 @@ const updateItemRating = async (item: Item, rating: number) => {
     refetch()
     ElNotification.success({
       title: 'Рейтинг изменен',
-      position: 'bottom-right'
+      position: 'bottom-right',
     })
   } catch (error: any) {
     ElNotification.error({
       title: error.response.data.message,
-      position: 'bottom-right'
+      position: 'bottom-right',
     })
   }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
 <style>
 .block-header .el-collapse-item__header {
   background-color: var(--el-color-info-light-8);
