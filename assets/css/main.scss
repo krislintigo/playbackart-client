@@ -34,7 +34,7 @@ body, input, button, textarea, select {
 }
 
 // STATUS COLORS
-.looking .el-collapse-item__header {
+.in-process .el-collapse-item__header {
   background: var(--el-color-primary-light-3);
   border-left-color: var(--el-color-primary-light-5);
 }
@@ -44,7 +44,7 @@ body, input, button, textarea, select {
   border-left-color: var(--el-color-warning-light-5);
 }
 
-.viewed .el-collapse-item__header {
+.completed .el-collapse-item__header {
   background: var(--el-color-success-light-3);
   border-left-color: var(--el-color-success-light-5);
 }
