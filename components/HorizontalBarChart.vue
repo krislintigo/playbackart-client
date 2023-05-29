@@ -4,7 +4,7 @@ BarChart(:chart-data='simpleData', :options='options', :styles='chartStyles')
 
 <script setup lang="ts">
 import { BarChart } from 'vue-chart-3'
-import { Chart, registerables, ChartOptions } from 'chart.js'
+import { Chart, registerables } from 'chart.js'
 Chart.register(...registerables)
 
 const props = defineProps<{
@@ -35,7 +35,7 @@ const simpleData = computed(() => ({
   ],
 }))
 
-const options: ChartOptions = {
+const options = {
   indexAxis: 'y',
   maintainAspectRatio: false,
   onClick: (_, arr) => {

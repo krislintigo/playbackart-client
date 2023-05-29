@@ -21,30 +21,32 @@ div
         )
       div(style='margin-bottom: 20px')
         el-input(
-          v-model='searchQuery',
+          v-model='queryFilters.searchQuery',
           placeholder='Поиск по названию...',
           clearable
         )
-      el-collapse(v-model='activeItems')
+      el-collapse(v-if='filters', v-model='activeItems')
         div(v-for='(block, i) in statuses', :key='block.value')
           StatusCollapseTable(
             :title='block.title.toUpperCase()',
             :status='block.value',
             :index='i',
+            :filters='queryFilters',
             @update-item='updateItem',
             @delete-item='deleteItem'
           )
       h4(style='text-align: center')
         span Всего: {{ filters?.total.count }} шт. / {{ formatDuration(filters?.total.duration) || '-' }}
     el-col(:span='24', :lg='6', style='margin-top: 68px')
-      //AsideFilters(
-      //  v-model:selected-ratings='selectedRatings',
-      //  v-model:selected-restrictions='selectedRestrictions',
-      //  v-model:selected-genres='selectedGenres',
-      //  v-model:selected-developers='selectedDevelopers',
-      //  v-model:selected-franchises='selectedFranchises',
-      //  :filters='filters'
-      //)
+      AsideFilters(
+        v-if='filters',
+        v-model:selected-ratings='queryFilters.selectedRatings',
+        v-model:selected-restrictions='queryFilters.selectedRestrictions',
+        v-model:selected-genres='queryFilters.selectedGenres',
+        v-model:selected-developers='queryFilters.selectedDevelopers',
+        v-model:selected-franchises='queryFilters.selectedFranchises',
+        :filters='filters'
+      )
 </template>
 
 <script setup lang="ts">
@@ -57,7 +59,6 @@ definePageMeta({
 
 const { api } = useFeathers()
 const authStore = useAuthStore()
-const route = useRoute()
 
 const activeItems = ref([0, 1, 2, 3, 4])
 const dialog = ref(false)
@@ -79,14 +80,9 @@ api.service('items').on('created', fetchFilters)
 api.service('items').on('patched', fetchFilters)
 api.service('items').on('removed', fetchFilters)
 
-const {
-  searchQuery,
-  selectedRatings,
-  selectedRestrictions,
-  selectedGenres,
-  selectedDevelopers,
-  selectedFranchises,
-} = useFilters()
+const queryFilters = reactive<{
+  searchQuery: string
+}>(useFilters())
 
 const createNew = () => {
   dialog.value = true

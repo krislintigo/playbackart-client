@@ -1,22 +1,23 @@
 <template lang="pug">
-el-aside.aside
+el-aside.aside(width='350px')
   el-row
     el-col
       h3.back-header Оценки
       HorizontalBarChart(
-        :labels='grades',
-        :data='grades.map((grade) => items.filter((i) => i.rating === grade).length)',
-        :selected='selectedGrades',
-        @click='gradeClick'
+        :labels='ratings.map((r) => r.value)',
+        :data='ratings.map((r) => r.count)',
+        :selected='selectedRatings',
+        @click='ratingClick'
       )
-  //el-col
-  //  h3.back-header Возрастные ограничения
-  //  HorizontalBarChart(
-  //    :labels='restrictionsLabels',
-  //    :data='restrictionsLabels.map((r) => items.filter((i) => i.restriction === r).length)',
-  //    :selected='selectedRestrictions',
-  //    @click='restrictionClick'
-  //  )
+  el-row
+    el-col
+      h3.back-header Возрастные ограничения
+      HorizontalBarChart(
+        :labels='restrictions.map((r) => r.value)',
+        :data='restrictions.map((r) => r.count)',
+        :selected='selectedRestrictions',
+        @click='restrictionClick'
+      )
   el-row
     el-col
       h3.back-header Жанры
@@ -24,9 +25,9 @@ el-aside.aside
         el-link.item(
           v-for='genre in genres',
           :key='genre',
-          :class='{ [getGenreTextClass(genre)]: true, "item-selected": selectedGenres.includes(genre) }',
-          @click='genreClick(genre)'
-        ) {{ genre }}
+          :class='{ [getGenreTextClass(genre.value)]: true, "item-selected": selectedGenres.includes(genre.value) }',
+          @click='genreClick(genre.value)'
+        ) {{ genre.value }}
   el-row
     el-col
       h3.back-header Создатели
@@ -34,9 +35,9 @@ el-aside.aside
         el-link.item(
           v-for='developer in dividedDevelopers.primary',
           :key='developer',
-          :class='{ [getDeveloperTextClass(developer)]: true, "item-selected": selectedDevelopers.includes(developer) }',
-          @click='developerClick(developer)'
-        ) {{ developer }}
+          :class='{ [getDeveloperTextClass(developer.value)]: true, "item-selected": selectedDevelopers.includes(developer.value) }',
+          @click='developerClick(developer.value)'
+        ) {{ developer.value }}
         el-select(
           v-model='selectedDevelopers',
           filterable,
@@ -49,8 +50,8 @@ el-aside.aside
           el-option(
             v-for='item in dividedDevelopers.secondary',
             :key='item',
-            :label='item',
-            :value='item'
+            :label='item.value',
+            :value='item.value'
           )
   el-row
     el-col
@@ -67,14 +68,14 @@ el-aside.aside
         el-option(
           v-for='item in franchises',
           :key='item',
-          :label='item',
-          :value='item'
+          :label='item.value',
+          :value='item.value'
         )
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{
-  selectedGrades: number[]
+  selectedRatings: number[]
   selectedRestrictions: string[]
   selectedGenres: string[]
   selectedDevelopers: string[]
@@ -106,20 +107,24 @@ const props = defineProps<{
       durations: number[]
       count: number
     }[]
+    total: {
+      count: number
+      duration: number
+    }
   }
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:selectedGrades', value: number[]): void
+  (e: 'update:selectedRatings', value: number[]): void
   (e: 'update:selectedRestrictions', value: string[]): void
   (e: 'update:selectedGenres', value: string[]): void
   (e: 'update:selectedDevelopers', value: string[]): void
   (e: 'update:selectedFranchises', value: string[]): void
 }>()
 
-const selectedGrades = computed({
-  get: () => props.selectedGrades,
-  set: (value) => emit('update:selectedGrades', value),
+const selectedRatings = computed({
+  get: () => props.selectedRatings,
+  set: (value) => emit('update:selectedRatings', value),
 })
 const selectedRestrictions = computed({
   get: () => props.selectedRestrictions,
@@ -139,72 +144,70 @@ const selectedFranchises = computed({
 })
 
 const ratings = computed(() =>
-  Array.from(new Set(props.filters.ratings.filter((i) => i.value))).sort(
+  [...props.filters.ratings.filter((i) => i.value)].sort(
     (a, b) => b.value - a.value
   )
 )
-const restrictionsComputed = computed(() =>
-  Array.from(new Set(props.items.map((i) => i.restriction)))
+const restrictions = computed(() =>
+  [...props.filters.restrictions.filter((r) => r.value)].sort(
+    (a, b) =>
+      restrictionsTemplate.indexOf(a.value) -
+      restrictionsTemplate.indexOf(b.value)
+  )
 )
-const restrictionsLabels = computed(() =>
-  restrictions.filter((r) => restrictionsComputed.value.includes(r))
-)
-const genres = computed(() =>
-  Array.from(new Set(props.filters.genres.filter((i) => i.value)))
-)
+const genres = computed(() => props.filters.genres.filter((i) => i.value))
 const developers = computed(() =>
-  Array.from(new Set(props.filters.developers.filter((i) => i.value)))
+  props.filters.developers.filter((i) => i.value)
 )
 const franchises = computed(() =>
-  Array.from(new Set(props.filters.franchises.filter((i) => i.value)))
+  props.filters.franchises.filter((i) => i.value)
 )
 
 const dividedDevelopers = computed(() => {
-  const primary: string[] = []
-  const secondary: string[] = []
-  developers.value.forEach((d) => {
-    const includedItems = props.items.filter((i) => i.developers.includes(d))
+  const primary = []
+  const secondary = []
+  developers.value.forEach((developer) => {
+    const includedItems = props.filters.developers.find(
+      (d) => d.value === developer.value
+    )
     // if (includedItems.length === 1 && includedItems[0].developers.length > 3 && includedItems[0].developers.length < 5) console.log(d)
     const percentage =
-      ((includedItems.reduce(
-        (acc, item) => acc + item.time.count * item.time.duration,
-        0
-      ) *
-        includedItems.reduce(
-          (acc, item) => acc * ratingCoefficient(item.rating),
+      ((includedItems?.durations.reduce((acc, cur) => acc + cur, 0) *
+        includedItems?.ratings.reduce(
+          (acc, cur) => acc * ratingCoefficient(cur),
           1
         )) /
-        props.items.reduce(
-          (acc, item) => acc + item.time.count * item.time.duration,
-          0
-        )) *
+        props.filters.total.duration) *
       100
+    console.log(developer.value, percentage)
     if (percentage > 5) {
-      primary.push(d)
+      primary.push(developer)
     } else {
-      secondary.push(d)
+      secondary.push(developer)
     }
   })
   return { primary, secondary }
 })
 
-const gradeClick = (gradeIndex: number) => {
-  const grade = grades.value[gradeIndex]
-  if (selectedGrades.value.includes(grade)) {
-    selectedGrades.value = selectedGrades.value.filter((g) => g !== grade)
+const ratingClick = (gradeIndex: number) => {
+  const rating = ratings.value[gradeIndex]
+  if (selectedRatings.value.includes(rating.value)) {
+    selectedRatings.value = selectedRatings.value.filter(
+      (r) => r !== rating.value
+    )
   } else {
-    selectedGrades.value.push(grade)
+    selectedRatings.value.push(rating.value)
   }
 }
 
 const restrictionClick = (restrictionIndex: number) => {
-  const restriction = restrictionsLabels.value[restrictionIndex]
-  if (selectedRestrictions.value.includes(restriction)) {
+  const restriction = restrictions.value[restrictionIndex]
+  if (selectedRestrictions.value.includes(restriction.value)) {
     selectedRestrictions.value = selectedRestrictions.value.filter(
-      (r) => r !== restriction
+      (r) => r !== restriction.value
     )
   } else {
-    selectedRestrictions.value.push(restriction)
+    selectedRestrictions.value.push(restriction.value)
   }
 }
 
@@ -229,25 +232,22 @@ const developerClick = (developer: string) => {
 const getGenreTextClass = (genre: string) => {
   // const percentage = props.items.filter(i => i.genres.includes(genre)).length / props.items.length * 100
   const percentage =
-    (props.items
-      .filter((i) => i.genres.includes(genre))
-      .reduce((acc, item) => acc + item.time.count * item.time.duration, 0) *
-      props.items
-        .filter((i) => i.genres.includes(genre))
-        .reduce((acc, item) => acc * ratingCoefficient(item.rating), 1)) /
-    props.items.reduce(
-      (acc, item) => acc + item.time.count * item.time.duration,
-      0
-    )
-  return getTextSizeClass(percentage, props.items.length, 'genre')
+    (props.filters.genres
+      .find((g) => g.value === genre)
+      ?.durations.reduce((acc, cur) => acc + cur, 0) *
+      props.filters.genres
+        .find((g) => g.value === genre)
+        ?.ratings.reduce((acc, cur) => acc * ratingCoefficient(cur), 1)) /
+    props.filters.total.duration
+  return getTextSizeClass(percentage, props.filters.total.count, 'genre')
 }
 
 const getDeveloperTextClass = (developer: string) => {
   const percentage =
-    (props.items.filter((i) => i.developers.includes(developer)).length /
+    (props.filters.developers.find((d) => d.value === developer)?.count /
       dividedDevelopers.value.primary.length) *
     100
-  return getTextSizeClass(percentage, props.items.length, 'developer')
+  return getTextSizeClass(percentage, props.filters.total.count, 'developer')
 }
 </script>
 
@@ -256,7 +256,7 @@ const getDeveloperTextClass = (developer: string) => {
   //display: flex;
   //flex-direction: column;
   row-gap: 30px;
-  width: 350px;
+  //width: 350px;
 }
 
 .back-header {

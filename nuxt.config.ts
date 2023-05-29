@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   modules: [
     '@element-plus/nuxt',
+    // '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     'nuxt-feathers-pinia',
     'nuxt-lodash',

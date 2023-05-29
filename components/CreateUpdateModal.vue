@@ -59,7 +59,7 @@
       <el-form-item label="Ограничение:" prop="restriction">
         <el-radio-group v-model="_item.restriction">
           <el-radio-button
-            v-for="restriction in restrictions"
+            v-for="restriction in restrictionsTemplate"
             :key="restriction"
             :label="restriction"
           />
@@ -244,7 +244,6 @@ const save = async () => {
     await formRef.value.validate()
     try {
       const response = await _item.value.save()
-      console.log(response)
       dialog.value = false
       ElNotification.success({
         title: 'Элемент успешно сохранен!',

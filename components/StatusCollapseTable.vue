@@ -3,7 +3,11 @@ el-collapse-item.block-header(v-if='total', :name='index')
   template(#title)
     el-row
       h2(style='font-size: 18px') {{ title }}
-  el-table(:data='items', @sort-change='onSortChange(index, $event)')
+  el-table(
+    v-loading='isPending',
+    :data='items',
+    @sort-change='onSortChange(index, $event)'
+  )
     el-table-column(type='index', label='#', width='50', :index='indexHandler')
     el-table-column(
       sortable='custom',
@@ -103,20 +107,41 @@ const props = defineProps<{
   title: string
   status: Item['status']
   index: number
+  filters: any
 }>()
 
 const emit = defineEmits(['update-item', 'delete-item'])
 
 const { api } = useFeathers()
+const route = useRoute()
 
 const query = computed(() => ({
   query: {
+    ...(route.query.type && { type: route.query.type }),
+    ...(props.filters.searchQuery && {
+      name: { $regex: props.filters.searchQuery, $options: 'i' },
+    }),
+    ...(props.filters.selectedRatings.length && {
+      rating: { $in: props.filters.selectedRatings },
+    }),
+    ...(props.filters.selectedRestrictions.length && {
+      restriction: { $in: props.filters.selectedRestrictions },
+    }),
+    ...(props.filters.selectedGenres.length && {
+      genres: { $in: props.filters.selectedGenres },
+    }),
+    ...(props.filters.selectedDevelopers.length && {
+      developers: { $in: props.filters.selectedDevelopers },
+    }),
     status: props.status,
   },
 }))
 
+watchEffect(() => console.log(query.value))
+
 const {
   data: items,
+  isPending,
   limit,
   // skip,
   currentPage,
