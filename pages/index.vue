@@ -2,13 +2,7 @@
 div
   el-row(v-if='!authStore.isAuthenticated')
     h2 Войдите, чтобы продолжить!
-  el-row(
-    v-else,
-    v-loading.fullscreen.lock='isPending',
-    justify='center',
-    :gutter='20',
-    style='margin-bottom: 30px'
-  )
+  el-row(v-else, justify='center', :gutter='20', style='margin-bottom: 30px')
     el-col(:span='24', :lg='18')
       div(style='display: flex; align-items: center; column-gap: 10px')
         h2 {{ 'Список' }}
@@ -26,26 +20,31 @@ div
           :item-for-update='itemForUpdate'
         )
       div(style='margin-bottom: 20px')
-        SearchInput(v-model='searchQuery')
-      MainDisplayLayout(
-        :items='queriedItems',
-        :editable='true',
-        @update-item='updateItem',
-        @delete-item='deleteItem'
-      )
+        el-input(
+          v-model='searchQuery',
+          placeholder='Поиск по названию...',
+          clearable
+        )
+      el-collapse(v-model='activeItems')
+        div(v-for='(block, i) in statuses', :key='block.value')
+          StatusCollapseTable(
+            :title='block.title.toUpperCase()',
+            :status='block.value',
+            :index='i',
+            @update-item='updateItem',
+            @delete-item='deleteItem'
+          )
       h4(style='text-align: center')
-        span Всего: {{ items.length }} шт.
-        | /
-        span {{ formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || '-' }}
+        span Всего: {{ filters?.total.count }} шт. / {{ formatDuration(filters?.total.duration) || '-' }}
     el-col(:span='24', :lg='6', style='margin-top: 68px')
-      AsideFilters(
-        v-model:selected-grades='selectedGrades',
-        v-model:selected-restrictions='selectedRestrictions',
-        v-model:selected-genres='selectedGenres',
-        v-model:selected-developers='selectedDevelopers',
-        v-model:selected-franchises='selectedFranchises',
-        :items='items'
-      )
+      //AsideFilters(
+      //  v-model:selected-ratings='selectedRatings',
+      //  v-model:selected-restrictions='selectedRestrictions',
+      //  v-model:selected-genres='selectedGenres',
+      //  v-model:selected-developers='selectedDevelopers',
+      //  v-model:selected-franchises='selectedFranchises',
+      //  :filters='filters'
+      //)
 </template>
 
 <script setup lang="ts">
@@ -54,35 +53,40 @@ definePageMeta({
   public: false,
 })
 
+// v-loading.fullscreen.lock='isPending',
+
 const { api } = useFeathers()
 const authStore = useAuthStore()
 const route = useRoute()
 
-const query = computed(() => ({
-  query: {
-    ...(route.query.type && { type: route.query.type }),
-  },
-}))
-
-const { data: items, isPending } = api
-  .service('items')
-  .useFind(query, { paginateOn: 'server' })
-
-watchEffect(() => console.log(items.value))
-
+const activeItems = ref([0, 1, 2, 3, 4])
 const dialog = ref(false)
 const dialogTarget = ref('')
 const itemForUpdate = ref<Item | null>(null)
+const filters = ref<any>(null)
+
+const fetchFilters = async () => {
+  try {
+    filters.value = await api.service('items').filters({ login: '' }, {})
+    console.log(filters.value)
+  } catch (e) {
+    console.error(e)
+  }
+}
+fetchFilters()
+
+api.service('items').on('created', fetchFilters)
+api.service('items').on('patched', fetchFilters)
+api.service('items').on('removed', fetchFilters)
 
 const {
   searchQuery,
-  selectedGrades,
+  selectedRatings,
   selectedRestrictions,
   selectedGenres,
   selectedDevelopers,
   selectedFranchises,
-  queriedItems,
-} = useFilters(items)
+} = useFilters()
 
 const createNew = () => {
   dialog.value = true
@@ -99,12 +103,12 @@ const deleteItem = async (id: string) => {
   try {
     const response = await api.service('items').remove(id)
     ElNotification.success({
-      title: response.message,
+      title: 'Элемент успешно удален!',
       position: 'bottom-right',
     })
   } catch (e: any) {
     ElNotification.error({
-      title: e.response.data.message,
+      title: 'Что-то пошло не так...',
       position: 'bottom-right',
     })
   }

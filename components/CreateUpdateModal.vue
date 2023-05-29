@@ -244,14 +244,15 @@ const save = async () => {
     await formRef.value.validate()
     try {
       const response = await _item.value.save()
+      console.log(response)
       dialog.value = false
       ElNotification.success({
-        title: response.message,
+        title: 'Элемент успешно сохранен!',
         position: 'bottom-right',
       })
     } catch (e: any) {
       ElNotification.error({
-        title: e.message,
+        title: 'Что-то пошло не так...',
         position: 'bottom-right',
       })
     }

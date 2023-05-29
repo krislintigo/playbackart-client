@@ -1,10 +1,10 @@
-<template>
-  <BarChart :chart-data="simpleData" :options="options" :styles="chartStyles" />
+<template lang="pug">
+BarChart(:chart-data='simpleData', :options='options', :styles='chartStyles')
 </template>
 
 <script setup lang="ts">
 import { BarChart } from 'vue-chart-3'
-import { Chart, registerables } from 'chart.js'
+import { Chart, registerables, ChartOptions } from 'chart.js'
 Chart.register(...registerables)
 
 const props = defineProps<{
@@ -35,10 +35,10 @@ const simpleData = computed(() => ({
   ],
 }))
 
-const options = {
+const options: ChartOptions = {
   indexAxis: 'y',
   maintainAspectRatio: false,
-  onClick: (e: any, arr: any[]) => {
+  onClick: (_, arr) => {
     if (!arr.length) return
     emit('click', arr[0].index)
   },
@@ -51,7 +51,7 @@ const options = {
       titleColor: 'dimgray',
       bodyColor: 'black',
       callbacks: {
-        beforeBody: function (tooltipItem: any[]) {
+        beforeBody: (tooltipItem) => {
           const value = tooltipItem[0].formattedValue
           tooltipItem[0].formattedValue = ` ${value}`
         },

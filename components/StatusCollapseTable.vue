@@ -1,9 +1,9 @@
 <template lang="pug">
-el-collapse-item.block-header(v-if='total', :name='i')
+el-collapse-item.block-header(v-if='total', :name='index')
   template(#title)
     el-row
       h2(style='font-size: 18px') {{ title }}
-  el-table(:data='items', @sort-change='onSortChange(i, $event)')
+  el-table(:data='items', @sort-change='onSortChange(index, $event)')
     el-table-column(type='index', label='#', width='50', :index='indexHandler')
     el-table-column(
       sortable='custom',
@@ -72,7 +72,7 @@ el-collapse-item.block-header(v-if='total', :name='i')
           width='200',
           confirm-button-text='Да',
           cancel-button-text='Нет',
-          @confirm='emit("delete-item", scope.row.id)'
+          @confirm='emit("delete-item", scope.row._id)'
         )
           template(#reference)
             el-button(
@@ -94,10 +94,18 @@ el-collapse-item.block-header(v-if='total', :name='i')
 </template>
 
 <script setup lang="ts">
+type Sort = {
+  prop: 'name' | 'rating' | 'time' | null
+  order: 'ascending' | 'descending' | null
+}
+
 const props = defineProps<{
   title: string
   status: Item['status']
+  index: number
 }>()
+
+const emit = defineEmits(['update-item', 'delete-item'])
 
 const { api } = useFeathers()
 
@@ -113,7 +121,7 @@ const {
   // skip,
   currentPage,
   total,
-} = api.service('items').useFind(query, { paginateOn: 'server' })
+} = api.service('items').useFind(query, { paginateOn: 'hybrid' })
 
 const indexHandler = (index: number) => {
   return (currentPage.value - 1) * limit.value + index + 1
@@ -176,3 +184,29 @@ const updateItemRating = async (item: Instance<Item>, rating: number) => {
 </script>
 
 <style scoped></style>
+<style>
+.block-header .el-collapse-item__header {
+  background-color: var(--el-color-info-light-8);
+  padding: 0 20px;
+  border-left: 5px solid;
+  border-bottom: 0;
+  /* var(--el-text-color-primary) */
+}
+
+.el-table {
+  --el-table-border-color: transparent;
+  --el-table-header-bg-color: transparent;
+}
+
+.el-table .el-table__cell {
+  padding: 3px 0;
+}
+
+.el-table .el-table__cell .cell {
+  padding-right: 0;
+}
+
+.el-link__inner {
+  word-break: normal;
+}
+</style>

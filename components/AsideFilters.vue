@@ -1,109 +1,112 @@
-<template>
-  <el-aside class="aside">
-    <el-col>
-      <h3 class="back-header">Оценки</h3>
-      <HorizontalBarChart
-        :labels="grades"
-        :data="
-          grades.map((grade) => items.filter((i) => i.rating === grade).length)
-        "
-        :selected="selectedGrades"
-        @click="gradeClick"
-      />
-    </el-col>
-    <el-col>
-      <h3 class="back-header">Возрастные ограничения</h3>
-      <HorizontalBarChart
-        :labels="restrictionsLabels"
-        :data="
-          restrictionsLabels.map(
-            (r) => items.filter((i) => i.restriction === r).length
+<template lang="pug">
+el-aside.aside
+  el-row
+    el-col
+      h3.back-header Оценки
+      HorizontalBarChart(
+        :labels='grades',
+        :data='grades.map((grade) => items.filter((i) => i.rating === grade).length)',
+        :selected='selectedGrades',
+        @click='gradeClick'
+      )
+  //el-col
+  //  h3.back-header Возрастные ограничения
+  //  HorizontalBarChart(
+  //    :labels='restrictionsLabels',
+  //    :data='restrictionsLabels.map((r) => items.filter((i) => i.restriction === r).length)',
+  //    :selected='selectedRestrictions',
+  //    @click='restrictionClick'
+  //  )
+  el-row
+    el-col
+      h3.back-header Жанры
+      el-row
+        el-link.item(
+          v-for='genre in genres',
+          :key='genre',
+          :class='{ [getGenreTextClass(genre)]: true, "item-selected": selectedGenres.includes(genre) }',
+          @click='genreClick(genre)'
+        ) {{ genre }}
+  el-row
+    el-col
+      h3.back-header Создатели
+      el-row
+        el-link.item(
+          v-for='developer in dividedDevelopers.primary',
+          :key='developer',
+          :class='{ [getDeveloperTextClass(developer)]: true, "item-selected": selectedDevelopers.includes(developer) }',
+          @click='developerClick(developer)'
+        ) {{ developer }}
+        el-select(
+          v-model='selectedDevelopers',
+          filterable,
+          multiple,
+          collapse-tags,
+          collapse-tags-tooltip,
+          placeholder='Другие создатели...',
+          style='width: 100%; margin-top: 10px'
+        )
+          el-option(
+            v-for='item in dividedDevelopers.secondary',
+            :key='item',
+            :label='item',
+            :value='item'
           )
-        "
-        :selected="selectedRestrictions"
-        @click="restrictionClick"
-      />
-    </el-col>
-    <el-col>
-      <h3 class="back-header">Жанры</h3>
-      <el-row>
-        <el-link
-          v-for="genre in genres"
-          :key="genre"
-          class="item"
-          :class="{
-            [getGenreTextClass(genre)]: true,
-            'item-selected': selectedGenres.includes(genre),
-          }"
-          @click="genreClick(genre)"
-        >
-          {{ genre }}
-        </el-link>
-      </el-row>
-    </el-col>
-    <el-col>
-      <h3 class="back-header">Создатели</h3>
-      <el-row>
-        <el-link
-          v-for="developer in dividedDevelopers.primary"
-          :key="developer"
-          class="item"
-          :class="{
-            [getDeveloperTextClass(developer)]: true,
-            'item-selected': selectedDevelopers.includes(developer),
-          }"
-          @click="developerClick(developer)"
-        >
-          {{ developer }}
-        </el-link>
-        <el-select
-          v-model="selectedDevelopers"
-          filterable
-          multiple
-          collapse-tags
-          collapse-tags-tooltip
-          placeholder="Другие создатели..."
-          style="width: 100%; margin-top: 10px"
-        >
-          <el-option
-            v-for="item in dividedDevelopers.secondary"
-            :key="item"
-            :label="item"
-            :value="item"
-          />
-        </el-select>
-      </el-row>
-    </el-col>
-    <el-col>
-      <h3 class="back-header">Франшизы</h3>
-      <el-select
-        v-model="selectedFranchises"
-        filterable
-        multiple
-        collapse-tags
-        collapse-tags-tooltip
-        placeholder="Введите название тут"
-        style="width: 100%"
-      >
-        <el-option
-          v-for="item in franchises"
-          :key="item"
-          :label="item"
-          :value="item"
-        />
-      </el-select>
-    </el-col>
-  </el-aside>
+  el-row
+    el-col
+      h3.back-header Франшизы
+      el-select(
+        v-model='selectedFranchises',
+        filterable,
+        multiple,
+        collapse-tags,
+        collapse-tags-tooltip,
+        placeholder='Введите название тут',
+        style='width: 100%'
+      )
+        el-option(
+          v-for='item in franchises',
+          :key='item',
+          :label='item',
+          :value='item'
+        )
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{
-  items: Array<Item>
-  selectedGrades: Array<number>
-  selectedRestrictions: Array<string>
-  selectedGenres: Array<string>
-  selectedDevelopers: Array<string>
-  selectedFranchises: Array<string>
+  selectedGrades: number[]
+  selectedRestrictions: string[]
+  selectedGenres: string[]
+  selectedDevelopers: string[]
+  selectedFranchises: string[]
+  filters: {
+    ratings: {
+      value: number
+      count: number
+    }[]
+    restrictions: {
+      value: string
+      count: number
+    }[]
+    genres: {
+      value: string
+      ratings: number[]
+      durations: number[]
+      count: number
+    }[]
+    developers: {
+      value: string
+      ratings: number[]
+      durations: number[]
+      count: number
+    }[]
+    franchises: {
+      value: string
+      ratings: number[]
+      durations: number[]
+      count: number
+    }[]
+  }
 }>()
 
 const emit = defineEmits<{
@@ -135,10 +138,10 @@ const selectedFranchises = computed({
   set: (value) => emit('update:selectedFranchises', value),
 })
 
-const grades = computed(() =>
-  Array.from(
-    new Set(props.items.filter((i) => i.rating).map((i) => i.rating))
-  ).sort((a, b) => b - a)
+const ratings = computed(() =>
+  Array.from(new Set(props.filters.ratings.filter((i) => i.value))).sort(
+    (a, b) => b.value - a.value
+  )
 )
 const restrictionsComputed = computed(() =>
   Array.from(new Set(props.items.map((i) => i.restriction)))
@@ -147,15 +150,13 @@ const restrictionsLabels = computed(() =>
   restrictions.filter((r) => restrictionsComputed.value.includes(r))
 )
 const genres = computed(() =>
-  Array.from(new Set(props.items.map((i) => i.genres).flat(1)))
+  Array.from(new Set(props.filters.genres.filter((i) => i.value)))
 )
 const developers = computed(() =>
-  Array.from(new Set(props.items.map((i) => i.developers).flat(1)))
+  Array.from(new Set(props.filters.developers.filter((i) => i.value)))
 )
 const franchises = computed(() =>
-  Array.from(
-    new Set(props.items.filter((i) => i.franchise).map((i) => i.franchise))
-  )
+  Array.from(new Set(props.filters.franchises.filter((i) => i.value)))
 )
 
 const dividedDevelopers = computed(() => {
@@ -252,8 +253,8 @@ const getDeveloperTextClass = (developer: string) => {
 
 <style scoped>
 .aside {
-  display: flex;
-  flex-direction: column;
+  //display: flex;
+  //flex-direction: column;
   row-gap: 30px;
   width: 350px;
 }
