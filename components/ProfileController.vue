@@ -1,62 +1,45 @@
-<template>
-  <el-popover placement="bottom" :width="380" trigger="click">
-    <template #reference>
-      <el-avatar :size="50" :icon="authStore.isAuthenticated ? User : Failed" />
-    </template>
-    <el-row justify="space-between" align="middle">
-      <h2>Профиль</h2>
-      <el-button circle text size="large" @click="dark = !dark">
-        <el-icon v-if="dark" :size="24"><Sunny /></el-icon>
-        <el-icon v-else :size="24"><Moon /></el-icon>
-      </el-button>
-    </el-row>
-    <div v-if="authStore.user?.login">
-      <h3>Добро пожаловать, {{ authStore.user.login }}!</h3>
-      <h4 style="margin-bottom: 5px">
-        Ваш список слежения:
-        <el-button
-          text
-          circle
-          :type="watchingChanged ? 'warning' : 'success'"
-          size="small"
-          @click="saveWatching"
-        >
-          <el-icon :size="20"><CircleCheck /></el-icon>
-        </el-button>
-      </h4>
-      <!--      <TextEditor v-model="watching" @input="watchingChanged = true" />-->
-      <el-row justify="end" style="margin-top: 10px">
-        <el-button type="danger" @click="handleUserAction('logout')"
-          >Выход</el-button
-        >
-      </el-row>
-    </div>
-    <div v-else>
-      <h3>Войдите в аккаунт!</h3>
-      <el-form v-model="authData" label-position="right" :label-width="65">
-        <el-form-item label="Логин">
-          <el-input v-model="authData.login" />
-        </el-form-item>
-        <el-form-item label="Пароль">
-          <el-input v-model="authData.password" type="password" show-password />
-        </el-form-item>
-        <el-row justify="end">
-          <el-button type="success" @click="handleUserAction('login')"
-            >Вход</el-button
-          >
-          <el-button type="warning" @click="handleUserAction('register')"
-            >Регистрация</el-button
-          >
-        </el-row>
-      </el-form>
-    </div>
-  </el-popover>
+<template lang="pug">
+el-popover(placement='bottom', :width='380', trigger='click')
+  template(#reference)
+    el-avatar(
+      :size='50',
+      :icon='authStore.isAuthenticated ? ElIconUser : ElIconFailed'
+    )
+  el-row(justify='space-between', align='middle')
+    h2 Профиль
+    el-button(circle, text, size='large', @click='dark = !dark')
+      el-icon(v-if='dark', :size='24')
+        ElIconSunny
+      el-icon(v-else, :size='24')
+        ElIconMoon
+  div(v-if='authStore.user?.login')
+    h3 Добро пожаловать, {{ authStore.user.login }}!
+    h4(style='margin-bottom: 5px') Ваш список слежения:
+      el-button(
+        text,
+        circle,
+        :type='watchingChanged ? "warning" : "success"',
+        size='small',
+        @click='saveWatching'
+      )
+        el-icon(:size='20')
+          ElIconCircleCheck
+    //TextEditor(v-model='watching', @input='watchingChanged = true')
+    el-row(justify='end', style='margin-top: 10px')
+      el-button(type='danger', @click='handleUserAction("logout")') Выход
+  div(v-else)
+    h3 Войдите в аккаунт!
+    el-form(v-model='authData', label-position='right', :label-width='65')
+      el-form-item(label='Логин')
+        el-input(v-model='authData.login')
+      el-form-item(label='Пароль')
+        el-input(v-model='authData.password', type='password', show-password)
+      el-row(justify='end')
+        el-button(type='success', @click='handleUserAction("login")') Вход
+        el-button(type='warning', @click='handleUserAction("register")') Регистрация
 </template>
 
 <script setup lang="ts">
-import { User, Failed, CircleCheck, Sunny, Moon } from '@element-plus/icons-vue'
-import { ElNotification } from 'element-plus'
-
 const { api } = useFeathers()
 const authStore = useAuthStore()
 
@@ -72,16 +55,6 @@ const authData = reactive({
 const watchingChanged = ref<boolean>(false)
 // const dark = ref(!!localStorage.getItem('theme'))
 const dark = ref(true)
-
-// ;(async () => {
-//   try {
-//     const validateResponse = await AuthAPI.validate()
-//     const userResponse = await UserAPI.getOneShort(validateResponse.data.id)
-//     store.commit(userNames.setUser, userResponse.data)
-//   } catch (e) {
-//     console.error('Invalid token')
-//   }
-// })()
 
 const handleUserAction = async (action: 'register' | 'login' | 'logout') => {
   try {
@@ -103,7 +76,7 @@ const handleUserAction = async (action: 'register' | 'login' | 'logout') => {
       }
     }
     ElNotification.success({
-      title: 'НЕКОЕ СООБЩЕНИЕ',
+      title: 'Успешно!',
       position: 'bottom-right',
     })
   } catch (e: any) {

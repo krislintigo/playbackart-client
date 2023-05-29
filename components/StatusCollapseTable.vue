@@ -107,31 +107,34 @@ const props = defineProps<{
   title: string
   status: Item['status']
   index: number
-  filters: any
 }>()
 
 const emit = defineEmits(['update-item', 'delete-item'])
 
 const { api } = useFeathers()
 const route = useRoute()
+const queryFilters = useFilters()
 
 const query = computed(() => ({
   query: {
     ...(route.query.type && { type: route.query.type }),
-    ...(props.filters.searchQuery && {
-      name: { $regex: props.filters.searchQuery, $options: 'i' },
+    ...(queryFilters.searchQuery && {
+      name: { $regex: queryFilters.searchQuery, $options: 'i' },
     }),
-    ...(props.filters.selectedRatings.length && {
-      rating: { $in: props.filters.selectedRatings },
+    ...(queryFilters.selectedRatings.length && {
+      rating: { $in: queryFilters.selectedRatings },
     }),
-    ...(props.filters.selectedRestrictions.length && {
-      restriction: { $in: props.filters.selectedRestrictions },
+    ...(queryFilters.selectedRestrictions.length && {
+      restriction: { $in: queryFilters.selectedRestrictions },
     }),
-    ...(props.filters.selectedGenres.length && {
-      genres: { $in: props.filters.selectedGenres },
+    ...(queryFilters.selectedGenres.length && {
+      genres: { $in: queryFilters.selectedGenres },
     }),
-    ...(props.filters.selectedDevelopers.length && {
-      developers: { $in: props.filters.selectedDevelopers },
+    ...(queryFilters.selectedDevelopers.length && {
+      developers: { $in: queryFilters.selectedDevelopers },
+    }),
+    ...(queryFilters.selectedFranchises.length && {
+      franchise: { $in: queryFilters.selectedFranchises },
     }),
     status: props.status,
   },

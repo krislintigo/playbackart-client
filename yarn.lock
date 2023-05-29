@@ -6666,9 +6666,9 @@ pkg-types@^1.0.2, pkg-types@^1.0.3:
     mlly "^1.2.0"
     pathe "^1.1.0"
 
-playbackart-server@./server/playbackart-server-0.0.2.tgz:
-  version "0.0.2"
-  resolved "./server/playbackart-server-0.0.2.tgz#95c1407d809ed3f07b0882cbe9ef2d78ff150a06"
+playbackart-server@./server/playbackart-server-0.0.3.tgz:
+  version "0.0.3"
+  resolved "./server/playbackart-server-0.0.3.tgz#5d7888d9fdeb663d404383e477b42ac7b347ff05"
   dependencies:
     "@feathersjs/adapter-commons" "5.0.5"
     "@feathersjs/authentication" "5.0.5"

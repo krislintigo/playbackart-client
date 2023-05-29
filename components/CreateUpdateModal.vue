@@ -243,7 +243,7 @@ const save = async () => {
   try {
     await formRef.value.validate()
     try {
-      const response = await _item.value.save()
+      await _item.value.save()
       dialog.value = false
       ElNotification.success({
         title: 'Элемент успешно сохранен!',

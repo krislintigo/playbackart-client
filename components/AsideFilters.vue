@@ -25,7 +25,7 @@ el-aside.aside(width='350px')
         el-link.item(
           v-for='genre in genres',
           :key='genre',
-          :class='{ [getGenreTextClass(genre.value)]: true, "item-selected": selectedGenres.includes(genre.value) }',
+          :class='{ [getGenreTextClass(genre)]: true, "item-selected": selectedGenres.includes(genre.value) }',
           @click='genreClick(genre.value)'
         ) {{ genre.value }}
   el-row
@@ -35,7 +35,7 @@ el-aside.aside(width='350px')
         el-link.item(
           v-for='developer in dividedDevelopers.primary',
           :key='developer',
-          :class='{ [getDeveloperTextClass(developer.value)]: true, "item-selected": selectedDevelopers.includes(developer.value) }',
+          :class='{ [getDeveloperTextClass(developer)]: true, "item-selected": selectedDevelopers.includes(developer.value) }',
           @click='developerClick(developer.value)'
         ) {{ developer.value }}
         el-select(
@@ -74,112 +74,50 @@ el-aside.aside(width='350px')
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  selectedRatings: number[]
-  selectedRestrictions: string[]
-  selectedGenres: string[]
-  selectedDevelopers: string[]
-  selectedFranchises: string[]
-  filters: {
-    ratings: {
-      value: number
-      count: number
-    }[]
-    restrictions: {
-      value: string
-      count: number
-    }[]
-    genres: {
-      value: string
-      ratings: number[]
-      durations: number[]
-      count: number
-    }[]
-    developers: {
-      value: string
-      ratings: number[]
-      durations: number[]
-      count: number
-    }[]
-    franchises: {
-      value: string
-      ratings: number[]
-      durations: number[]
-      count: number
-    }[]
-    total: {
-      count: number
-      duration: number
-    }
-  }
-}>()
+import { storeToRefs } from 'pinia'
 
-const emit = defineEmits<{
-  (e: 'update:selectedRatings', value: number[]): void
-  (e: 'update:selectedRestrictions', value: string[]): void
-  (e: 'update:selectedGenres', value: string[]): void
-  (e: 'update:selectedDevelopers', value: string[]): void
-  (e: 'update:selectedFranchises', value: string[]): void
-}>()
-
-const selectedRatings = computed({
-  get: () => props.selectedRatings,
-  set: (value) => emit('update:selectedRatings', value),
-})
-const selectedRestrictions = computed({
-  get: () => props.selectedRestrictions,
-  set: (value) => emit('update:selectedRestrictions', value),
-})
-const selectedGenres = computed({
-  get: () => props.selectedGenres,
-  set: (value) => emit('update:selectedGenres', value),
-})
-const selectedDevelopers = computed({
-  get: () => props.selectedDevelopers,
-  set: (value) => emit('update:selectedDevelopers', value),
-})
-const selectedFranchises = computed({
-  get: () => props.selectedFranchises,
-  set: (value) => emit('update:selectedFranchises', value),
-})
+const queryFilters = useFilters()
+const {
+  filters,
+  selectedRatings,
+  selectedRestrictions,
+  selectedGenres,
+  selectedDevelopers,
+  selectedFranchises,
+} = storeToRefs(queryFilters)
 
 const ratings = computed(() =>
-  [...props.filters.ratings.filter((i) => i.value)].sort(
+  [...filters.value.ratings.filter((i) => i.value)].sort(
     (a, b) => b.value - a.value
   )
 )
 const restrictions = computed(() =>
-  [...props.filters.restrictions.filter((r) => r.value)].sort(
+  [...filters.value.restrictions.filter((r) => r.value)].sort(
     (a, b) =>
       restrictionsTemplate.indexOf(a.value) -
       restrictionsTemplate.indexOf(b.value)
   )
 )
-const genres = computed(() => props.filters.genres.filter((i) => i.value))
+const genres = computed(() => filters.value.genres.filter((i) => i.value))
 const developers = computed(() =>
-  props.filters.developers.filter((i) => i.value)
+  filters.value.developers.filter((i) => i.value)
 )
 const franchises = computed(() =>
-  props.filters.franchises.filter((i) => i.value)
+  filters.value.franchises.filter((i) => i.value)
 )
 
 const dividedDevelopers = computed(() => {
   const primary = []
   const secondary = []
   developers.value.forEach((developer) => {
-    const includedItems = props.filters.developers.find(
-      (d) => d.value === developer.value
-    )
-    // if (includedItems.length === 1 && includedItems[0].developers.length > 3 && includedItems[0].developers.length < 5) console.log(d)
     const percentage =
-      ((includedItems?.durations.reduce((acc, cur) => acc + cur, 0) *
-        includedItems?.ratings.reduce(
+      ((developer.durations.reduce((acc, cur) => acc + cur, 0) *
+        developer.ratings.reduce(
           (acc, cur) => acc * ratingCoefficient(cur),
           1
         )) /
-        props.filters.total.duration) *
+        filters.value.total.duration) *
       100
-    console.log(developer.value, percentage)
     if (percentage > 5) {
       primary.push(developer)
     } else {
@@ -229,34 +167,37 @@ const developerClick = (developer: string) => {
   }
 }
 
-const getGenreTextClass = (genre: string) => {
+const getGenreTextClass = (genre: {
+  value: string
+  ratings: number[]
+  durations: number[]
+  count: number
+}) => {
   // const percentage = props.items.filter(i => i.genres.includes(genre)).length / props.items.length * 100
   const percentage =
-    (props.filters.genres
-      .find((g) => g.value === genre)
-      ?.durations.reduce((acc, cur) => acc + cur, 0) *
-      props.filters.genres
-        .find((g) => g.value === genre)
-        ?.ratings.reduce((acc, cur) => acc * ratingCoefficient(cur), 1)) /
-    props.filters.total.duration
-  return getTextSizeClass(percentage, props.filters.total.count, 'genre')
+    (genre.durations.reduce((acc, cur) => acc + cur, 0) *
+      genre.ratings.reduce((acc, cur) => acc * ratingCoefficient(cur), 1)) /
+    filters.value.total.duration
+  return getTextSizeClass(percentage, filters.value.total.count, 'genre')
 }
 
-const getDeveloperTextClass = (developer: string) => {
+const getDeveloperTextClass = (developer: {
+  value: string
+  ratings: number[]
+  durations: number[]
+  count: number
+}) => {
   const percentage =
-    (props.filters.developers.find((d) => d.value === developer)?.count /
-      dividedDevelopers.value.primary.length) *
-    100
-  return getTextSizeClass(percentage, props.filters.total.count, 'developer')
+    (developer.count / dividedDevelopers.value.primary.length) * 100
+  return getTextSizeClass(percentage, filters.value.total.count, 'developer')
 }
 </script>
 
 <style scoped>
 .aside {
-  //display: flex;
-  //flex-direction: column;
+  display: flex;
+  flex-direction: column;
   row-gap: 30px;
-  //width: 350px;
 }
 
 .back-header {
