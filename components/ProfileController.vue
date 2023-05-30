@@ -7,11 +7,11 @@ el-popover(placement='bottom', :width='380', trigger='click')
     )
   el-row(justify='space-between', align='middle')
     h2 Профиль
-    el-button(circle, text, size='large', @click='toggleDark()')
-      el-icon(v-if='isDark', :size='24')
-        ElIconSunny
-      el-icon(v-else, :size='24')
-        ElIconMoon
+    //el-button(circle, text, size='large', @click='toggleDark()')
+    //  el-icon(v-if='isDark', :size='24')
+    //    ElIconSunny
+    //  el-icon(v-else, :size='24')
+    //    ElIconMoon
   div(v-if='authStore.isAuthenticated')
     h3 Добро пожаловать, {{ authStore.user.login }}!
     client-only
@@ -45,8 +45,8 @@ el-popover(placement='bottom', :width='380', trigger='click')
 <script setup lang="ts">
 const { api } = useFeathers()
 const authStore = useAuthStore()
-const isDark = useDark()
-const toggleDark = useToggle(isDark)
+// const isDark = useDark()
+// const toggleDark = useToggle(isDark)
 const authData = reactive({
   login: '',
   password: '',
