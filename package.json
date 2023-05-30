@@ -18,6 +18,8 @@
     "@pinia/nuxt": "^0.4.11",
     "@prettier/plugin-pug": "^2.5.0",
     "@types/node": "^18",
+    "@vueuse/core": "^10.1.2",
+    "@vueuse/nuxt": "^10.1.2",
     "element-plus": "^2.3.5",
     "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",

@@ -1,65 +1,55 @@
-<template>
-  <div>
-    <div v-if="editor">
-      <el-button-group style="margin-bottom: 10px">
-        <el-button
-          :disabled="!editor.can().chain().focus().toggleBold().run()"
-          :class="{ 'is-active': editor.isActive('bold') }"
-          @click="editor.chain().focus().toggleBold().run()"
-        >
-          <strong>Ж</strong>
-        </el-button>
-        <el-button
-          :disabled="!editor.can().chain().focus().toggleItalic().run()"
-          :class="{ 'is-active': editor.isActive('italic') }"
-          @click="editor.chain().focus().toggleItalic().run()"
-        >
-          <em>К</em>
-        </el-button>
-        <el-button
-          :disabled="!editor.can().chain().focus().toggleStrike().run()"
-          :class="{ 'is-active': editor.isActive('strike') }"
-          @click="editor.chain().focus().toggleStrike().run()"
-        >
-          <del>del</del>
-        </el-button>
-        <el-button
-          :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
-          @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-        >
-          <span style="font-size: 20px">A</span>
-        </el-button>
-        <el-button
-          :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-          @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-        >
-          <span style="font-size: 17px">A</span>
-        </el-button>
-        <el-button
-          :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
-          @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-        >
-          <span style="font-size: 14px">A</span>
-        </el-button>
-        <el-button
-          :class="{ 'is-active': editor.isActive('blockquote') }"
-          @click="editor.chain().focus().toggleBlockquote().run()"
-        >
-          <el-icon><Expand /></el-icon>
-        </el-button>
-        <el-button @click="editor.chain().focus().setHorizontalRule().run()">
-          <el-icon><SemiSelect /></el-icon>
-        </el-button>
-      </el-button-group>
-    </div>
-    <EditorContent :editor="editor" />
-  </div>
+<template lang="pug">
+div
+  div(v-if='editor')
+    el-button-group(style='margin-bottom: 10px')
+      el-button(
+        :disabled='!editor.can().chain().focus().toggleBold().run()',
+        :class='{ "is-active": editor.isActive("bold") }',
+        @click='editor.chain().focus().toggleBold().run()'
+      )
+        strong Ж
+      el-button(
+        :disabled='!editor.can().chain().focus().toggleItalic().run()',
+        :class='{ "is-active": editor.isActive("italic") }',
+        @click='editor.chain().focus().toggleItalic().run()'
+      )
+        em К
+      el-button(
+        :disabled='!editor.can().chain().focus().toggleStrike().run()',
+        :class='{ "is-active": editor.isActive("strike") }',
+        @click='editor.chain().focus().toggleStrike().run()'
+      )
+        del del
+      el-button(
+        :class='{ "is-active": editor.isActive("heading", { level: 1 }) }',
+        @click='editor.chain().focus().toggleHeading({ level: 1 }).run()'
+      )
+        span(style='font-size: 20px') A
+      el-button(
+        :class='{ "is-active": editor.isActive("heading", { level: 2 }) }',
+        @click='editor.chain().focus().toggleHeading({ level: 2 }).run()'
+      )
+        span(style='font-size: 17px') A
+      el-button(
+        :class='{ "is-active": editor.isActive("heading", { level: 3 }) }',
+        @click='editor.chain().focus().toggleHeading({ level: 3 }).run()'
+      )
+        span(style='font-size: 14px') A
+      el-button(
+        :class='{ "is-active": editor.isActive("blockquote") }',
+        @click='editor.chain().focus().toggleBlockquote().run()'
+      )
+        el-icon
+          ElIconExpand
+      el-button(@click='editor.chain().focus().setHorizontalRule().run()')
+        el-icon
+          ElIconSemiSelect
+  EditorContent(:editor='editor')
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { EditorContent, Editor } from '@tiptap/vue-3'
 import { StarterKit } from '@tiptap/starter-kit'
-import { Expand, SemiSelect } from '@element-plus/icons-vue'
 
 const props = defineProps({
   modelValue: {
@@ -70,13 +60,17 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'input'])
 
-const editor = new Editor({
-  content: props.modelValue,
-  extensions: [StarterKit],
-  onUpdate: () => {
-    emit('update:modelValue', editor.getHTML())
-    emit('input')
-  },
+const editor = ref<any>(null)
+
+onMounted(() => {
+  editor.value = new Editor({
+    content: props.modelValue,
+    extensions: [StarterKit],
+    onUpdate: () => {
+      emit('update:modelValue', editor.value.getHTML())
+      emit('input')
+    },
+  })
 })
 </script>
 

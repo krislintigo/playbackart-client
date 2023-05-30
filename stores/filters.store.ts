@@ -22,13 +22,8 @@ export const useFilters = defineStore('filters', () => {
         },
         {}
       )
-      console.log(filters.value)
     } catch (e: any) {
       console.error(e.message)
-      ElNotification.error({
-        title: 'Что-то пошло не так...',
-        position: 'bottom-right',
-      })
     }
   }
   fetchFilters()
@@ -37,6 +32,7 @@ export const useFilters = defineStore('filters', () => {
   api.service('items').on('patched', fetchFilters)
   api.service('items').on('removed', fetchFilters)
   watch(() => route.query.type, fetchFilters)
+  watch(() => authStore.user, fetchFilters)
 
   return {
     filters,

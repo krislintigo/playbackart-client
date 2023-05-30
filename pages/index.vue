@@ -1,10 +1,16 @@
 <template lang="pug">
 div
+  el-row(v-if='route.query.userId', align='middle')
+    h3 Вы просматриваете список другого пользователя
+    el-button(
+      link,
+      type='primary',
+      style='margin-left: 10px',
+      @click='navigateTo("/")'
+    ) На свою страницу
   el-row(v-if='!authStore.isAuthenticated && !route.query.userId')
     h2 Войдите, чтобы продолжить!
-  el-row(v-if='route.query.userId')
-    h3 Вы просматриваете список другого пользователя
-  el-row(justify='center', :gutter='20', style='margin-bottom: 30px')
+  el-row(v-else, justify='center', :gutter='20', style='margin-bottom: 30px')
     el-col(:span='24', :lg='18')
       div(style='display: flex; align-items: center; column-gap: 10px')
         h2 {{ navigationTabs.find((tab) => tab.searchType === (route.query.type ?? ''))?.header }}
@@ -29,14 +35,15 @@ div
           clearable
         )
       el-collapse(v-if='queryFilters.filters', v-model='activeItems')
-        div(v-for='(block, i) in statuses', :key='block.value')
-          StatusCollapseTable(
-            :title='block.title.toUpperCase()',
-            :status='block.value',
-            :index='i',
-            @update-item='updateItem',
-            @delete-item='deleteItem'
-          )
+        StatusCollapseTable(
+          v-for='(block, i) in statuses',
+          :key='block.value',
+          :title='block.title.toUpperCase()',
+          :status='block.value',
+          :index='i',
+          @update-item='updateItem',
+          @delete-item='deleteItem'
+        )
       h4(style='text-align: center')
         span Всего: {{ queryFilters.filters?.total.count }} шт. / {{ formatDuration(queryFilters.filters?.total.duration) || '-' }}
     el-col(:span='24', :lg='6', style='margin-top: 68px')

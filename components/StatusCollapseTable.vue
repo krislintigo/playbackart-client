@@ -1,13 +1,9 @@
 <template lang="pug">
-el-collapse-item.block-header(v-if='total', :name='index')
+el-collapse-item.block-header(v-if='items.length', :name='index')
   template(#title)
     el-row
       h2(style='font-size: 18px') {{ title }}
-  el-table(
-    v-loading='isPending',
-    :data='items',
-    @sort-change='onSortChange(index, $event)'
-  )
+  el-table(v-loading='isPending', :data='items', @sort-change='onSortChange')
     el-table-column(type='index', label='#', width='50', :index='indexHandler')
     el-table-column(
       sortable='custom',
@@ -61,7 +57,7 @@ el-collapse-item.block-header(v-if='total', :name='index')
       template(#default='scope')
         span(v-if='!scope.row.time.duration') -
         div(v-else)
-          span(v-if='scope.row.time.count > 1') {{ scope.row.time.count }} x
+          span(v-if='scope.row.time.count > 1') {{ scope.row.time.count }} x&nbsp;
           span {{ formatDuration(scope.row.time.duration) }}
     el-table-column(
       v-if='authStore.isAuthenticated && !route.query.userId',
@@ -100,13 +96,13 @@ el-collapse-item.block-header(v-if='total', :name='index')
     :page-sizes='[20, 50, 100]',
     :total='total'
   )
-  h4(style='margin: 5px 0') Общая продолжительность: {{ formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || '-' }}
+  h4(style='margin: 5px 0') Продолжительность: {{ formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || '-' }}
 </template>
 
 <script setup lang="ts">
 type Sort = {
   prop: 'name' | 'rating' | 'time' | null
-  order: 'ascending' | 'descending' | null
+  order: 1 | -1 | null
 }
 
 const props = defineProps<{
@@ -121,6 +117,11 @@ const { api } = useFeathers()
 const route = useRoute()
 const authStore = useAuthStore()
 const queryFilters = useFilters()
+
+const sort = reactive<Sort>({
+  prop: null,
+  order: null,
+})
 
 const query = computed(() => ({
   query: {
@@ -145,16 +146,18 @@ const query = computed(() => ({
       franchise: { $in: queryFilters.selectedFranchises },
     }),
     status: props.status,
+    $limit: 20,
+    ...(sort.prop &&
+      sort.order && {
+        $sort: { [sort.prop]: sort.order },
+      }),
   },
 }))
-
-// watchEffect(() => console.log(query.value))
 
 const {
   data: items,
   isPending,
   limit,
-  // skip,
   currentPage,
   total,
 } = api.service('items').useFind(query, { paginateOn: 'hybrid' })
@@ -163,45 +166,11 @@ const indexHandler = (index: number) => {
   return (currentPage.value - 1) * limit.value + index + 1
 }
 
-const onSortChange = (index: number, { prop, order }: Sort) => {
-  displayedItems.value[index].data.sort.prop = prop
-  displayedItems.value[index].data.sort.order = order
+const onSortChange = ({ prop, order }: Sort) => {
+  const sortRef = { ascending: 1, descending: -1 }
+  sort.prop = prop
+  sort.order = sortRef[order] ?? null
 }
-
-// const sortBy = ({ prop, order }: Sort) => {
-//   switch (prop) {
-//     case 'name':
-//       return sortByName(order)
-//     case 'rating':
-//       return sortByRating(order)
-//     case 'time':
-//       return sortByDuration(order)
-//     default:
-//       return sortByName('ascending')
-//   }
-// }
-//
-// const sortByName = (order: Sort['order']) => (a: Item, b: Item) => {
-//   if (!order) return 0
-//   return a.name.localeCompare(b.name) * (order === 'ascending' ? 1 : -1)
-// }
-//
-// const sortByRating = (order: Sort['order']) => (a: Item, b: Item) => {
-//   if (!order) return 0
-//   const mult = order === 'ascending' ? 1 : -1
-//   if (a.rating === b.rating) return 0
-//   return a.rating > b.rating ? 1 * mult : -1 * mult
-// }
-//
-// const sortByDuration = (order: Sort['order']) => (a: Item, b: Item) => {
-//   if (!order) return 0
-//   const mult = order === 'ascending' ? 1 : -1
-//   if (!a.time || !b.time) return -1 * mult
-//   const totalA = a.time.count * a.time.duration
-//   const totalB = b.time.count * b.time.duration
-//   if (totalA === totalB) return 0
-//   return totalA > totalB ? 1 * mult : -1 * mult
-// }
 
 const updateItemRating = async (item: Instance<Item>, rating: number) => {
   try {

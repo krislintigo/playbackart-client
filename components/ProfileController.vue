@@ -7,24 +7,27 @@ el-popover(placement='bottom', :width='380', trigger='click')
     )
   el-row(justify='space-between', align='middle')
     h2 Профиль
-    el-button(circle, text, size='large', @click='dark = !dark')
-      el-icon(v-if='dark', :size='24')
+    el-button(circle, text, size='large', @click='toggleDark()')
+      el-icon(v-if='isDark', :size='24')
         ElIconSunny
       el-icon(v-else, :size='24')
         ElIconMoon
-  div(v-if='authStore.user?.login')
+  div(v-if='authStore.isAuthenticated')
     h3 Добро пожаловать, {{ authStore.user.login }}!
-    h4(style='margin-bottom: 5px') Ваш список слежения:
+    client-only
+      h4(style='margin-bottom: 0') Поделиться приложением:
+      h4(style='margin-top: 0') {{ shareLink }}
+    h3(style='margin-bottom: 5px') Ваш список слежения:
       el-button(
         text,
         circle,
-        :type='watchingChanged ? "warning" : "success"',
+        :type='listChanged ? "warning" : "success"',
         size='small',
         @click='saveWatching'
       )
         el-icon(:size='20')
           ElIconCircleCheck
-    //TextEditor(v-model='watching', @input='watchingChanged = true')
+    TextEditor(v-model='list')
     el-row(justify='end', style='margin-top: 10px')
       el-button(type='danger', @click='handleUserAction("logout")') Выход
   div(v-else)
@@ -42,19 +45,20 @@ el-popover(placement='bottom', :width='380', trigger='click')
 <script setup lang="ts">
 const { api } = useFeathers()
 const authStore = useAuthStore()
-
+const isDark = useDark()
+const toggleDark = useToggle(isDark)
 const authData = reactive({
   login: '',
   password: '',
 })
 
-// const watching = computed({
-//   get: () => authStore.user.watching,
-//   set: (value) => store.commit(userNames.setWatching, value),
-// })
-const watchingChanged = ref<boolean>(false)
-// const dark = ref(!!localStorage.getItem('theme'))
-const dark = ref(true)
+const list = ref('')
+
+const shareLink = computed(() =>
+  !process.server ? location.origin + '?userId=' + authStore.user._id : ''
+)
+
+const listChanged = computed(() => authStore.user.list !== list.value)
 
 const handleUserAction = async (action: 'register' | 'login' | 'logout') => {
   try {
@@ -89,31 +93,23 @@ const handleUserAction = async (action: 'register' | 'login' | 'logout') => {
 
 const saveWatching = async () => {
   try {
-    const response = await UserAPI.updateWatching(watching.value)
+    await authStore.user.save({ diff: { list: list.value } })
     ElNotification.success({
-      title: response.message,
+      title: 'Список успешно обновлен',
       position: 'bottom-right',
     })
-    watchingChanged.value = false
   } catch (e: any) {
     ElNotification.error({
-      title: e.response.data.message,
+      title: 'Что-то пошло не так...',
       position: 'bottom-right',
     })
   }
 }
 
 watchEffect(() => {
-  if (dark.value) {
-    // localStorage.setItem('theme', 'dark')
-    // document.documentElement.classList.add('dark')
-  } else {
-    // localStorage.removeItem('theme')
-    // document.documentElement.classList.remove('dark')
-  }
+  if (!authStore.user) return
+  list.value = authStore.user.list
 })
 </script>
 
 <style scoped></style>
-
-<style></style>

@@ -4,6 +4,7 @@ export default defineNuxtConfig({
     '@element-plus/nuxt',
     // '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
+    '@vueuse/nuxt',
     'nuxt-feathers-pinia',
     'nuxt-lodash',
   ],
