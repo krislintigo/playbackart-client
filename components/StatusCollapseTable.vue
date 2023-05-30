@@ -25,7 +25,7 @@ el-collapse-item.block-header(v-if='total', :name='index')
         )
           template(#reference)
             el-link {{ scope.row.name }}
-          ItemPreview(:item='scope.row', :editable='true')
+          ItemPreview(:item='scope.row')
     el-table-column(
       sortable='custom',
       prop='rating',
@@ -34,6 +34,7 @@ el-collapse-item.block-header(v-if='total', :name='index')
     )
       template(#default='scope')
         el-popover(
+          v-if='authStore.isAuthenticated && !route.query.userId',
           placement='right',
           :width='380',
           trigger='hover',
@@ -50,6 +51,7 @@ el-collapse-item.block-header(v-if='total', :name='index')
             :colors='rating.colors',
             @change='updateItemRating(scope.row, $event)'
           )
+        span(v-else) {{ scope.row.rating || '-' }}
     el-table-column(
       sortable='custom',
       prop='time',
@@ -61,7 +63,11 @@ el-collapse-item.block-header(v-if='total', :name='index')
         div(v-else)
           span(v-if='scope.row.time.count > 1') {{ scope.row.time.count }} x
           span {{ formatDuration(scope.row.time.duration) }}
-    el-table-column(v-if='true', label='Операции', width='100')
+    el-table-column(
+      v-if='authStore.isAuthenticated && !route.query.userId',
+      label='Операции',
+      width='100'
+    )
       template(#default='scope')
         el-button(
           :icon='ElIconEditPen',
@@ -113,10 +119,12 @@ const emit = defineEmits(['update-item', 'delete-item'])
 
 const { api } = useFeathers()
 const route = useRoute()
+const authStore = useAuthStore()
 const queryFilters = useFilters()
 
 const query = computed(() => ({
   query: {
+    userId: route.query.userId || authStore.user?._id,
     ...(route.query.type && { type: route.query.type }),
     ...(queryFilters.searchQuery && {
       name: { $regex: queryFilters.searchQuery, $options: 'i' },
@@ -140,7 +148,7 @@ const query = computed(() => ({
   },
 }))
 
-watchEffect(() => console.log(query.value))
+// watchEffect(() => console.log(query.value))
 
 const {
   data: items,

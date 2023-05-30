@@ -1,12 +1,15 @@
 <template lang="pug">
 div
-  el-row(v-if='!authStore.isAuthenticated')
+  el-row(v-if='!authStore.isAuthenticated && !route.query.userId')
     h2 Войдите, чтобы продолжить!
-  el-row(v-else, justify='center', :gutter='20', style='margin-bottom: 30px')
+  el-row(v-if='route.query.userId')
+    h3 Вы просматриваете список другого пользователя
+  el-row(justify='center', :gutter='20', style='margin-bottom: 30px')
     el-col(:span='24', :lg='18')
       div(style='display: flex; align-items: center; column-gap: 10px')
-        h2 {{ 'Список' }}
+        h2 {{ navigationTabs.find((tab) => tab.searchType === (route.query.type ?? ''))?.header }}
         el-button(
+          v-if='authStore.isAuthenticated && !route.query.userId',
           circle,
           plain,
           :icon='ElIconPlus',
@@ -37,10 +40,7 @@ div
       h4(style='text-align: center')
         span Всего: {{ queryFilters.filters?.total.count }} шт. / {{ formatDuration(queryFilters.filters?.total.duration) || '-' }}
     el-col(:span='24', :lg='6', style='margin-top: 68px')
-      AsideFilters(
-        v-if='queryFilters.filters',
-        :filters='queryFilters.filters'
-      )
+      AsideFilters(v-if='queryFilters.filters')
 </template>
 
 <script setup lang="ts">
@@ -50,6 +50,7 @@ definePageMeta({
 })
 
 const { api } = useFeathers()
+const route = useRoute()
 const authStore = useAuthStore()
 const queryFilters = useFilters()
 

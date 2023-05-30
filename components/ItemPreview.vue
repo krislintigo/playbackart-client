@@ -13,6 +13,10 @@ el-row
       el-tag(type='info') {{ getTypeWord(item.type) }}
       el-tag(v-if='item.year', type='info') {{ item.year }}
       el-tag(v-if='item.restriction', type='info') {{ item.restriction }}
+    div(v-if='item.genres.length')
+      h3(style='margin-bottom: 5px') Жанры:
+      .tags-container
+        el-tag(v-for='(genre, i) in item.genres', :key='i', type='info') {{ genre }}
     div(v-if='item.developers.length')
       h3(style='margin-bottom: 5px') {{ getDeveloperWordByType(item.type, item.developers.length) }}:
       .tags-container
@@ -21,11 +25,7 @@ el-row
           :key='i',
           type='info'
         ) {{ developer }}
-    div(v-if='item.genres.length')
-      h3(style='margin-bottom: 5px') Жанры:
-      .tags-container
-        el-tag(v-for='(genre, i) in item.genres', :key='i', type='info') {{ genre }}
-    el-collapse(v-if='editable')
+    el-collapse(v-if='authStore.isAuthenticated && !route.query.userId')
       el-collapse-item(:class='["set-status", item.status]')
         template(#title)
           el-row(align='middle', style='column-gap: 10px')
@@ -50,10 +50,10 @@ el-row
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  item: Instance<Item>
-  editable: boolean
-}>()
+const props = defineProps<{ item: Instance<Item> }>()
+
+const route = useRoute()
+const authStore = useAuthStore()
 
 const updateItemStatus = async (status: string) => {
   try {

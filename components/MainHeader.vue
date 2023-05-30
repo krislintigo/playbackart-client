@@ -13,7 +13,7 @@ el-header.header
           template(#label)
             el-icon
               component(:is='tab.icon')
-            | {{ tab.label }}
+            span(style='margin-left: 4px') {{ tab.label }}
       ProfileController
 </template>
 
@@ -23,7 +23,7 @@ const route = useRoute()
 const active = ref<string>(<string>route.query.type ?? '')
 
 const tabClick = (tab: any) => {
-  return navigateTo({ path: route.path, query: { type: tab.props.name || undefined } })
+  return navigateTo({ path: route.path, query: { type: tab.props.name || undefined, userId: route.query.userId } })
 }
 </script>
 
