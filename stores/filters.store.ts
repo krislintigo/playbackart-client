@@ -18,7 +18,7 @@ export const useFilters = defineStore('filters', () => {
       filters.value = await api.service('items').filters(
         {
           userId: route.query.userId || authStore.user?._id,
-          type: route.query.type,
+          type: route.query.type as Item['type'] | undefined,
         },
         {}
       )

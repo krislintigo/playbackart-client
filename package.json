@@ -29,7 +29,7 @@
     "nuxt": "^3.5.1",
     "nuxt-feathers-pinia": "^0.0.3",
     "ofetch": "^1.0.1",
-    "playbackart-server": "./server/playbackart-server-0.0.3.tgz",
+    "playbackart-server": "./server/playbackart-server-1.0.0.tgz",
     "prettier": "^2.8.8",
     "pug": "^3.0.2",
     "pug-plain-loader": "^1.1.0",

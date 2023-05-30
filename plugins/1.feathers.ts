@@ -16,7 +16,7 @@ import io from 'socket.io-client'
  */
 export default defineNuxtPlugin((nuxt) => {
   const host =
-    (import.meta.env.VITE_MYAPP_API_URL as string) || 'http://localhost:3030'
+    (import.meta.env.VITE_MYAPP_API_URL as string) || 'http://localhost:9000'
 
   // Store JWT in a cookie for SSR.
   const storageKey = 'feathers-jwt'
