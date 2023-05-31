@@ -1,160 +1,132 @@
-<template>
-  <el-dialog v-model="dialog" width="95%" :lock-scroll="false" class="dialog">
-    <template #header>
-      <h3>{{ target === 'create' ? 'Добавить' : 'Обновить' }} элемент</h3>
-    </template>
-    <el-form
-      ref="formRef"
-      :model="_item"
-      label-position="right"
-      :label-width="120"
-      :rules="rules"
-    >
-      <el-form-item label="Название:" prop="name">
-        <el-input v-model="_item.name" />
-      </el-form-item>
-      <el-form-item label="Фото:" prop="image">
-        <el-input v-model="_item.image" />
-      </el-form-item>
-      <el-form-item label="Рейтинг:" prop="rating">
-        <el-rate
-          v-model="_item.rating"
-          :max="10"
-          show-text
-          :texts="rating.texts"
-          :colors="rating.colors"
-        />
-        <el-button
-          style="margin-left: 5px"
-          :icon="ElIconClose"
-          size="small"
-          circle
-          text
-          @click="_item.rating = 0"
-        />
-      </el-form-item>
-      <el-form-item label="Статус:" prop="status">
-        <el-radio-group v-model="_item.status">
-          <el-radio-button
-            v-for="status in statuses"
-            :key="status.value"
-            :label="status.value"
-            :style="{ '--el-radio-button-checked-bg-color': status.color }"
-          >
-            {{ status.title }}
-          </el-radio-button>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="Тип:" prop="type">
-        <el-radio-group v-model="_item.type">
-          <el-radio-button
-            v-for="type in types"
-            :key="type.value"
-            :label="type.value"
-          >
-            {{ type.title }}
-          </el-radio-button>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="Ограничение:" prop="restriction">
-        <el-radio-group v-model="_item.restriction">
-          <el-radio-button
-            v-for="restriction in restrictionsTemplate"
-            :key="restriction"
-            :label="restriction"
-          />
-        </el-radio-group>
-        <el-button
-          style="margin-left: 5px"
-          :icon="ElIconClose"
-          size="small"
-          circle
-          text
-          @click="_item.restriction = ''"
-        />
-      </el-form-item>
-      <el-form-item label="Жанры:" prop="genres">
-        <el-input
-          v-model="inputGenre"
-          style="width: 300px; margin-bottom: 5px"
-          @keyup.enter="handleGenreConfirm"
-        />
-        <el-button
-          text
-          circle
-          :icon="ElIconMore"
-          style="margin-left: 5px"
-          @click="splitAndWrite('genre')"
-        />
-        <el-button text style="margin: 0 10px" @click="handleGenreConfirm"
-          >Добавить</el-button
-        >
-        <el-tag
-          v-for="genre in _item.genres"
-          :key="genre"
-          size="large"
-          type="info"
-          style="margin-right: 10px"
-          closable
-          @close="handleGenreDelete(genre)"
-        >
-          {{ genre }}
-        </el-tag>
-      </el-form-item>
-      <el-form-item label="Длительность:" prop="time">
-        <el-row justify="space-between">
-          <el-col :span="11">
-            <el-input-number v-model="_item.time.count" :min="1" />
-            <h4 style="margin: 0">Кол-во элементов</h4>
-          </el-col>
-          <el-col :span="12" :push="1">
-            <el-input-number v-model="_item.time.duration" :min="0" />
-            <h4 style="margin: 0">Длительность (мин)</h4>
-          </el-col>
-        </el-row>
-      </el-form-item>
-      <el-form-item label="Год выхода:" prop="year">
-        <el-date-picker v-model="_item.year" value-format="YYYY" type="year" />
-      </el-form-item>
-      <el-form-item
-        :label="getDeveloperWordByType(_item.type, 2) + ':'"
-        prop="developers"
-      >
-        <el-input
-          v-model="inputDeveloper"
-          style="width: 300px; margin-bottom: 5px"
-          @keyup.enter="handleDeveloperConfirm"
-        />
-        <el-button
-          text
-          circle
-          :icon="ElIconMore"
-          style="margin-left: 5px"
-          @click="splitAndWrite('developer')"
-        />
-        <el-button text style="margin: 0 10px" @click="handleDeveloperConfirm"
-          >Добавить</el-button
-        >
-        <el-tag
-          v-for="developer in _item.developers"
-          :key="developer"
-          size="large"
-          type="info"
-          style="margin-right: 10px"
-          closable
-          @close="handleDeveloperDelete(developer)"
-        >
-          {{ developer }}
-        </el-tag>
-      </el-form-item>
-      <el-form-item label="Франшиза:" prop="franchise">
-        <el-input v-model="_item.franchise" />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <el-button type="success" @click="save"> Подтвердить </el-button>
-    </template>
-  </el-dialog>
+<template lang="pug">
+el-dialog.dialog(
+  v-model='dialog',
+  width='95%',
+  :lock-scroll='false',
+  :close-on-click-modal='false'
+)
+  template(#header)
+    h3 {{ target === 'create' ? 'Добавить' : 'Обновить' }} элемент
+  el-form(
+    ref='formRef',
+    :model='_item',
+    label-position='right',
+    :label-width='120',
+    :rules='rules'
+  )
+    el-form-item(label='Название:', prop='name')
+      el-input(v-model='_item.name')
+    el-form-item(label='Фото:', prop='image')
+      el-input(v-model='_item.image')
+    el-form-item(label='Рейтинг:', prop='rating')
+      el-rate(
+        v-model='_item.rating',
+        :max='10',
+        show-text,
+        :texts='rating.texts',
+        :colors='rating.colors'
+      )
+      el-button(
+        style='margin-left: 5px',
+        :icon='ElIconClose',
+        size='small',
+        circle,
+        text,
+        @click='_item.rating = 0'
+      )
+    el-form-item(label='Статус:', prop='status')
+      el-radio-group(v-model='_item.status')
+        el-radio-button(
+          v-for='status in statuses',
+          :key='status.value',
+          :label='status.value',
+          :style='{ "--el-radio-button-checked-bg-color": status.color }'
+        ) {{ status.title }}
+    el-form-item(label='Тип:', prop='type')
+      el-radio-group(v-model='_item.type')
+        el-radio-button(
+          v-for='type in types',
+          :key='type.value',
+          :label='type.value'
+        ) {{ type.title }}
+    el-form-item(label='Ограничение:', prop='restriction')
+      el-radio-group(v-model='_item.restriction')
+        el-radio-button(
+          v-for='restriction in restrictionsTemplate',
+          :key='restriction',
+          :label='restriction'
+        )
+      el-button(
+        style='margin-left: 5px',
+        :icon='ElIconClose',
+        size='small',
+        circle,
+        text,
+        @click='_item.restriction = ""'
+      )
+    el-form-item(label='Жанры:', prop='genres')
+      el-input(
+        v-model='inputGenre',
+        style='width: 300px; margin-bottom: 5px',
+        @keyup.enter='handleGenreConfirm'
+      )
+      el-button(
+        text,
+        circle,
+        :icon='ElIconMore',
+        style='margin-left: 5px',
+        @click='splitAndWrite("genre")'
+      )
+      el-button(text, style='margin: 0 10px', @click='handleGenreConfirm') Добавить
+      el-tag(
+        v-for='genre in _item.genres',
+        :key='genre',
+        size='large',
+        type='info',
+        style='margin-right: 10px',
+        closable,
+        @close='handleGenreDelete(genre)'
+      ) {{ genre }}
+    el-form-item(label='Длительность:', prop='time')
+      el-row(justify='space-between')
+        el-col(:span='11')
+          el-input-number(v-model='_item.time.count', :min='1')
+          h4(style='margin: 0') Кол-во элементов
+        el-col(:span='12', :push='1')
+          el-input-number(v-model='_item.time.duration', :min='0')
+          h4(style='margin: 0') Длительность (мин)
+    el-form-item(label='Год выхода:', prop='year')
+      el-date-picker(v-model='_item.year', value-format='YYYY', type='year')
+    el-form-item(
+      :label='getDeveloperWordByType(_item.type, 2) + ":"',
+      prop='developers'
+    )
+      el-input(
+        v-model='inputDeveloper',
+        style='width: 300px; margin-bottom: 5px',
+        @keyup.enter='handleDeveloperConfirm'
+      )
+      el-button(
+        text,
+        circle,
+        :icon='ElIconMore',
+        style='margin-left: 5px',
+        @click='splitAndWrite("developer")'
+      )
+      el-button(text, style='margin: 0 10px', @click='handleDeveloperConfirm') Добавить
+      el-tag(
+        v-for='developer in _item.developers',
+        :key='developer',
+        size='large',
+        type='info',
+        style='margin-right: 10px',
+        closable,
+        @close='handleDeveloperDelete(developer)'
+      ) {{ developer }}
+    el-form-item(label='Франшиза:', prop='franchise')
+      el-input(v-model='_item.franchise')
+  template(#footer)
+    el-button(type='success', @click='save') Подтвердить
 </template>
 
 <script setup lang="ts">
@@ -203,9 +175,8 @@ const handleGenreDelete = (tag: string) => {
 }
 
 const handleGenreConfirm = () => {
-  if (inputGenre.value.trim()) {
-    _item.value.genres.push(inputGenre.value.trim())
-  }
+  if (!inputGenre.value.trim()) return
+  _item.value.genres.push(inputGenre.value.trim())
   inputGenre.value = ''
 }
 
@@ -214,9 +185,8 @@ const handleDeveloperDelete = (tag: string) => {
 }
 
 const handleDeveloperConfirm = () => {
-  if (inputDeveloper.value.trim()) {
-    _item.value.developers.push(inputDeveloper.value.trim())
-  }
+  if (!inputDeveloper.value.trim()) return
+  _item.value.developers.push(inputDeveloper.value.trim())
   inputDeveloper.value = ''
 }
 

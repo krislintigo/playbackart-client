@@ -22,7 +22,7 @@ div
           size='small',
           @click='createNew'
         )
-      ClientOnly
+      client-only
         CreateUpdateModal(
           v-model='dialog',
           :target='dialogTarget',
