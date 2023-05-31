@@ -13,7 +13,7 @@ el-popover(placement='bottom', :width='380', trigger='click')
     //  el-icon(v-else, :size='24')
     //    ElIconMoon
   div(v-if='authStore.isAuthenticated')
-    h3 Добро пожаловать, {{ authStore.user.login }}!
+    h3 Добро пожаловать, {{ authStore.user?.login }}!
     client-only
       h4(style='margin-bottom: 0') Поделиться приложением:
       h4(style='margin-top: 0') {{ shareLink }}
@@ -52,6 +52,8 @@ const authData = reactive({
   password: '',
 })
 
+watchEffect(() => console.log('auth status', authStore.isAuthenticated))
+
 const list = ref('')
 
 const shareLink = computed(() =>
@@ -62,6 +64,8 @@ const listChanged = computed(() => authStore.user.list !== list.value)
 
 const handleUserAction = async (action: 'register' | 'login' | 'logout') => {
   try {
+    if (action !== 'logout' && (!authData.login || !authData.password))
+      throw new Error('Пожалуйста, заполните поля')
     switch (action) {
       case 'login': {
         await authStore.authenticate({ strategy: 'local', ...authData })

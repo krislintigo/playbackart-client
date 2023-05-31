@@ -91,8 +91,8 @@ el-collapse-item.block-header(v-if='items.length', :name='index')
   el-pagination(
     v-model:current-page='currentPage',
     v-model:page-size='limit',
-    hide-on-single-page,
-    layout='prev, pager, next',
+    :hide-on-single-page='limit === 20',
+    layout='prev, pager, next, sizes, total',
     :page-sizes='[20, 50, 100]',
     :total='total'
   )
@@ -101,8 +101,8 @@ el-collapse-item.block-header(v-if='items.length', :name='index')
 
 <script setup lang="ts">
 type Sort = {
-  prop: 'name' | 'rating' | 'time' | null
-  order: 1 | -1 | null
+  prop: 'name' | 'rating' | 'time'
+  order: 1 | -1
 }
 
 const props = defineProps<{
@@ -119,8 +119,8 @@ const authStore = useAuthStore()
 const queryFilters = useFilters()
 
 const sort = reactive<Sort>({
-  prop: null,
-  order: null,
+  prop: 'name',
+  order: 1,
 })
 
 const query = computed(() => ({
@@ -146,11 +146,8 @@ const query = computed(() => ({
       franchise: { $in: queryFilters.selectedFranchises },
     }),
     status: props.status,
+    $sort: { [sort.prop]: sort.order },
     $limit: 20,
-    ...(sort.prop &&
-      sort.order && {
-        $sort: { [sort.prop]: sort.order },
-      }),
   },
 }))
 
@@ -162,14 +159,16 @@ const {
   total,
 } = api.service('items').useFind(query, { paginateOn: 'hybrid' })
 
+watch(limit, () => (currentPage.value = 1))
+
 const indexHandler = (index: number) => {
   return (currentPage.value - 1) * limit.value + index + 1
 }
 
 const onSortChange = ({ prop, order }: Sort) => {
   const sortRef = { ascending: 1, descending: -1 }
-  sort.prop = prop
-  sort.order = sortRef[order] ?? null
+  sort.prop = order ? prop : 'name'
+  sort.order = sortRef[order] ?? 1
 }
 
 const updateItemRating = async (item: Instance<Item>, rating: number) => {
