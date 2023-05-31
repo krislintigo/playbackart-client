@@ -4,7 +4,7 @@ module.exports = {
       name: 'PBA-C',
       port: '9001',
       exec_mode: 'cluster',
-      instances: '1',
+      instances: 'max',
       script: './.output/server/index.mjs',
     },
   ],
