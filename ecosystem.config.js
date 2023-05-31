@@ -4,8 +4,8 @@ module.exports = {
       name: 'PBA-C',
       port: '9001',
       exec_mode: 'cluster',
-      instances: 'max',
-      script: './.output/server/index.mjs',
+      instances: '1',
+      script: 'yarn build && ./.output/server/index.mjs',
     },
   ],
 }
