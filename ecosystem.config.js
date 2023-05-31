@@ -5,7 +5,7 @@ module.exports = {
       port: '9001',
       exec_mode: 'cluster',
       instances: '1',
-      script: 'yarn build && ./.output/server/index.mjs',
+      script: './.output/server/index.mjs',
     },
   ],
 }
