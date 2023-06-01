@@ -4,8 +4,6 @@ export const ratingCoefficient = (rating: number) => {
       return 5
     case 9:
       return 1.5
-    case 8:
-      return 1
     default:
       return 1
   }
