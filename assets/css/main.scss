@@ -29,8 +29,25 @@ body, input, button, textarea, select {
   font-weight: bold !important;
 }
 
-.el-collapse-item__header {
-  border-left: 10px solid;
+// COLLAPSE ITEMS COLORS
+.in-process .el-collapse-item__header {
+  border-left-color: var(--el-color-primary-light-3) !important;
+}
+
+.planned .el-collapse-item__header {
+  border-left-color: var(--el-color-warning-light-3) !important;
+}
+
+.completed .el-collapse-item__header {
+  border-left-color: var(--el-color-success-light-3) !important;
+}
+
+.postponed .el-collapse-item__header {
+  border-left-color: var(--el-color-info-light-3) !important;
+}
+
+.abandoned .el-collapse-item__header {
+  border-left-color: var(--el-color-danger) !important;
 }
 
 // STATUS COLORS

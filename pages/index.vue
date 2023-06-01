@@ -44,8 +44,7 @@ div
           @update-item='updateItem',
           @delete-item='deleteItem'
         )
-      h4(style='text-align: center')
-        span Всего: {{ queryFilters.filters?.total.count }} шт. / {{ formatDuration(queryFilters.filters?.total.duration) || '-' }}
+      h3(style='text-align: center') Всего: {{ queryFilters.filters?.total.count }} шт. / {{ formatDuration(queryFilters.filters?.total.duration) || '-' }}
     el-col(:span='24', :lg='6', style='margin-top: 68px')
       AsideFilters(v-if='queryFilters.filters')
 </template>

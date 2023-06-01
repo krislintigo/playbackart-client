@@ -1,4 +1,8 @@
-export const getTextSizeClass = (percentage: number, total: number, target: string): string => {
+export const getTextSizeClass = (
+  percentage: number,
+  total: number,
+  target: string
+): string => {
   const multiplier = 1 / Math.log10(total)
   switch (target) {
     case 'genre':

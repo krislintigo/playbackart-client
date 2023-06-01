@@ -17,7 +17,7 @@ el-dialog.dialog(
     el-form-item(label='Название:', prop='name')
       el-input(v-model='_item.name')
     el-form-item(label='Фото:', prop='image')
-      el-input(v-model='_item.image')
+      el-input(v-model='_item.image', placeholder='Ссылка на фото')
     el-form-item(label='Рейтинг:', prop='rating')
       el-rate(
         v-model='_item.rating',
@@ -89,12 +89,12 @@ el-dialog.dialog(
       ) {{ genre }}
     el-form-item(label='Длительность:', prop='time')
       el-row(justify='space-between')
-        el-col(:span='11')
+        el-col(:span='12')
           el-input-number(v-model='_item.time.count', :min='1')
-          h4(style='margin: 0') Кол-во элементов
+          h4(style='margin: 0; text-align: center') Кол-во элементов
         el-col(:span='12', :push='1')
           el-input-number(v-model='_item.time.duration', :min='0')
-          h4(style='margin: 0') Длительность (мин)
+          h4(style='margin: 0; text-align: center') Длительность (мин)
     el-form-item(label='Год выхода:', prop='year')
       el-date-picker(v-model='_item.year', value-format='YYYY', type='year')
     el-form-item(

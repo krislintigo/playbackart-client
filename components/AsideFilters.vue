@@ -33,7 +33,7 @@ el-aside.aside(width='350px')
       h3.back-header Создатели
       el-row
         el-link.item(
-          v-for='developer in dividedDevelopers.primary',
+          v-for='developer in developers.primary',
           :key='developer',
           :class='{ [getDeveloperTextClass(developer)]: true, "item-selected": selectedDevelopers.includes(developer.value) }',
           @click='developerClick(developer.value)'
@@ -48,7 +48,7 @@ el-aside.aside(width='350px')
           style='width: 100%; margin-top: 10px'
         )
           el-option(
-            v-for='item in dividedDevelopers.secondary',
+            v-for='item in developers.secondary',
             :key='item',
             :label='item.value',
             :value='item.value'
@@ -56,21 +56,28 @@ el-aside.aside(width='350px')
   el-row
     el-col
       h3.back-header Франшизы
-      el-select(
-        v-model='selectedFranchises',
-        filterable,
-        multiple,
-        collapse-tags,
-        collapse-tags-tooltip,
-        placeholder='Введите название тут',
-        style='width: 100%'
-      )
-        el-option(
-          v-for='item in franchises',
-          :key='item',
-          :label='item.value',
-          :value='item.value'
+      el-row
+        el-link.item(
+          v-for='franchise in franchises.primary',
+          :key='franchise',
+          :class='{ [getFranchiseTextClass(franchise)]: true, "item-selected": selectedFranchises.includes(franchise.value) }',
+          @click='franchiseClick(franchise.value)'
+        ) {{ franchise.value }}
+        el-select(
+          v-model='selectedFranchises',
+          filterable,
+          multiple,
+          collapse-tags,
+          collapse-tags-tooltip,
+          placeholder='Другие франшизы...',
+          style='width: 100%; margin-top: 10px'
         )
+          el-option(
+            v-for='item in franchises.secondary',
+            :key='item',
+            :label='item.value',
+            :value='item.value'
+          )
 </template>
 
 <script setup lang="ts">
@@ -99,31 +106,48 @@ const restrictions = computed(() =>
   )
 )
 const genres = computed(() => filters.value.genres.filter((i) => i.value))
-const developers = computed(() =>
-  filters.value.developers.filter((i) => i.value)
-)
-const franchises = computed(() =>
-  filters.value.franchises.filter((i) => i.value)
-)
-
-const dividedDevelopers = computed(() => {
+const developers = computed(() => {
   const primary = []
   const secondary = []
-  developers.value.forEach((developer) => {
-    const percentage =
-      ((developer.durations.reduce((acc, cur) => acc + cur, 0) *
-        developer.ratings.reduce(
-          (acc, cur) => acc * ratingCoefficient(cur),
-          1
-        )) /
-        filters.value.total.duration) *
-      100
-    if (percentage > 5) {
-      primary.push(developer)
-    } else {
-      secondary.push(developer)
-    }
-  })
+  filters.value.developers
+    .filter((i) => i.value)
+    .forEach((developer) => {
+      const percentage =
+        ((developer.durations.reduce((acc, cur) => acc + cur, 0) *
+          developer.ratings.reduce(
+            (acc, cur) => acc * ratingCoefficient(cur),
+            1
+          )) /
+          filters.value.total.duration) *
+        100
+      if (percentage > 5) {
+        primary.push(developer)
+      } else {
+        secondary.push(developer)
+      }
+    })
+  return { primary, secondary }
+})
+const franchises = computed(() => {
+  const primary = []
+  const secondary = []
+  filters.value.franchises
+    .filter((i) => i.value)
+    .forEach((franchise) => {
+      const percentage =
+        ((franchise.durations.reduce((acc, cur) => acc + cur, 0) *
+          franchise.ratings.reduce(
+            (acc, cur) => acc * ratingCoefficient(cur),
+            1
+          )) /
+          filters.value.total.duration) *
+        100
+      if (percentage > 5) {
+        primary.push(franchise)
+      } else {
+        secondary.push(franchise)
+      }
+    })
   return { primary, secondary }
 })
 
@@ -167,6 +191,16 @@ const developerClick = (developer: string) => {
   }
 }
 
+const franchiseClick = (franchise: string) => {
+  if (selectedFranchises.value.includes(franchise)) {
+    selectedFranchises.value = selectedFranchises.value.filter(
+      (d) => d !== franchise
+    )
+  } else {
+    selectedFranchises.value.push(franchise)
+  }
+}
+
 const getGenreTextClass = (genre: {
   value: string
   ratings: number[]
@@ -187,8 +221,17 @@ const getDeveloperTextClass = (developer: {
   durations: number[]
   count: number
 }) => {
-  const percentage =
-    (developer.count / dividedDevelopers.value.primary.length) * 100
+  const percentage = (developer.count / developers.value.primary.length) * 100
+  return getTextSizeClass(percentage, filters.value.total.count, 'developer')
+}
+
+const getFranchiseTextClass = (franchise: {
+  value: string
+  ratings: number[]
+  durations: number[]
+  count: number
+}) => {
+  const percentage = (franchise.count / franchises.value.primary.length) * 100
   return getTextSizeClass(percentage, filters.value.total.count, 'developer')
 }
 </script>

@@ -1,8 +1,11 @@
 <template lang="pug">
-el-collapse-item.block-header(v-if='items.length', :name='index')
+el-collapse-item.block-header(
+  v-if='items.length',
+  :name='index',
+  :class='[status]'
+)
   template(#title)
-    el-row
-      h2(style='font-size: 18px') {{ title }}
+    h2(style='font-size: 18px') {{ title }}
   el-table(v-loading='isPending', :data='items', @sort-change='onSortChange')
     el-table-column(type='index', label='#', width='50', :index='indexHandler')
     el-table-column(
@@ -96,7 +99,7 @@ el-collapse-item.block-header(v-if='items.length', :name='index')
     :page-sizes='[20, 50, 100]',
     :total='total'
   )
-  h4(style='margin: 5px 0') Продолжительность: {{ formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || '-' }}
+  h3(style='margin: 0 0 15px') Продолжительность: {{ formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || '-' }}
 </template>
 
 <script setup lang="ts">
@@ -192,9 +195,8 @@ const updateItemRating = async (item: Instance<Item>, rating: number) => {
 .block-header .el-collapse-item__header {
   background-color: var(--el-color-info-light-8);
   padding: 0 20px;
-  border-left: 5px solid;
+  border-left: 7px solid;
   border-bottom: 0;
-  /* var(--el-text-color-primary) */
 }
 
 .el-table {

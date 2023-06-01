@@ -61,7 +61,13 @@ const options = {
   scales: {
     y: {
       grid: {
-        color: 'transparent',
+        display: false,
+      },
+    },
+    x: {
+      grid: {
+        lineWidth: 0.1,
+        color: 'white',
       },
     },
   },
