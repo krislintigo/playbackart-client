@@ -65,7 +65,6 @@ const options = {
       },
     },
     x: {
-      // min: 0,
       ticks: {
         precision: 0,
       },

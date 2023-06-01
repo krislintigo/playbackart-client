@@ -1,10 +1,12 @@
 <template lang="pug">
 el-popover(placement='bottom', :width='380', trigger='click')
   template(#reference)
-    el-avatar(
-      :size='50',
-      :icon='authStore.isAuthenticated ? ElIconUser : ElIconFailed'
-    )
+    div
+      client-only
+        el-avatar(
+          :size='50',
+          :icon='authStore.isAuthenticated ? ElIconUser : ElIconFailed'
+        )
   el-row(justify='space-between', align='middle')
     h2 Профиль
     //el-button(circle, text, size='large', @click='toggleDark()')
