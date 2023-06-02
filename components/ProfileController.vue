@@ -1,11 +1,18 @@
 <template lang="pug">
-el-popover(placement='bottom', :width='382', trigger='click')
+el-popover(
+  :visible='visible',
+  placement='bottom',
+  :width='382',
+  trigger='click'
+)
   template(#reference)
     div
       client-only
         el-avatar(
           :size='50',
-          :icon='authStore.isAuthenticated ? ElIconUser : ElIconFailed'
+          :icon='authStore.isAuthenticated ? ElIconUserFilled : ElIconUser',
+          style='cursor: pointer',
+          @click='visible = !visible'
         )
   el-row(justify='space-between', align='middle')
     h2 Профиль
@@ -43,6 +50,8 @@ const { api } = useFeathers()
 const authStore = useAuthStore()
 // const isDark = useDark()
 // const toggleDark = useToggle(isDark)
+
+const visible = ref(false)
 const authData = reactive({
   login: '',
   password: '',

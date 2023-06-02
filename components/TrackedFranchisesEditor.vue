@@ -1,9 +1,9 @@
 <template lang="pug">
-h3(style='margin: 0 0 5px') Здесь будут отслеживаемые франшизы
 el-select(
   v-model='input',
   filterable,
   placeholder='Выберите...',
+  style='width: 100%; margin: 10px 0',
   @change='trackFranchise'
 )
   el-option(
@@ -12,7 +12,18 @@ el-select(
     :label='franchise',
     :value='franchise'
   )
-div {{ authStore.user?.trackedFranchises }}
+div(
+  v-if='authStore.user.trackedFranchises',
+  style='display: flex; flex-direction: column; align-items: flex-start; row-gap: 5px'
+)
+  el-tag(
+    v-for='franchise in authStore.user.trackedFranchises',
+    :key='franchise',
+    size='large',
+    type='warning',
+    closable,
+    @close='untrackFranchise(franchise)'
+  ) {{ franchise }}
 </template>
 
 <script setup lang="ts">
@@ -27,16 +38,20 @@ const franchises = computed(
 )
 
 const trackFranchise = async (franchise: string) => {
+  if (authStore.user.trackedFranchises.includes(franchise)) return
+  input.value = ''
   const _user = authStore.user.clone()
   _user.trackedFranchises.push(franchise)
   await _user.save()
-  input.value = ''
 }
 
-// watchEffect(() => {
-//   if (!authStore.user) return
-//   trackedFranchises.value = authStore.user.trackedFranchises
-// })
+const untrackFranchise = async (franchise: string) => {
+  const _user = authStore.user.clone()
+  _user.trackedFranchises = _user.trackedFranchises.filter(
+    (f) => f !== franchise
+  )
+  await _user.save()
+}
 </script>
 
 <style scoped></style>

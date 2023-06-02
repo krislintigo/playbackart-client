@@ -8,7 +8,7 @@ el-header.header
         el-tab-pane(
           v-for='tab in navigationTabs',
           :key='tab.label',
-          :name='tab.searchType'
+          :name='tab.searchType',
         )
           template(#label)
             el-icon
