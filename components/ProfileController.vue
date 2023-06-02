@@ -1,5 +1,5 @@
 <template lang="pug">
-el-popover(placement='bottom', :width='380', trigger='click')
+el-popover(placement='bottom', :width='382', trigger='click')
   template(#reference)
     div
       client-only
@@ -19,17 +19,35 @@ el-popover(placement='bottom', :width='380', trigger='click')
     client-only
       h4(style='margin-bottom: 0') Поделиться приложением:
       h4(style='margin-top: 0') {{ shareLink }}
-    h3(style='margin-bottom: 5px') Ваш список слежения:
-      el-button(
-        text,
-        circle,
-        :type='listChanged ? "warning" : "success"',
-        size='small',
-        @click='saveWatching'
-      )
-        el-icon(:size='20')
-          ElIconCircleCheck
-    TextEditor(v-model='list')
+    el-collapse.profile-collapse
+      el-collapse-item(title='Список')
+        div(style='padding: 4px')
+          h3(style='margin: 0 0 5px') Синхронизация:
+            el-button(
+              text,
+              circle,
+              :type='listChanged ? "warning" : "success"',
+              style='margin-left: 5px',
+              size='small',
+              @click='saveWatching'
+            )
+              el-icon(:size='20')
+                ElIconCircleCheck
+          TextEditor(v-model='list')
+      el-collapse-item(title='Отслеживаемые франшизы')
+        div(style='padding: 4px')
+          h3(style='margin: 0 0 5px') Синхронизация:
+            el-button(
+              text,
+              circle,
+              :type='listChanged ? "warning" : "success"',
+              style='margin-left: 5px',
+              size='small',
+              @click='saveWatching'
+            )
+              el-icon(:size='20')
+                ElIconCircleCheck
+          TextEditor(v-model='list')
     el-row(justify='end', style='margin-top: 10px')
       el-button(type='danger', @click='handleUserAction("logout")') Выход
   div(v-else)
@@ -53,8 +71,6 @@ const authData = reactive({
   login: '',
   password: '',
 })
-
-watchEffect(() => console.log('auth status', authStore.isAuthenticated))
 
 const list = ref('')
 
@@ -119,3 +135,10 @@ watchEffect(() => {
 </script>
 
 <style scoped></style>
+<style>
+.profile-collapse .el-collapse-item__header {
+  background-color: var(--el-color-info-light-8);
+  padding: 0 20px;
+  border-left: 5px solid var(--el-color-info-light-3);
+}
+</style>

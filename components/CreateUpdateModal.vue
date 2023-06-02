@@ -1,5 +1,5 @@
 <template lang="pug">
-el-dialog.dialog(
+el-dialog.cu-dialog(
   v-model='dialog',
   width='95%',
   :lock-scroll='false',
@@ -237,19 +237,19 @@ const save = async () => {
 <style scoped></style>
 
 <style>
-.dialog {
+.cu-dialog {
   max-width: 1300px;
 }
 
-.el-dialog__body {
+.cu-dialog .el-dialog__body {
   padding-top: 0;
 }
 
-.el-rate__item {
+.cu-dialog .el-rate__item {
   line-height: 0;
 }
 
-.el-radio-button__original-radio:checked + .el-radio-button__inner {
+.cu-dialog .el-radio-button__original-radio:checked + .el-radio-button__inner {
   border-color: transparent;
   box-shadow: none;
 }

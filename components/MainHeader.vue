@@ -32,10 +32,4 @@ const tabClick = (tab: any) => {
   --el-header-height: 60px;
   padding: 0 30px;
 }
-
-@media (max-width: 992px) {
-  .header {
-    --el-header-height: 130px;
-  }
-}
 </style>

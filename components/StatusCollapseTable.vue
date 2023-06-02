@@ -1,5 +1,5 @@
 <template lang="pug">
-el-collapse-item.block-header(
+el-collapse-item.status-table(
   v-if='items.length',
   :name='index',
   :class='[status]'
@@ -78,7 +78,7 @@ el-collapse-item.block-header(
         )
         el-popconfirm(
           title='Вы действительно хотите удалить?',
-          width='200',
+          width='285',
           confirm-button-text='Да',
           cancel-button-text='Нет',
           @confirm='emit("delete-item", scope.row._id)'
@@ -99,7 +99,7 @@ el-collapse-item.block-header(
     :page-sizes='[20, 50, 100]',
     :total='total'
   )
-  h3(style='margin: 0 0 15px') Продолжительность: {{ formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || '-' }}
+  h3(style='margin: 15px 0 0') Продолжительность: {{ formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || '-' }}
 </template>
 
 <script setup lang="ts">
@@ -192,27 +192,22 @@ const updateItemRating = async (item: Instance<Item>, rating: number) => {
 
 <style scoped></style>
 <style>
-.block-header .el-collapse-item__header {
+.status-table .el-collapse-item__header {
   background-color: var(--el-color-info-light-8);
   padding: 0 20px;
   border-left: 7px solid;
-  border-bottom: 0;
 }
 
-.el-table {
+.status-table .el-table {
   --el-table-border-color: transparent;
   --el-table-header-bg-color: transparent;
 }
 
-.el-table .el-table__cell {
-  padding: 3px 0;
+.status-table .el-table .el-table__cell {
+  padding: 4px 0;
 }
 
-.el-table .el-table__cell .cell {
-  padding-right: 0;
-}
-
-.el-link__inner {
+.status-table .el-link__inner {
   word-break: normal;
 }
 </style>

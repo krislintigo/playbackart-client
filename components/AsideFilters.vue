@@ -2,7 +2,7 @@
 el-aside.aside(width='350px')
   el-row
     el-col
-      h3.back-header Оценки
+      h3.filter-header Оценки
       HorizontalBarChart(
         :labels='ratings.map((r) => r.value)',
         :data='ratings.map((r) => r.count)',
@@ -11,7 +11,7 @@ el-aside.aside(width='350px')
       )
   el-row
     el-col
-      h3.back-header Возрастные ограничения
+      h3.filter-header Возрастные ограничения
       HorizontalBarChart(
         :labels='restrictions.map((r) => r.value)',
         :data='restrictions.map((r) => r.count)',
@@ -20,7 +20,7 @@ el-aside.aside(width='350px')
       )
   el-row
     el-col
-      h3.back-header Жанры
+      h3.filter-header Жанры
       el-row
         el-link.item(
           v-for='genre in genres',
@@ -30,7 +30,7 @@ el-aside.aside(width='350px')
         ) {{ genre.value }}
   el-row
     el-col
-      h3.back-header Создатели
+      h3.filter-header Создатели
       el-row
         el-link.item(
           v-for='developer in developers.primary',
@@ -55,7 +55,7 @@ el-aside.aside(width='350px')
           )
   el-row
     el-col
-      h3.back-header Франшизы
+      h3.filter-header Франшизы
       el-row
         el-link.item(
           v-for='franchise in franchises.primary',
@@ -243,7 +243,7 @@ const getFranchiseTextClass = (franchise: {
   row-gap: 30px;
 }
 
-.back-header {
+.filter-header {
   background-color: var(--el-color-info-light-8);
   padding: 10px;
   margin-top: 0;

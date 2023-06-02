@@ -8,17 +8,17 @@ el-row
             ElIconPictureRounded
   el-col(:span='13', :push='1')
     h2.item-header {{ item.name }}
-    h3(style='margin-bottom: 5px') Информация:
+    h4(style='margin-bottom: 5px') Информация:
     .tags-container
       el-tag(type='info') {{ getTypeWord(item.type) }}
       el-tag(v-if='item.year', type='info') {{ item.year }}
       el-tag(v-if='item.restriction', type='info') {{ item.restriction }}
     div(v-if='item.genres.length')
-      h3(style='margin-bottom: 5px') Жанры:
+      h4(style='margin-bottom: 5px') Жанры:
       .tags-container
         el-tag(v-for='(genre, i) in item.genres', :key='i', type='info') {{ genre }}
     div(v-if='item.developers.length')
-      h3(style='margin-bottom: 5px') {{ getDeveloperWordByType(item.type, item.developers.length) }}:
+      h4(style='margin-bottom: 5px') {{ getDeveloperWordByType(item.type, item.developers.length) }}:
       .tags-container
         el-tag(
           v-for='(developer, i) in item.developers',
@@ -26,7 +26,7 @@ el-row
           type='info'
         ) {{ developer }}
     el-collapse(v-if='authStore.isAuthenticated && !route.query.userId')
-      el-collapse-item(:class='["set-status", item.status]')
+      el-collapse-item(:class='["set-status-collapse", item.status]')
         template(#title)
           el-row(align='middle', style='column-gap: 10px')
             el-icon(size='large')
@@ -46,7 +46,7 @@ el-row
             :style='{ fontSize: "large", color: status.color }',
             @click='updateItemStatus(status.value)'
           )
-            h3.set-status-button-text {{ status.title }}
+            h3(style='font-size: 16px') {{ status.title }}
 </template>
 
 <script setup lang="ts">
@@ -84,19 +84,15 @@ const updateItemStatus = async (status: string) => {
   column-gap: 7px;
   margin-bottom: 20px;
 }
-
-.set-status-button-text {
-  font-size: 16px;
-}
 </style>
 
 <style>
-.set-status .el-collapse-item__header {
+.set-status-collapse .el-collapse-item__header {
   padding: 0 15px;
   border-bottom: 0;
 }
 
-.el-collapse-item__content {
+.set-status-collapse .el-collapse-item__content {
   display: flex;
   flex-direction: column;
   padding: 10px 0 0 2px;
