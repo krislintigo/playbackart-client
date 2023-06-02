@@ -1,52 +1,59 @@
 <template lang="pug">
 div
-  el-row(v-if='route.query.userId', align='middle')
-    h3 Вы просматриваете список другого пользователя
-    el-button(
-      link,
-      type='primary',
-      style='margin-left: 10px',
-      @click='navigateTo("/")'
-    ) На свою страницу
-  el-row(v-if='!authStore.isAuthenticated && !route.query.userId')
-    h2 Войдите, чтобы продолжить!
-  el-row(v-else, justify='center', :gutter='20', style='margin-bottom: 30px')
-    el-col(:span='24', :lg='18')
-      div(style='display: flex; align-items: center; column-gap: 10px')
-        h2 {{ navigationTabs.find((tab) => tab.searchType === (route.query.type ?? ''))?.header }}
-        el-button(
-          v-if='authStore.isAuthenticated && !route.query.userId',
-          circle,
-          plain,
-          :icon='ElIconPlus',
-          size='small',
-          @click='createNew'
-        )
-      client-only
+  client-only(fallback-tag='div')
+    template(#fallback)
+      el-empty
+        template(#description)
+          h3 Пожалуйста, подождите...
+        template(#image)
+          el-icon.is-loading(:size='150')
+            ElIconChromeFilled
+    el-row(v-if='route.query.userId', align='middle')
+      h3 Вы просматриваете список другого пользователя
+      el-button(
+        link,
+        type='primary',
+        style='margin-left: 10px',
+        @click='navigateTo("/")'
+      ) На свою страницу
+    el-row(v-if='!authStore.isAuthenticated && !route.query.userId')
+      h2 Войдите, чтобы продолжить!
+    el-row(v-else, justify='center', :gutter='20', style='margin-bottom: 30px')
+      el-col(:span='24', :lg='18')
+        div(style='display: flex; align-items: center; column-gap: 10px')
+          h2 {{ navigationTabs.find((tab) => tab.searchType === (route.query.type ?? ''))?.header }}
+          el-button(
+            v-if='authStore.isAuthenticated && !route.query.userId',
+            circle,
+            plain,
+            :icon='ElIconPlus',
+            size='small',
+            @click='createNew'
+          )
         CreateUpdateModal(
           v-model='dialog',
           :target='dialogTarget',
           :item-for-update='itemForUpdate'
         )
-      div(style='margin-bottom: 20px')
-        el-input(
-          v-model='queryFilters.searchQuery',
-          placeholder='Поиск по названию...',
-          clearable
-        )
-      el-collapse(v-if='queryFilters.filters', v-model='activeItems')
-        StatusCollapseTable(
-          v-for='(block, i) in statuses',
-          :key='block.value',
-          :title='block.title.toUpperCase()',
-          :status='block.value',
-          :index='i',
-          @update-item='updateItem',
-          @delete-item='deleteItem'
-        )
-      h3(style='text-align: center') Всего: {{ queryFilters.filters?.total.count }} шт. / {{ formatDuration(queryFilters.filters?.total.duration) || '-' }}
-    el-col(:span='24', :lg='6', style='margin-top: 68px')
-      AsideFilters(v-if='queryFilters.filters')
+        div(style='margin-bottom: 20px')
+          el-input(
+            v-model='queryFilters.searchQuery',
+            placeholder='Поиск по названию...',
+            clearable
+          )
+        el-collapse(v-if='queryFilters.filters', v-model='activeItems')
+          StatusCollapseTable(
+            v-for='(block, i) in statuses',
+            :key='block.value',
+            :title='block.title.toUpperCase()',
+            :status='block.value',
+            :index='i',
+            @update-item='updateItem',
+            @delete-item='deleteItem'
+          )
+        h3(style='text-align: center') Всего: {{ queryFilters.filters?.total.count }} шт. / {{ formatDuration(queryFilters.filters?.total.duration) || '-' }}
+      el-col(:span='24', :lg='6', style='margin-top: 68px')
+        AsideFilters(v-if='queryFilters.filters')
 </template>
 
 <script setup lang="ts">

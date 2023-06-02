@@ -21,33 +21,9 @@ el-popover(placement='bottom', :width='382', trigger='click')
       h4(style='margin-top: 0') {{ shareLink }}
     el-collapse.profile-collapse
       el-collapse-item(title='Список')
-        div(style='padding: 4px')
-          h3(style='margin: 0 0 5px') Синхронизация:
-            el-button(
-              text,
-              circle,
-              :type='listChanged ? "warning" : "success"',
-              style='margin-left: 5px',
-              size='small',
-              @click='saveWatching'
-            )
-              el-icon(:size='20')
-                ElIconCircleCheck
-          TextEditor(v-model='list')
+        ListEditor
       el-collapse-item(title='Отслеживаемые франшизы')
-        div(style='padding: 4px')
-          h3(style='margin: 0 0 5px') Синхронизация:
-            el-button(
-              text,
-              circle,
-              :type='listChanged ? "warning" : "success"',
-              style='margin-left: 5px',
-              size='small',
-              @click='saveWatching'
-            )
-              el-icon(:size='20')
-                ElIconCircleCheck
-          TextEditor(v-model='list')
+        TrackedFranchisesEditor
     el-row(justify='end', style='margin-top: 10px')
       el-button(type='danger', @click='handleUserAction("logout")') Выход
   div(v-else)
@@ -72,13 +48,9 @@ const authData = reactive({
   password: '',
 })
 
-const list = ref('')
-
 const shareLink = computed(() =>
   !process.server ? location.origin + '?userId=' + authStore.user._id : ''
 )
-
-const listChanged = computed(() => authStore.user.list !== list.value)
 
 const handleUserAction = async (action: 'register' | 'login' | 'logout') => {
   try {
@@ -112,26 +84,6 @@ const handleUserAction = async (action: 'register' | 'login' | 'logout') => {
     })
   }
 }
-
-const saveWatching = async () => {
-  try {
-    await authStore.user.save({ diff: { list: list.value } })
-    ElNotification.success({
-      title: 'Список успешно обновлен',
-      position: 'bottom-right',
-    })
-  } catch (e: any) {
-    ElNotification.error({
-      title: 'Что-то пошло не так...',
-      position: 'bottom-right',
-    })
-  }
-}
-
-watchEffect(() => {
-  if (!authStore.user) return
-  list.value = authStore.user.list
-})
 </script>
 
 <style scoped></style>
@@ -140,5 +92,9 @@ watchEffect(() => {
   background-color: var(--el-color-info-light-8);
   padding: 0 20px;
   border-left: 5px solid var(--el-color-info-light-3);
+}
+
+.profile-collapse .el-collapse-item__content {
+  padding: 4px;
 }
 </style>
