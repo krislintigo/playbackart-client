@@ -7,7 +7,7 @@ el-collapse-item.status-table(
   template(#title)
     h2(style='font-size: 18px') {{ title }}
   el-table(v-loading='isPending', :data='items', @sort-change='onSortChange')
-    el-table-column(type='index', label='#', width='50', :index='indexHandler')
+    el-table-column(type='index', label='#', width='57', :index='indexHandler')
     el-table-column(
       sortable='custom',
       prop='name',
@@ -91,6 +91,7 @@ el-collapse-item.status-table(
               size='small',
               text
             )
+  // find problem with total (hybrid)
   el-pagination(
     v-model:current-page='currentPage',
     v-model:page-size='limit',
@@ -99,7 +100,7 @@ el-collapse-item.status-table(
     :page-sizes='[20, 50, 100]',
     :total='total'
   )
-  h3(style='margin: 15px 0 0') Продолжительность: {{ formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || '-' }}
+  h3(style='margin: 7px 0 0') Продолжительность: {{ formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || '-' }} {{ pageCount > 1 ? ` (на странице) / ${formatDuration(queryFilters.filters.total.find((i) => i.status === status).duration) || '-'} (всего)` : '' }}
 </template>
 
 <script setup lang="ts">
@@ -159,6 +160,7 @@ const {
   isPending,
   limit,
   currentPage,
+  pageCount,
   total,
 } = api.service('items').useFind(query, { paginateOn: 'hybrid' })
 
@@ -174,7 +176,7 @@ const onSortChange = ({ prop, order }: Sort) => {
   sort.order = sortRef[order] ?? 1
 }
 
-const updateItemRating = async (item: Instance<Item>, rating: number) => {
+const updateItemRating = async (item: Item, rating: number) => {
   try {
     await item.save({ diff: { rating } })
     ElNotification.success({

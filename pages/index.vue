@@ -51,7 +51,7 @@ div
             @update-item='updateItem',
             @delete-item='deleteItem'
           )
-        h3(style='text-align: center') Всего: {{ queryFilters.filters?.total.count }} шт. / {{ formatDuration(queryFilters.filters?.total.duration) || '-' }}
+        h3(style='text-align: center') Всего: {{ queryFilters.filters?.total.reduce((acc, cur) => acc + cur.count, 0) }} шт. / {{ formatDuration(queryFilters.filters?.total.reduce((acc, cur) => acc + cur.duration, 0)) }}
       el-col(:span='24', :lg='6', style='margin-top: 68px')
         AsideFilters(v-if='queryFilters.filters')
 </template>
@@ -59,7 +59,7 @@ div
 <script setup lang="ts">
 definePageMeta({
   layout: 'default',
-  public: false,
+  public: true,
 })
 
 const { api } = useFeathers()

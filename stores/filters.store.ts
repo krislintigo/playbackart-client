@@ -15,6 +15,7 @@ export const useFilters = defineStore('filters', () => {
 
   const fetchFilters = async () => {
     try {
+      console.log('filters')
       filters.value = await api.service('items').filters(
         {
           userId: route.query.userId || authStore.user?._id,
@@ -22,17 +23,18 @@ export const useFilters = defineStore('filters', () => {
         },
         {}
       )
+      console.log(filters.value)
     } catch (e: any) {
       console.error(e.message)
     }
   }
-  fetchFilters()
+  // fetchFilters()
 
   api.service('items').on('created', fetchFilters)
   api.service('items').on('patched', fetchFilters)
   api.service('items').on('removed', fetchFilters)
   watch(() => route.query.type, fetchFilters)
-  watch(() => authStore.user, fetchFilters)
+  watch(() => authStore.user, fetchFilters, { immediate: true })
 
   return {
     filters,

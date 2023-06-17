@@ -4277,10 +4277,10 @@ feathers-hooks-common@^7.0.1:
     lodash "^4.17.21"
     traverse "^0.6.7"
 
-feathers-pinia@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/feathers-pinia/-/feathers-pinia-3.0.2.tgz#90de9899e1cd4288c234be072412a5e94f68c1ad"
-  integrity sha512-zQoYiyO2C8H0fGR+DLjHnnKvlsFQSZuFAmAgJUVWDfaAskdveaVO346jQ9c5GOnK7uyTW3LXabhYbKGrdYdq0w==
+feathers-pinia@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/feathers-pinia/-/feathers-pinia-3.0.4.tgz#0472007ad14d0cb4dce0ccbf6719ae99fba7c13d"
+  integrity sha512-5mn9Zu6JzWksJMhV9ebXdVjn0AJRQajVStadbm2+BQ+MGQtGws8LSKhF2Q8m8yKZ5OEAZtwEN8wLxOVHIgoNng==
   dependencies:
     "@types/lz-string" "^1.3.34"
     "@vueuse/core" "^10.1.0"

@@ -118,7 +118,7 @@ const developers = computed(() => {
             (acc, cur) => acc * ratingCoefficient(cur),
             1
           )) /
-          filters.value.total.duration) *
+          filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)) *
         100
       if (percentage > 5) {
         primary.push(developer)
@@ -140,7 +140,7 @@ const franchises = computed(() => {
             (acc, cur) => acc * ratingCoefficient(cur),
             1
           )) /
-          filters.value.total.duration) *
+          filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)) *
         100
       if (percentage > 5) {
         primary.push(franchise)
@@ -211,8 +211,12 @@ const getGenreTextClass = (genre: {
   const percentage =
     (genre.durations.reduce((acc, cur) => acc + cur, 0) *
       genre.ratings.reduce((acc, cur) => acc * ratingCoefficient(cur), 1)) /
-    filters.value.total.duration
-  return getTextSizeClass(percentage, filters.value.total.count, 'genre')
+    filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)
+  return getTextSizeClass(
+    percentage,
+    filters.value.total.reduce((acc, cur) => acc + cur.count, 0),
+    'genre'
+  )
 }
 
 const getDeveloperTextClass = (developer: {
@@ -222,7 +226,11 @@ const getDeveloperTextClass = (developer: {
   count: number
 }) => {
   const percentage = (developer.count / developers.value.primary.length) * 100
-  return getTextSizeClass(percentage, filters.value.total.count, 'developer')
+  return getTextSizeClass(
+    percentage,
+    filters.value.total.reduce((acc, cur) => acc + cur.count, 0),
+    'developer'
+  )
 }
 
 const getFranchiseTextClass = (franchise: {
@@ -232,7 +240,11 @@ const getFranchiseTextClass = (franchise: {
   count: number
 }) => {
   const percentage = (franchise.count / franchises.value.primary.length) * 100
-  return getTextSizeClass(percentage, filters.value.total.count, 'developer')
+  return getTextSizeClass(
+    percentage,
+    filters.value.total.reduce((acc, cur) => acc + cur.count, 0),
+    'developer'
+  )
 }
 </script>
 
