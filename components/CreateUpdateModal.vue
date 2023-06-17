@@ -6,7 +6,7 @@ el-dialog.cu-dialog(
   :close-on-click-modal='false'
 )
   template(#header)
-    h3 {{ target === 'create' ? 'Добавить' : 'Обновить' }} элемент
+    h3 {{ updateItemId ? 'Обновить' : 'Добавить' }} элемент
   el-form(
     ref='formRef',
     :model='_item',
@@ -15,7 +15,7 @@ el-dialog.cu-dialog(
     :rules='rules'
   )
     el-form-item(label='Название:', prop='name')
-      el-input(v-model='_item.name')
+      el-input(v-model.trim='_item.name')
     el-form-item(label='Фото:', prop='image')
       el-input(v-model='_item.image', placeholder='Ссылка на фото')
     el-form-item(label='Рейтинг:', prop='rating')
@@ -132,8 +132,7 @@ el-dialog.cu-dialog(
 <script setup lang="ts">
 const props = defineProps<{
   modelValue: boolean
-  target: string
-  itemForUpdate: Instance<Item>
+  updateItemId: string | null
 }>()
 
 const emit = defineEmits<{
@@ -145,30 +144,29 @@ const authStore = useAuthStore()
 
 const formRef = ref<any>(null)
 const _item = ref()
+const inputGenre = ref('')
+const inputDeveloper = ref('')
 
-const dialog = computed<boolean>({
+const dialog = computed({
   get: () => props.modelValue,
   set: (value) => emit('update:modelValue', value),
 })
 
+// fix html scroll
 watch(dialog, (open) => {
-  // fix html scroll
   document.documentElement.style.paddingRight = open
     ? window.innerWidth - document.documentElement.clientWidth + 'px'
     : ''
   document.documentElement.style.overflowY = open ? 'hidden' : 'scroll'
-
-  // set _item
-  if (open) {
-    _item.value =
-      props.target === 'create'
-        ? api.service('items').new({ userId: authStore.user._id })
-        : props.itemForUpdate.clone()
-  }
 })
 
-const inputGenre = ref('')
-const inputDeveloper = ref('')
+watch(dialog, (open) => {
+  if (!open) return
+  _item.value = props.updateItemId
+    ? api.service('items').getFromStore(props.updateItemId, { clones: true })
+        .value
+    : api.service('items').new({ userId: authStore.user._id })
+})
 
 const handleGenreDelete = (tag: string) => {
   _item.value.genres.splice(_item.value.genres.indexOf(tag), 1)

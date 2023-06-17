@@ -28,13 +28,9 @@ div
             plain,
             :icon='ElIconPlus',
             size='small',
-            @click='createNew'
+            @click='createItem'
           )
-        CreateUpdateModal(
-          v-model='dialog',
-          :target='dialogTarget',
-          :item-for-update='itemForUpdate'
-        )
+        CreateUpdateModal(v-model='dialog', :update-item-id='updateItemId')
         div(style='margin-bottom: 20px')
           el-input(
             v-model='queryFilters.searchQuery',
@@ -69,18 +65,16 @@ const queryFilters = useFilters()
 
 const activeItems = ref([0, 1, 2, 3, 4])
 const dialog = ref(false)
-const dialogTarget = ref('')
-const itemForUpdate = ref<Item | null>(null)
+const updateItemId = ref<string | null>(null)
 
-const createNew = () => {
+const createItem = () => {
   dialog.value = true
-  dialogTarget.value = 'create'
+  updateItemId.value = null
 }
 
-const updateItem = (item: Item) => {
+const updateItem = (id: string) => {
   dialog.value = true
-  dialogTarget.value = 'update'
-  itemForUpdate.value = item
+  updateItemId.value = id
 }
 
 const deleteItem = async (id: string) => {

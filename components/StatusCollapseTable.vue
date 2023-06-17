@@ -74,7 +74,7 @@ el-collapse-item.status-table(
           circle,
           size='small',
           text,
-          @click='emit("update-item", scope.row)'
+          @click='emit("update-item", scope.row._id)'
         )
         el-popconfirm(
           title='Вы действительно хотите удалить?',

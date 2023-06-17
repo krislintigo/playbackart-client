@@ -1,3 +1,5 @@
+import { FormRules } from 'element-plus'
+
 export const statuses = [
   {
     title: 'В процессе',
@@ -116,7 +118,7 @@ export const types = [
 
 export const restrictionsTemplate = ['G', 'PG', 'PG-13', 'R', 'NC-17']
 
-export const rules = {
+export const rules: FormRules = {
   name: [
     {
       required: true,
