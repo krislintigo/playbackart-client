@@ -23,18 +23,16 @@ export const useFilters = defineStore('filters', () => {
         },
         {}
       )
-      console.log(filters.value)
     } catch (e: any) {
       console.error(e.message)
     }
   }
-  // fetchFilters()
 
   api.service('items').on('created', fetchFilters)
   api.service('items').on('patched', fetchFilters)
   api.service('items').on('removed', fetchFilters)
-  watch(() => route.query.type, fetchFilters)
-  watch(() => authStore.user, fetchFilters, { immediate: true })
+  watch(() => route.query.type, fetchFilters, { immediate: true })
+  watch(() => authStore.user, fetchFilters)
 
   return {
     filters,

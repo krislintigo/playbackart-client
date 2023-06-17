@@ -16,14 +16,27 @@ div(
   v-if='authStore.user.trackedFranchises',
   style='display: flex; flex-direction: column; align-items: flex-start; row-gap: 5px'
 )
-  el-tag(
+  el-check-tag(
     v-for='franchise in authStore.user.trackedFranchises',
     :key='franchise',
-    size='large',
-    type='warning',
-    closable,
-    @close='untrackFranchise(franchise)'
-  ) {{ franchise }}
+    :checked='authStore.user.trackedFranchises.includes(franchise)'
+  )
+    span {{ franchise }}
+    el-popconfirm(
+      title='Вы действительно хотите удалить?',
+      width='285',
+      confirm-button-text='Да',
+      cancel-button-text='Нет',
+      @confirm='untrackFranchise(franchise)'
+    )
+      template(#reference)
+        el-button(
+          :icon='ElIconClose',
+          circle,
+          size='small',
+          text,
+          style='margin-left: 5px; width: 15px; height: 15px'
+        )
 </template>
 
 <script setup lang="ts">
