@@ -1,19 +1,17 @@
 export const getTextSizeClass = (
   percentage: number,
-  total: number,
-  target: string
+  target: 'genre' | 'developer' | 'franchise'
 ): string => {
-  const multiplier = 1 / Math.log10(total)
   switch (target) {
     case 'genre':
       switch (true) {
-        case percentage > 50 * multiplier:
+        case percentage > 50:
           return 'text4'
-        case percentage > 35 * multiplier:
+        case percentage > 35:
           return 'text3'
-        case percentage > 25 * multiplier:
+        case percentage > 25:
           return 'text2'
-        case percentage > 15 * multiplier:
+        case percentage > 15:
           return 'text1'
         default:
           return 'text0'
@@ -21,13 +19,13 @@ export const getTextSizeClass = (
 
     case 'developer':
       switch (true) {
-        case percentage > 50 * multiplier * 4:
+        case percentage > 50:
           return 'text4'
-        case percentage > 35 * multiplier * 4:
+        case percentage > 35:
           return 'text3'
-        case percentage > 25 * multiplier * 4:
+        case percentage > 25:
           return 'text2'
-        case percentage > 15 * multiplier * 4:
+        case percentage > 15:
           return 'text1'
         default:
           return 'text0'

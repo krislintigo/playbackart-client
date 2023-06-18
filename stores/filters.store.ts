@@ -22,6 +22,7 @@ export const useFilters = defineStore('filters', () => {
         userId: route.query.userId || authStore.user?._id,
         type: route.query.type as Item['type'] | undefined,
       })
+      console.log(filters.value)
     } catch (e: any) {
       console.error(e.message)
     }

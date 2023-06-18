@@ -112,15 +112,8 @@ const developers = computed(() => {
   filters.value.developers
     .filter((i) => i.value)
     .forEach((developer) => {
-      const percentage =
-        ((developer.durations.reduce((acc, cur) => acc + cur, 0) *
-          developer.ratings.reduce(
-            (acc, cur) => acc * ratingCoefficient(cur),
-            1
-          )) /
-          filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)) *
-        100
-      if (percentage > 5) {
+      const percentage = getFilterPercentage(developer)
+      if (percentage > 7) {
         primary.push(developer)
       } else {
         secondary.push(developer)
@@ -134,15 +127,8 @@ const franchises = computed(() => {
   filters.value.franchises
     .filter((i) => i.value)
     .forEach((franchise) => {
-      const percentage =
-        ((franchise.durations.reduce((acc, cur) => acc + cur, 0) *
-          franchise.ratings.reduce(
-            (acc, cur) => acc * ratingCoefficient(cur),
-            1
-          )) /
-          filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)) *
-        100
-      if (percentage > 5) {
+      const percentage = getFilterPercentage(franchise)
+      if (percentage > 7) {
         primary.push(franchise)
       } else {
         secondary.push(franchise)
@@ -150,6 +136,12 @@ const franchises = computed(() => {
     })
   return { primary, secondary }
 })
+
+const getFilterPercentage = (item) =>
+  ((item.fullDurations.reduce((acc, cur) => acc + cur, 0) *
+    item.ratings.reduce((acc, cur) => acc + ratingCoefficient(cur), 1)) /
+    filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)) *
+  100
 
 const ratingClick = (gradeIndex: number) => {
   const rating = ratings.value[gradeIndex]
@@ -205,46 +197,50 @@ const getGenreTextClass = (genre: {
   value: string
   ratings: number[]
   durations: number[]
+  fullDurations: number[]
   count: number
 }) => {
-  // const percentage = props.items.filter(i => i.genres.includes(genre)).length / props.items.length * 100
   const percentage =
-    (genre.durations.reduce((acc, cur) => acc + cur, 0) *
-      genre.ratings.reduce((acc, cur) => acc * ratingCoefficient(cur), 1)) /
-    filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)
-  return getTextSizeClass(
-    percentage,
-    filters.value.total.reduce((acc, cur) => acc + cur.count, 0),
-    'genre'
-  )
+    (genre.fullDurations.reduce((acc, cur) => acc + cur, 0) *
+      genre.ratings.reduce((acc, cur) => acc + ratingCoefficient(cur), 1)) /
+    filters.value.total.reduce((acc, cur) => acc + cur.fullDuration, 0)
+  return getTextSizeClass(percentage, 'genre')
 }
 
 const getDeveloperTextClass = (developer: {
   value: string
   ratings: number[]
   durations: number[]
+  fullDurations: number[]
   count: number
 }) => {
-  const percentage = (developer.count / developers.value.primary.length) * 100
-  return getTextSizeClass(
-    percentage,
-    filters.value.total.reduce((acc, cur) => acc + cur.count, 0),
-    'developer'
-  )
+  const percentage =
+    ((developer.fullDurations.reduce((acc, cur) => acc + cur, 0) *
+      developer.ratings.reduce((acc, cur) => acc + ratingCoefficient(cur), 1)) /
+      developers.value.primary.reduce(
+        (acc, cur) => acc + cur.durations.reduce((acc, cur) => acc + cur, 0),
+        0
+      )) *
+    100
+  return getTextSizeClass(percentage, 'developer')
 }
 
 const getFranchiseTextClass = (franchise: {
   value: string
   ratings: number[]
   durations: number[]
+  fullDurations: number[]
   count: number
 }) => {
-  const percentage = (franchise.count / franchises.value.primary.length) * 100
-  return getTextSizeClass(
-    percentage,
-    filters.value.total.reduce((acc, cur) => acc + cur.count, 0),
-    'developer'
-  )
+  const percentage =
+    ((franchise.fullDurations.reduce((acc, cur) => acc + cur, 0) *
+      franchise.ratings.reduce((acc, cur) => acc + ratingCoefficient(cur), 1)) /
+      developers.value.primary.reduce(
+        (acc, cur) => acc + cur.durations.reduce((acc, cur) => acc + cur, 0),
+        0
+      )) *
+    100
+  return getTextSizeClass(percentage, 'developer')
 }
 </script>
 

@@ -1,10 +1,10 @@
 export const ratingCoefficient = (rating: number) => {
   switch (rating) {
     case 10:
-      return 6
+      return 7
     case 9:
-      return 1.5
+      return 2
     default:
-      return 1
+      return 0
   }
 }
