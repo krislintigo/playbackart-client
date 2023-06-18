@@ -67,6 +67,7 @@ export default defineNuxtPlugin((nuxt) => {
             time: {
               count: 1,
               duration: 0,
+              replays: 0,
             },
             year: '',
             developers: [],

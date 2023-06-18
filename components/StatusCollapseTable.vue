@@ -29,7 +29,7 @@ el-collapse-item.status-table(
       sortable='custom',
       prop='rating',
       label='Рейтинг',
-      width='120'
+      width='105'
     )
       template(#default='scope')
         el-popover(
@@ -60,8 +60,16 @@ el-collapse-item.status-table(
       template(#default='scope')
         span(v-if='!scope.row.time.duration') -
         div(v-else)
-          span(v-if='scope.row.time.count > 1') {{ scope.row.time.count }} x&nbsp;
-          span {{ formatDuration(scope.row.time.duration) }}
+          el-row(justify='space-between')
+            div
+              span(v-if='scope.row.time.count > 1') {{ scope.row.time.count }} x&nbsp;
+              span {{ formatDuration(scope.row.time.duration) }}
+            el-tag(
+              v-if='scope.row.time.replays',
+              effect='plain',
+              type='info',
+              style='margin-left: 5px'
+            ) x{{ scope.row.time.replays }}
     el-table-column(
       v-if='authStore.isAuthenticated && !route.query.userId',
       label='Операции',
@@ -96,11 +104,23 @@ el-collapse-item.status-table(
     v-model:current-page='currentPage',
     v-model:page-size='limit',
     :hide-on-single-page='limit === 20',
-    layout='prev, pager, next, sizes, total',
+    layout='prev, pager, next, sizes',
     :page-sizes='[20, 50, 100]',
-    :total='total'
+    :total='total',
+    style='margin-top: 10px'
   )
-  h3(style='margin: 7px 0 0') Продолжительность: {{ formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || '-' }} {{ pageCount > 1 ? ` (на странице) / ${formatDuration(queryFilters.filters.total.find((i) => i.status === status).duration) || '-'} (всего)` : '' }}
+  el-row(style='column-gap: 30px; margin-top: 10px', align='middle')
+    StatisticItem(title='Всего', :content='total')
+    StatisticItem(
+      title='Продолжительность',
+      :content='(formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || "-") + " / " + (formatDuration(items.reduce((acc, cur) => acc + (cur.time.replays + 1) * cur.time.count * cur.time.duration, 0)) || "-")',
+      tooltip='(без повторов / общая)'
+    )
+    StatisticItem(
+      title='Общая продолжительность',
+      :content='(formatDuration(queryFilters.filters.total.find((i) => i.status === status)?.duration) || "-") + " / " + (formatDuration(queryFilters.filters.total.find((i) => i.status === status)?.fullDuration) || "-")',
+      tooltip='(без повторов / общая)'
+    )
 </template>
 
 <script setup lang="ts">

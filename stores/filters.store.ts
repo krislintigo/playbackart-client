@@ -23,6 +23,7 @@ export const useFilters = defineStore('filters', () => {
         },
         {}
       )
+      console.log(filters.value)
     } catch (e: any) {
       console.error(e.message)
     }

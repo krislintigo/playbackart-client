@@ -89,12 +89,15 @@ el-dialog.cu-dialog(
       ) {{ genre }}
     el-form-item(label='Длительность:', prop='time')
       el-row(justify='space-between')
-        el-col(:span='12')
+        el-col(:span='8')
           el-input-number(v-model='_item.time.count', :min='1')
           h4(style='margin: 0; text-align: center') Кол-во элементов
-        el-col(:span='12', :push='1')
+        el-col(:span='8', :push='1')
           el-input-number(v-model='_item.time.duration', :min='0')
           h4(style='margin: 0; text-align: center') Длительность (мин)
+        el-col(:span='8', :push='2')
+          el-input-number(v-model='_item.time.replays', :min='0')
+          h4(style='margin: 0; text-align: center') Повторы
     el-form-item(label='Год выхода:', prop='year')
       el-date-picker(v-model='_item.year', value-format='YYYY', type='year')
     el-form-item(
