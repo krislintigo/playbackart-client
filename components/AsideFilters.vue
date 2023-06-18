@@ -39,6 +39,7 @@ el-aside.aside(width='350px')
           @click='developerClick(developer.value)'
         ) {{ developer.value }}
         el-select(
+          v-if='developers.secondary.length',
           v-model='selectedDevelopers',
           filterable,
           multiple,
@@ -64,6 +65,7 @@ el-aside.aside(width='350px')
           @click='franchiseClick(franchise.value)'
         ) {{ franchise.value }}
         el-select(
+          v-if='franchises.secondary.length',
           v-model='selectedFranchises',
           filterable,
           multiple,

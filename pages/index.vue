@@ -54,11 +54,11 @@ div
           )
           StatisticItem(
             title='Продолжительность без повторов',
-            :content='formatDuration(queryFilters.filters?.total.reduce((acc, cur) => acc + cur.duration, 0))'
+            :content='formatDuration(queryFilters.filters?.total.reduce((acc, cur) => acc + cur.duration, 0)) || "---"'
           )
           StatisticItem(
             title='Полная продолжительность',
-            :content='formatDuration(queryFilters.filters?.total.reduce((acc, cur) => acc + cur.fullDuration, 0))'
+            :content='formatDuration(queryFilters.filters?.total.reduce((acc, cur) => acc + cur.fullDuration, 0)) || "---"'
           )
       el-col(:span='24', :lg='6', style='margin-top: 68px')
         AsideFilters(v-if='queryFilters.filters')
