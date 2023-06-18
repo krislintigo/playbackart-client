@@ -117,6 +117,7 @@ el-collapse-item.status-table(
       tooltip='Без повторов / Полная'
     )
     StatisticItem(
+      v-if='pageCount > 1',
       title='Общая продолжительность',
       :content='(formatDuration(queryFilters.filters.total.find((i) => i.status === status)?.duration) || "-") + " / " + (formatDuration(queryFilters.filters.total.find((i) => i.status === status)?.fullDuration) || "-")',
       tooltip='Без повторов / Полная'
