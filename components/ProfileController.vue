@@ -96,7 +96,7 @@ const handleUserAction = async (action: 'register' | 'login' | 'logout') => {
 </script>
 
 <style scoped></style>
-<style>
+<style lang="scss">
 .profile-collapse .el-collapse-item__header {
   background-color: var(--el-color-info-light-8);
   padding: 0 20px;

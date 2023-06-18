@@ -47,7 +47,19 @@ div
             @update-item='updateItem',
             @delete-item='deleteItem'
           )
-        h3(style='text-align: center') Всего: {{ queryFilters.filters?.total.reduce((acc, cur) => acc + cur.count, 0) }} шт. / {{ formatDuration(queryFilters.filters?.total.reduce((acc, cur) => acc + cur.duration, 0)) }}
+        el-row(justify='center', style='column-gap: 50px; margin-top: 20px')
+          StatisticItem(
+            title='Всего',
+            :content='queryFilters.filters?.total.reduce((acc, cur) => acc + cur.count, 0) + " шт."'
+          )
+          StatisticItem(
+            title='Продолжительность без повторов',
+            :content='formatDuration(queryFilters.filters?.total.reduce((acc, cur) => acc + cur.duration, 0))'
+          )
+          StatisticItem(
+            title='Полная продолжительность',
+            :content='formatDuration(queryFilters.filters?.total.reduce((acc, cur) => acc + cur.fullDuration, 0))'
+          )
       el-col(:span='24', :lg='6', style='margin-top: 68px')
         AsideFilters(v-if='queryFilters.filters')
 </template>

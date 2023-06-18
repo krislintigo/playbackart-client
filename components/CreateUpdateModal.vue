@@ -236,8 +236,7 @@ const save = async () => {
 </script>
 
 <style scoped></style>
-
-<style>
+<style lang="scss">
 .cu-dialog {
   max-width: 1300px;
 }

@@ -248,7 +248,7 @@ const getFranchiseTextClass = (franchise: {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .aside {
   display: flex;
   flex-direction: column;

@@ -5,7 +5,10 @@ export const useFilters = defineStore('filters', () => {
   const route = useRoute()
   const authStore = useAuthStore()
 
-  const filters = ref<any>(null)
+  const filterFn = api.service('items').filters
+  type FilterReturnType = Awaited<ReturnType<typeof filterFn>>
+
+  const filters = ref<FilterReturnType | null>(null)
   const searchQuery = ref<string>('')
   const selectedRatings = ref<number[]>([])
   const selectedRestrictions = ref<string[]>([])
@@ -15,15 +18,10 @@ export const useFilters = defineStore('filters', () => {
 
   const fetchFilters = async () => {
     try {
-      console.log('filters')
-      filters.value = await api.service('items').filters(
-        {
-          userId: route.query.userId || authStore.user?._id,
-          type: route.query.type as Item['type'] | undefined,
-        },
-        {}
-      )
-      console.log(filters.value)
+      filters.value = await api.service('items').filters({
+        userId: route.query.userId || authStore.user?._id,
+        type: route.query.type as Item['type'] | undefined,
+      })
     } catch (e: any) {
       console.error(e.message)
     }

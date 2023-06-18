@@ -10,7 +10,7 @@
     )
       el-icon(style='margin-left: 4px', :size='14')
         ElIconWarning
-  h2(style='margin-top: 0') {{ content }}
+  h2(style='margin: 0') {{ content }}
 </template>
 
 <script setup lang="ts">

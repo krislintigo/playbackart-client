@@ -29,7 +29,7 @@ el-collapse-item.status-table(
       sortable='custom',
       prop='rating',
       label='Рейтинг',
-      width='105'
+      width='120'
     )
       template(#default='scope')
         el-popover(
@@ -114,12 +114,12 @@ el-collapse-item.status-table(
     StatisticItem(
       title='Продолжительность',
       :content='(formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || "-") + " / " + (formatDuration(items.reduce((acc, cur) => acc + (cur.time.replays + 1) * cur.time.count * cur.time.duration, 0)) || "-")',
-      tooltip='(без повторов / общая)'
+      tooltip='Без повторов / Полная'
     )
     StatisticItem(
       title='Общая продолжительность',
       :content='(formatDuration(queryFilters.filters.total.find((i) => i.status === status)?.duration) || "-") + " / " + (formatDuration(queryFilters.filters.total.find((i) => i.status === status)?.fullDuration) || "-")',
-      tooltip='(без повторов / общая)'
+      tooltip='Без повторов / Полная'
     )
 </template>
 
@@ -213,7 +213,7 @@ const updateItemRating = async (item: Item, rating: number) => {
 </script>
 
 <style scoped></style>
-<style>
+<style lang="scss">
 .status-table .el-collapse-item__header {
   background-color: var(--el-color-info-light-8);
   padding: 0 20px;
