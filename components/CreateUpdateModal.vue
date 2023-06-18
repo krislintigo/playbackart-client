@@ -164,7 +164,10 @@ watch(dialog, (open) => {
 })
 
 watch(dialog, (open) => {
-  if (!open) return
+  if (!open) {
+    _item.value.reset()
+    return
+  }
   _item.value = props.updateItemId
     ? api.service('items').getFromStore(props.updateItemId, { clones: true })
         .value
