@@ -205,7 +205,7 @@ const getGenreTextClass = (genre: {
   const percentage =
     (genre.fullDurations.reduce((acc, cur) => acc + cur, 0) *
       genre.ratings.reduce((acc, cur) => acc + ratingCoefficient(cur), 1)) /
-    filters.value.total.reduce((acc, cur) => acc + cur.fullDuration, 0)
+    filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)
   return getTextSizeClass(percentage, 'genre')
 }
 
@@ -242,7 +242,7 @@ const getFranchiseTextClass = (franchise: {
         0
       )) *
     100
-  return getTextSizeClass(percentage, 'developer')
+  return getTextSizeClass(percentage, 'franchise')
 }
 </script>
 
