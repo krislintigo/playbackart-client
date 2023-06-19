@@ -65,28 +65,13 @@ el-dialog.cu-dialog(
         @click='_item.restriction = ""'
       )
     el-form-item(label='Жанры:', prop='genres')
-      el-input(
+      TagsInput(
         v-model='inputGenre',
-        style='width: 300px; margin-bottom: 5px',
-        @keyup.enter='handleGenreConfirm'
+        :items='_item.genres',
+        @add='addGenre',
+        @split='splitGenres',
+        @remove='removeGenre'
       )
-      el-button(
-        text,
-        circle,
-        :icon='ElIconMore',
-        style='margin-left: 5px',
-        @click='splitAndWrite("genre")'
-      )
-      el-button(text, style='margin: 0 10px', @click='handleGenreConfirm') Добавить
-      el-tag(
-        v-for='genre in _item.genres',
-        :key='genre',
-        size='large',
-        type='info',
-        style='margin-right: 10px',
-        closable,
-        @close='handleGenreDelete(genre)'
-      ) {{ genre }}
     el-form-item(label='Длительность:', prop='time')
       el-row(justify='space-between')
         el-col(:span='8')
@@ -104,28 +89,13 @@ el-dialog.cu-dialog(
       :label='getDeveloperWordByType(_item.type, 2) + ":"',
       prop='developers'
     )
-      el-input(
+      TagsInput(
         v-model='inputDeveloper',
-        style='width: 300px; margin-bottom: 5px',
-        @keyup.enter='handleDeveloperConfirm'
+        :items='_item.developers',
+        @add='addDeveloper',
+        @split='splitDevelopers',
+        @remove='removeDeveloper'
       )
-      el-button(
-        text,
-        circle,
-        :icon='ElIconMore',
-        style='margin-left: 5px',
-        @click='splitAndWrite("developer")'
-      )
-      el-button(text, style='margin: 0 10px', @click='handleDeveloperConfirm') Добавить
-      el-tag(
-        v-for='developer in _item.developers',
-        :key='developer',
-        size='large',
-        type='info',
-        style='margin-right: 10px',
-        closable,
-        @close='handleDeveloperDelete(developer)'
-      ) {{ developer }}
     el-form-item(label='Франшиза:', prop='franchise')
       el-input(v-model='_item.franchise')
   template(#footer)
@@ -174,40 +144,38 @@ watch(dialog, (open) => {
     : api.service('items').new({ userId: authStore.user._id })
 })
 
-const handleGenreDelete = (tag: string) => {
-  _item.value.genres.splice(_item.value.genres.indexOf(tag), 1)
-}
-
-const handleGenreConfirm = () => {
+const addGenre = () => {
   if (!inputGenre.value.trim()) return
   _item.value.genres.push(inputGenre.value.trim())
   inputGenre.value = ''
 }
 
-const handleDeveloperDelete = (tag: string) => {
-  _item.value.developers.splice(_item.value.developers.indexOf(tag), 1)
+const splitGenres = () => {
+  const array = inputGenre.value.trim().split(', ')
+  _item.value.genres.push(...array.map((i) => i[0].toUpperCase() + i.slice(1)))
+  inputGenre.value = ''
 }
 
-const handleDeveloperConfirm = () => {
+const removeGenre = (tag: string) => {
+  _item.value.genres.splice(_item.value.genres.indexOf(tag), 1)
+}
+
+const addDeveloper = () => {
   if (!inputDeveloper.value.trim()) return
   _item.value.developers.push(inputDeveloper.value.trim())
   inputDeveloper.value = ''
 }
 
-const splitAndWrite = (type: string) => {
-  if (type === 'genre') {
-    const array = inputGenre.value.trim().split(', ')
-    _item.value.genres.push(
-      ...array.map((i) => i[0].toUpperCase() + i.slice(1))
-    )
-    inputGenre.value = ''
-  } else if (type === 'developer') {
-    const array = inputDeveloper.value.trim().split(', ')
-    _item.value.developers.push(
-      ...array.map((i) => i[0].toUpperCase() + i.slice(1))
-    )
-    inputDeveloper.value = ''
-  }
+const splitDevelopers = () => {
+  const array = inputDeveloper.value.trim().split(', ')
+  _item.value.developers.push(
+    ...array.map((i) => i[0].toUpperCase() + i.slice(1))
+  )
+  inputDeveloper.value = ''
+}
+
+const removeDeveloper = (tag: string) => {
+  _item.value.developers.splice(_item.value.developers.indexOf(tag), 1)
 }
 
 const save = async () => {
