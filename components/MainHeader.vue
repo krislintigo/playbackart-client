@@ -8,7 +8,7 @@ el-header.header
         el-tab-pane(
           v-for='tab in navigationTabs',
           :key='tab.label',
-          :name='tab.searchType',
+          :name='tab.searchType'
         )
           template(#label)
             el-icon
@@ -20,10 +20,16 @@ el-header.header
 <script setup lang="ts">
 const route = useRoute()
 
-const active = ref<string>(<string>route.query.type ?? '')
+const active = ref<string>((route.query.type as string) ?? '')
 
 const tabClick = (tab: any) => {
-  return navigateTo({ path: route.path, query: { type: tab.props.name || undefined, userId: route.query.userId } })
+  return navigateTo(
+    {
+      path: route.path,
+      query: { ...route.query, type: tab.props.name || undefined },
+    },
+    { replace: true }
+  )
 }
 </script>
 

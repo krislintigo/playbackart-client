@@ -80,6 +80,7 @@ el-aside.aside(width='350px')
             :label='item.value',
             :value='item.value'
           )
+  el-button(text, bg, type='danger', @click='resetFilters') Сбросить фильтры
 </template>
 
 <script setup lang="ts">
@@ -141,7 +142,7 @@ const franchises = computed(() => {
 
 const getFilterPercentage = (item) =>
   ((item.fullDurations.reduce((acc, cur) => acc + cur, 0) *
-    item.ratings.reduce((acc, cur) => acc + ratingCoefficient(cur), 1)) /
+    ratingCoefficient(item.ratings)) /
     filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)) *
   100
 
@@ -204,7 +205,7 @@ const getGenreTextClass = (genre: {
 }) => {
   const percentage =
     (genre.fullDurations.reduce((acc, cur) => acc + cur, 0) *
-      genre.ratings.reduce((acc, cur) => acc + ratingCoefficient(cur), 1)) /
+      ratingCoefficient(genre.ratings)) /
     filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)
   return getTextSizeClass(percentage, 'genre')
 }
@@ -218,7 +219,7 @@ const getDeveloperTextClass = (developer: {
 }) => {
   const percentage =
     ((developer.fullDurations.reduce((acc, cur) => acc + cur, 0) *
-      developer.ratings.reduce((acc, cur) => acc + ratingCoefficient(cur), 1)) /
+      ratingCoefficient(developer.ratings)) /
       developers.value.primary.reduce(
         (acc, cur) => acc + cur.durations.reduce((acc, cur) => acc + cur, 0),
         0
@@ -236,13 +237,21 @@ const getFranchiseTextClass = (franchise: {
 }) => {
   const percentage =
     ((franchise.fullDurations.reduce((acc, cur) => acc + cur, 0) *
-      franchise.ratings.reduce((acc, cur) => acc + ratingCoefficient(cur), 1)) /
+      ratingCoefficient(franchise.ratings)) /
       developers.value.primary.reduce(
         (acc, cur) => acc + cur.durations.reduce((acc, cur) => acc + cur, 0),
         0
       )) *
     100
   return getTextSizeClass(percentage, 'franchise')
+}
+
+const resetFilters = () => {
+  selectedRatings.value = []
+  selectedRestrictions.value = []
+  selectedGenres.value = []
+  selectedDevelopers.value = []
+  selectedFranchises.value = []
 }
 </script>
 

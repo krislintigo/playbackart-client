@@ -9,12 +9,51 @@ export const useFilters = defineStore('filters', () => {
   type FilterReturnType = Awaited<ReturnType<typeof filterFn>>
 
   const filters = ref<FilterReturnType | null>(null)
-  const searchQuery = ref<string>('')
-  const selectedRatings = ref<number[]>([])
-  const selectedRestrictions = ref<string[]>([])
-  const selectedGenres = ref<string[]>([])
-  const selectedDevelopers = ref<string[]>([])
-  const selectedFranchises = ref<string[]>([])
+  const searchQuery = ref<string>(route.query.searchQuery as string)
+  const selectedRatings = ref<number[]>(
+    [route.query.selectedRatings ?? []].flat(1).map((i) => +i) as number[]
+  )
+  const selectedRestrictions = ref<string[]>(
+    [route.query.selectedRestrictions ?? []].flat(1) as string[]
+  )
+  const selectedGenres = ref<string[]>(
+    [route.query.selectedGenres ?? []].flat(1) as string[]
+  )
+  const selectedDevelopers = ref<string[]>(
+    [route.query.selectedDevelopers ?? []].flat(1) as string[]
+  )
+  const selectedFranchises = ref<string[]>(
+    [route.query.selectedFranchises ?? []].flat(1) as string[]
+  )
+
+  watch(
+    [
+      searchQuery,
+      selectedRatings,
+      selectedRestrictions,
+      selectedGenres,
+      selectedDevelopers,
+      selectedFranchises,
+    ],
+    () => {
+      // TODO: performance
+      navigateTo(
+        {
+          query: {
+            ...route.query,
+            searchQuery: searchQuery.value || undefined,
+            selectedRatings: selectedRatings.value,
+            selectedRestrictions: selectedRestrictions.value,
+            selectedGenres: selectedGenres.value,
+            selectedDevelopers: selectedDevelopers.value,
+            selectedFranchises: selectedFranchises.value,
+          },
+        },
+        { replace: true }
+      )
+    },
+    { deep: true }
+  )
 
   const fetchFilters = async () => {
     try {
@@ -22,7 +61,6 @@ export const useFilters = defineStore('filters', () => {
         userId: route.query.userId || authStore.user?._id,
         type: route.query.type as Item['type'] | undefined,
       })
-      console.log(filters.value)
     } catch (e: any) {
       console.error(e.message)
     }

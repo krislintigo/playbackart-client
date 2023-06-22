@@ -2,6 +2,8 @@
 el-row
   el-col(:span='10')
     el-image(:src='item.image')
+      template(#placeholder)
+        p Loading...
       template(#error)
         el-row.image-placeholder
           el-icon(:size='175')
@@ -50,7 +52,7 @@ el-row
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{ item: Instance<Item> }>()
+const props = defineProps<{ item: Item }>()
 
 const route = useRoute()
 const authStore = useAuthStore()

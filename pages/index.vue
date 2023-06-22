@@ -20,7 +20,7 @@ div
       h2 Войдите, чтобы продолжить!
     el-row(v-else, justify='center', :gutter='20', style='margin-bottom: 30px')
       el-col(:span='24', :lg='18')
-        div(style='display: flex; align-items: center; column-gap: 10px')
+        el-row(align='middle')
           h2 {{ navigationTabs.find((tab) => tab.searchType === (route.query.type ?? ''))?.header }}
           el-button(
             v-if='authStore.isAuthenticated && !route.query.userId',
@@ -28,6 +28,7 @@ div
             plain,
             :icon='ElIconPlus',
             size='small',
+            style='margin-left: 10px',
             @click='createItem'
           )
         CreateUpdateModal(v-model='dialog', :update-item-id='updateItemId')
