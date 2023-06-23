@@ -238,9 +238,6 @@ const textClass = (
         )
     }
   }
-  if (target === 'genre') {
-    console.log(value, getPercentage())
-  }
   return getTextSizeClass(getPercentage(), target)
 }
 

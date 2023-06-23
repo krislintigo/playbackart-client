@@ -31,7 +31,7 @@ div
             style='margin-left: 10px',
             @click='createItem'
           )
-        CreateUpdateModal(v-model='dialog', :update-item-id='updateItemId')
+        ItemFormModal(v-model='dialog', :update-item-id='updateItemId')
         div(style='margin-bottom: 20px')
           el-input(
             v-model='queryFilters.searchQuery',

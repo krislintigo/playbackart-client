@@ -36,6 +36,15 @@ export const useFilters = defineStore('filters', () => {
       selectedFranchises,
     ],
     () => {
+      console.log(route.query)
+      console.log(
+        searchQuery.value,
+        selectedRatings.value,
+        selectedRestrictions.value,
+        selectedGenres.value,
+        selectedDevelopers.value,
+        selectedFranchises.value
+      )
       // TODO: performance
       navigateTo(
         {
@@ -50,6 +59,15 @@ export const useFilters = defineStore('filters', () => {
           },
         },
         { replace: true }
+      )
+      console.log(route.query)
+      console.log(
+        searchQuery.value,
+        selectedRatings.value,
+        selectedRestrictions.value,
+        selectedGenres.value,
+        selectedDevelopers.value,
+        selectedFranchises.value
       )
     },
     { deep: true }
