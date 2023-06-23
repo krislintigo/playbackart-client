@@ -27,6 +27,12 @@ export const useFilters = defineStore('filters', () => {
   )
 
   watch(
+    () => route.query,
+    () => console.log('QUERY', route.query),
+    { immediate: true }
+  )
+
+  watch(
     [
       searchQuery,
       selectedRatings,
@@ -36,6 +42,7 @@ export const useFilters = defineStore('filters', () => {
       selectedFranchises,
     ],
     () => {
+      console.log('BEFORE')
       console.log(route.query)
       console.log(
         searchQuery.value,
@@ -60,6 +67,7 @@ export const useFilters = defineStore('filters', () => {
         },
         { replace: true }
       )
+      console.log('AFTER')
       console.log(route.query)
       console.log(
         searchQuery.value,
