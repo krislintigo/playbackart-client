@@ -152,7 +152,9 @@ const addGenre = () => {
 
 const splitGenres = () => {
   const array = inputGenre.value.trim().split(', ')
-  _item.value.genres.push(...array.map((i) => _capitalize(i)))
+  _item.value.genres.push(
+    ...array.map((i) => i.charAt(0).toUpperCase() + i.slice(1))
+  )
   inputGenre.value = ''
 }
 
@@ -168,7 +170,9 @@ const addDeveloper = () => {
 
 const splitDevelopers = () => {
   const array = inputDeveloper.value.trim().split(', ')
-  _item.value.developers.push(...array.map((i) => _capitalize(i)))
+  _item.value.developers.push(
+    ...array.map((i) => i.charAt(0).toUpperCase() + i.slice(1))
+  )
   inputDeveloper.value = ''
 }
 
