@@ -44,7 +44,8 @@ export const useFilters = defineStore('filters', () => {
       selectedDevelopers,
       selectedFranchises,
     ],
-    async () => {
+    async (newValue) => {
+      console.log('NEW', newValue)
       console.log('BEFORE')
       console.log(selectedRatings.value)
       // TODO: performance
