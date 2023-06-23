@@ -45,26 +45,29 @@ export const useFilters = defineStore('filters', () => {
       selectedFranchises,
     ],
     async (newValue) => {
-      console.log('NEW', newValue)
-      console.log('BEFORE')
-      console.log(selectedRatings.value)
+      const [
+        searchQuery,
+        selectedRatings,
+        selectedRestrictions,
+        selectedGenres,
+        selectedDevelopers,
+        selectedFranchises,
+      ] = newValue
       // TODO: performance
       await navigateTo(
         {
           query: {
             ...route.query,
-            searchQuery: searchQuery.value || undefined,
-            selectedRatings: selectedRatings.value,
-            selectedRestrictions: selectedRestrictions.value,
-            selectedGenres: selectedGenres.value,
-            selectedDevelopers: selectedDevelopers.value,
-            selectedFranchises: selectedFranchises.value,
+            searchQuery,
+            selectedRatings,
+            selectedRestrictions,
+            selectedGenres,
+            selectedDevelopers,
+            selectedFranchises,
           },
         },
         { replace: true }
       )
-      console.log('AFTER')
-      console.log(selectedRatings.value)
     },
     { deep: true }
   )
