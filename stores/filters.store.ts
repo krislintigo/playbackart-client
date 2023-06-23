@@ -9,7 +9,7 @@ export const useFilters = defineStore('filters', () => {
   type FilterReturnType = Awaited<ReturnType<typeof filterFn>>
 
   const filters = ref<FilterReturnType | null>(null)
-  console.log(route.query.selectedRatings)
+  console.log('query rating before init', route.query.selectedRatings)
   const searchQuery = ref<string>(route.query.searchQuery as string)
   const selectedRatings = ref<number[]>(
     [route.query.selectedRatings ?? []].flat(1).map((i) => +i) as number[]
@@ -26,6 +26,8 @@ export const useFilters = defineStore('filters', () => {
   const selectedFranchises = ref<string[]>(
     [route.query.selectedFranchises ?? []].flat(1) as string[]
   )
+  console.log('selected after init', selectedRatings.value)
+  console.log('query rating after init', route.query.selectedRatings)
 
   watch(
     () => route.query,
@@ -44,14 +46,7 @@ export const useFilters = defineStore('filters', () => {
     ],
     async () => {
       console.log('BEFORE')
-      console.log(
-        searchQuery.value,
-        selectedRatings.value,
-        selectedRestrictions.value,
-        selectedGenres.value,
-        selectedDevelopers.value,
-        selectedFranchises.value
-      )
+      console.log(selectedRatings.value)
       // TODO: performance
       await navigateTo(
         {
@@ -68,14 +63,7 @@ export const useFilters = defineStore('filters', () => {
         { replace: true }
       )
       console.log('AFTER')
-      console.log(
-        searchQuery.value,
-        selectedRatings.value,
-        selectedRestrictions.value,
-        selectedGenres.value,
-        selectedDevelopers.value,
-        selectedFranchises.value
-      )
+      console.log(selectedRatings.value)
     },
     { deep: true }
   )
