@@ -15,7 +15,7 @@ el-dialog.cu-dialog(
     :rules='rules'
   )
     el-form-item(label='Название:', prop='name')
-      el-input(v-model.trim='_item.name')
+      el-input(v-model='_item.name')
     el-form-item(label='Фото:', prop='image')
       el-input(v-model='_item.image', placeholder='Ссылка на фото')
     el-form-item(label='Рейтинг:', prop='rating')
@@ -152,12 +152,12 @@ const addGenre = () => {
 
 const splitGenres = () => {
   const array = inputGenre.value.trim().split(', ')
-  _item.value.genres.push(...array.map((i) => i[0].toUpperCase() + i.slice(1)))
+  _item.value.genres.push(...array.map((i) => _capitalize(i)))
   inputGenre.value = ''
 }
 
-const removeGenre = (tag: string) => {
-  _item.value.genres.splice(_item.value.genres.indexOf(tag), 1)
+const removeGenre = (index: number) => {
+  _item.value.genres.splice(index, 1)
 }
 
 const addDeveloper = () => {
@@ -168,14 +168,12 @@ const addDeveloper = () => {
 
 const splitDevelopers = () => {
   const array = inputDeveloper.value.trim().split(', ')
-  _item.value.developers.push(
-    ...array.map((i) => i[0].toUpperCase() + i.slice(1))
-  )
+  _item.value.developers.push(...array.map((i) => _capitalize(i)))
   inputDeveloper.value = ''
 }
 
-const removeDeveloper = (tag: string) => {
-  _item.value.developers.splice(_item.value.developers.indexOf(tag), 1)
+const removeDeveloper = (index: number) => {
+  _item.value.developers.splice(index, 1)
 }
 
 const save = async () => {

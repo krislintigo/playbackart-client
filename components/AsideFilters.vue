@@ -25,7 +25,7 @@ el-aside.aside(width='350px')
         el-link.item(
           v-for='genre in genres',
           :key='genre',
-          :class='{ [getGenreTextClass(genre)]: true, "item-selected": selectedGenres.includes(genre.value) }',
+          :class='{ [textClass("genre", genre)]: true, "item-selected": selectedGenres.includes(genre.value) }',
           @click='genreClick(genre.value)'
         ) {{ genre.value }}
   el-row
@@ -35,7 +35,7 @@ el-aside.aside(width='350px')
         el-link.item(
           v-for='developer in developers.primary',
           :key='developer',
-          :class='{ [getDeveloperTextClass(developer)]: true, "item-selected": selectedDevelopers.includes(developer.value) }',
+          :class='{ [textClass("developer", developer)]: true, "item-selected": selectedDevelopers.includes(developer.value) }',
           @click='developerClick(developer.value)'
         ) {{ developer.value }}
         el-select(
@@ -61,7 +61,7 @@ el-aside.aside(width='350px')
         el-link.item(
           v-for='franchise in franchises.primary',
           :key='franchise',
-          :class='{ [getFranchiseTextClass(franchise)]: true, "item-selected": selectedFranchises.includes(franchise.value) }',
+          :class='{ [textClass("franchise", franchise)]: true, "item-selected": selectedFranchises.includes(franchise.value) }',
           @click='franchiseClick(franchise.value)'
         ) {{ franchise.value }}
         el-select(
@@ -196,54 +196,52 @@ const franchiseClick = (franchise: string) => {
   }
 }
 
-const getGenreTextClass = (genre: {
-  value: string
-  ratings: number[]
-  durations: number[]
-  fullDurations: number[]
-  count: number
-}) => {
-  const percentage =
-    (genre.fullDurations.reduce((acc, cur) => acc + cur, 0) *
-      ratingCoefficient(genre.ratings)) /
-    filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)
-  return getTextSizeClass(percentage, 'genre')
-}
-
-const getDeveloperTextClass = (developer: {
-  value: string
-  ratings: number[]
-  durations: number[]
-  fullDurations: number[]
-  count: number
-}) => {
-  const percentage =
-    ((developer.fullDurations.reduce((acc, cur) => acc + cur, 0) *
-      ratingCoefficient(developer.ratings)) /
-      developers.value.primary.reduce(
-        (acc, cur) => acc + cur.durations.reduce((acc, cur) => acc + cur, 0),
-        0
-      )) *
-    100
-  return getTextSizeClass(percentage, 'developer')
-}
-
-const getFranchiseTextClass = (franchise: {
-  value: string
-  ratings: number[]
-  durations: number[]
-  fullDurations: number[]
-  count: number
-}) => {
-  const percentage =
-    ((franchise.fullDurations.reduce((acc, cur) => acc + cur, 0) *
-      ratingCoefficient(franchise.ratings)) /
-      developers.value.primary.reduce(
-        (acc, cur) => acc + cur.durations.reduce((acc, cur) => acc + cur, 0),
-        0
-      )) *
-    100
-  return getTextSizeClass(percentage, 'franchise')
+const textClass = (
+  target: 'genre' | 'developer' | 'franchise',
+  value: {
+    value: string
+    ratings: number[]
+    durations: number[]
+    fullDurations: number[]
+    count: number
+  }
+) => {
+  const getPercentage = () => {
+    switch (target) {
+      case 'genre':
+        return (
+          (value.fullDurations.reduce((acc, cur) => acc + cur, 0) *
+            ratingCoefficient(value.ratings)) /
+          filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)
+        )
+      case 'developer':
+        return (
+          ((value.fullDurations.reduce((acc, cur) => acc + cur, 0) *
+            ratingCoefficient(value.ratings)) /
+            developers.value.primary.reduce(
+              (acc, cur) =>
+                acc + cur.durations.reduce((acc, cur) => acc + cur, 0),
+              0
+            )) *
+          100
+        )
+      case 'franchise':
+        return (
+          ((value.fullDurations.reduce((acc, cur) => acc + cur, 0) *
+            ratingCoefficient(value.ratings)) /
+            developers.value.primary.reduce(
+              (acc, cur) =>
+                acc + cur.durations.reduce((acc, cur) => acc + cur, 0),
+              0
+            )) *
+          100
+        )
+    }
+  }
+  if (target === 'genre') {
+    console.log(value, getPercentage())
+  }
+  return getTextSizeClass(getPercentage(), target)
 }
 
 const resetFilters = () => {

@@ -30,6 +30,7 @@ el-popover(
         plain,
         size='small',
         :icon='ElIconShare',
+        style='margin-left: 5px',
         @click='copyLink'
       )
     el-collapse.profile-collapse
@@ -68,10 +69,11 @@ const copyLink = async () => {
   try {
     if (!navigator?.clipboard?.writeText)
       throw new Error('Ваш браузер не поддерживает эту функцию!')
-    console.log(route.fullPath)
-    await navigator.clipboard.writeText(
-      location.origin + route.fullPath + '&userId=' + authStore.user._id
-    )
+    const query =
+      JSON.stringify(route.query) === '{}'
+        ? '?userId=' + authStore.user._id
+        : route.fullPath + '&userId=' + authStore.user._id
+    await navigator.clipboard.writeText(location.origin + query)
     ElNotification.success({
       title: 'Ссылка успешно скопирована!',
       position: 'bottom-right',
@@ -83,6 +85,7 @@ const copyLink = async () => {
     })
   }
 }
+
 const handleUserAction = async (action: 'register' | 'login' | 'logout') => {
   try {
     if (action !== 'logout' && (!authData.login || !authData.password))

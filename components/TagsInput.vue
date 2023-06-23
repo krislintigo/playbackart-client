@@ -13,13 +13,13 @@ el-button(
 )
 el-button(text, style='margin: 0 10px', @click='emit("add")') Добавить
 el-tag(
-  v-for='item in items',
+  v-for='(item, i) in items',
   :key='item',
   size='large',
   type='info',
   style='margin-right: 10px',
   closable,
-  @close='emit("remove", item)'
+  @close='emit("remove", i)'
 ) {{ item }}
 </template>
 
@@ -33,7 +33,7 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
   (e: 'add'): void
   (e: 'split'): void
-  (e: 'remove', value: string)
+  (e: 'remove', index: number)
 }>()
 
 const input = computed({
