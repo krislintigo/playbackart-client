@@ -1,43 +1,26 @@
 <template lang="pug">
-h3(style='margin: 0 0 5px') Синхронизация:
-  el-button(
-    text,
-    circle,
-    :type='listChanged ? "warning" : "success"',
-    style='margin-left: 5px',
-    size='small',
-    @click='saveWatching'
-  )
-    el-icon(:size='20')
-      ElIconCircleCheck
-TextEditor(v-model='list')
+TextEditor(v-model='_user.list')
 </template>
 
 <script setup lang="ts">
 const authStore = useAuthStore()
 
-const list = ref('')
+const _user = ref(authStore.user.clone())
 
-const listChanged = computed(() => authStore.user.list !== list.value)
-const saveWatching = async () => {
+const save = _throttle(async () => {
+  console.log('save list')
   try {
-    await authStore.user.save({ diff: { list: list.value } })
-    ElNotification.success({
-      title: 'Список успешно обновлен',
-      position: 'bottom-right',
-    })
+    await _user.value.save({ diff: 'list' })
+    await _user.value.reset()
   } catch (e: any) {
     ElNotification.error({
       title: 'Что-то пошло не так...',
       position: 'bottom-right',
     })
   }
-}
+}, 5000)
 
-watchEffect(() => {
-  if (!authStore.user) return
-  list.value = authStore.user.list
-})
+watch(() => _user.value.list, save)
 </script>
 
 <style scoped></style>

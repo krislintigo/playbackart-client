@@ -40,7 +40,8 @@ watch(dialog, (open) => {
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="scss"></style>
+<style lang="scss">
 .dialog .el-dialog__body {
   padding-top: 0;
 }

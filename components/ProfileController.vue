@@ -22,7 +22,7 @@ el-popover(
     //  el-icon(v-else, :size='24')
     //    ElIconMoon
   div(v-if='authStore.isAuthenticated')
-    h3 Добро пожаловать, {{ authStore.user?.login }}!
+    h3 Добро пожаловать, {{ authStore.user.login }}!
     el-row(align='middle', style='margin-bottom: 15px')
       h4(style='margin: 0') Поделиться приложением:
       el-button(
@@ -34,9 +34,19 @@ el-popover(
         @click='copyLink'
       )
     ListEditor
-    el-collapse.profile-collapse
-      el-collapse-item(title='Отслеживаемые франшизы')
-        TrackedFranchisesEditor
+    el-row(justify='center', style='margin: 10px 5px')
+      el-button(
+        type='primary',
+        style='width: 100%',
+        @click='trackedFranchisesDialog = true'
+      ) Отслеживаемые франшизы
+      client-only
+        AppDialog(
+          v-model='trackedFranchisesDialog',
+          title='Отслеживаемые франшизы',
+          max-width='700px'
+        )
+          TrackedFranchisesEditor
     el-row(justify='end', style='margin-top: 10px')
       el-button(type='danger', @click='handleUserAction("logout")') Выход
   div(v-else)
@@ -59,6 +69,7 @@ const authStore = useAuthStore()
 // const toggleDark = useToggle(isDark)
 
 const visible = ref(false)
+const trackedFranchisesDialog = ref(false)
 const authData = reactive({
   login: '',
   password: '',
