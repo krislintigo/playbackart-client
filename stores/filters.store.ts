@@ -11,7 +11,9 @@ export const useFilters = defineStore('filters', () => {
   const filters = ref<FilterReturnType | null>(null)
   const searchQuery = ref<string>(route.query.searchQuery as string)
   const selectedRatings = ref<number[]>(
-    [route.query.selectedRatings ?? []].flat(1).map((i) => +i) as number[]
+    [route.query.selectedRatings ?? []]
+      .flat(1)
+      .map((i) => Number(i)) as number[]
   )
   const selectedRestrictions = ref<string[]>(
     [route.query.selectedRestrictions ?? []].flat(1) as string[]

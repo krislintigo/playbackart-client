@@ -29,9 +29,15 @@ div
             :icon='ElIconPlus',
             size='small',
             style='margin-left: 10px',
-            @click='createItem'
+            @click='createItemHandler'
           )
-        ItemFormModal(v-model='dialog', :update-item-id='updateItemId')
+        AppDialog(
+          v-model='dialog',
+          :title='(updateItemId ? "Обновить" : "Добавить") + " элемент"'
+        )
+          ItemForm(ref='itemForm', v-model='item')
+          template(#footer)
+            el-button(type='success', @click='save') Подтвердить
         div(style='margin-bottom: 20px')
           el-input(
             v-model='queryFilters.searchQuery',
@@ -45,7 +51,7 @@ div
             :title='block.title.toUpperCase()',
             :status='block.value',
             :index='i',
-            @update-item='updateItem',
+            @update-item='updateItemHandler',
             @delete-item='deleteItem'
           )
         el-row(justify='center', style='column-gap: 50px; margin-top: 20px')
@@ -76,18 +82,54 @@ const route = useRoute()
 const authStore = useAuthStore()
 const queryFilters = useFilters()
 
+const itemForm = ref<any>(null)
 const activeItems = ref([0, 1, 2, 3, 4])
 const dialog = ref(false)
+const item = ref()
 const updateItemId = ref<string | null>(null)
 
-const createItem = () => {
-  dialog.value = true
-  updateItemId.value = null
+// reset clone
+watch(dialog, (open) => {
+  if (open) return
+  item.value.reset()
+})
+
+const save = async () => {
+  item.value.name = item.value.name.trim()
+  item.value.image = item.value.image.trim()
+  item.value.franchise = item.value.franchise.trim()
+
+  const valid = await itemForm.value.validate()
+  if (!valid) {
+    return ElNotification.error({
+      title: 'Пожалуйста, заполните все поля',
+      position: 'bottom-right',
+    })
+  }
+
+  try {
+    await item.value.save()
+    dialog.value = false
+    ElNotification.success({
+      title: 'Элемент успешно сохранен!',
+      position: 'bottom-right',
+    })
+  } catch (e: any) {
+    ElNotification.error({
+      title: 'Что-то пошло не так...',
+      position: 'bottom-right',
+    })
+  }
 }
 
-const updateItem = (id: string) => {
+const createItemHandler = () => {
+  item.value = api.service('items').new({ userId: authStore.user._id })
   dialog.value = true
-  updateItemId.value = id
+}
+
+const updateItemHandler = (id: string) => {
+  item.value = api.service('items').getFromStore(id, { clones: true }).value
+  dialog.value = true
 }
 
 const deleteItem = async (id: string) => {

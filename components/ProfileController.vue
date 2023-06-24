@@ -2,7 +2,7 @@
 el-popover(
   :visible='visible',
   placement='bottom',
-  :width='382',
+  :width='380',
   trigger='click'
 )
   template(#reference)
@@ -33,9 +33,8 @@ el-popover(
         style='margin-left: 5px',
         @click='copyLink'
       )
+    ListEditor
     el-collapse.profile-collapse
-      el-collapse-item(title='Список')
-        ListEditor
       el-collapse-item(title='Отслеживаемые франшизы')
         TrackedFranchisesEditor
     el-row(justify='end', style='margin-top: 10px')
