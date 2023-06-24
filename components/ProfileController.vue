@@ -15,7 +15,7 @@ el-popover(
           @click='visible = !visible'
         )
   el-row(justify='space-between', align='middle')
-    h2 Профиль
+    h2(style='margin-bottom: 10px') Профиль
     //el-button(circle, text, size='large', @click='toggleDark()')
     //  el-icon(v-if='isDark', :size='24')
     //    ElIconSunny
@@ -65,7 +65,7 @@ el-popover(
 const { api } = useFeathers()
 const route = useRoute()
 const authStore = useAuthStore()
-// const isDark = useDark()
+// const isDark = useDark({ storageKey: 'theme' })
 // const toggleDark = useToggle(isDark)
 
 const visible = ref(false)
