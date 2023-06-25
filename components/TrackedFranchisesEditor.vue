@@ -1,9 +1,8 @@
 <template lang="pug">
-el-select(
+el-select.w-full.my-2(
   v-model='input',
   filterable,
-  placeholder='Выберите...',
-  style='width: 100%; margin: 10px 0',
+  placeholder='Добавить...',
   @change='trackFranchise'
 )
   el-option(
@@ -19,7 +18,7 @@ el-collapse(v-model='activeTabs')
     :name='franchise.name'
   )
     template(#title)
-      h3(style='font-size: 20px') {{ franchise.name }}
+      h3.text-xl {{ franchise.name }}
     TextEditor(v-model='franchise.description')
     el-popconfirm(
       title='Вы действительно хотите удалить?',
@@ -29,7 +28,7 @@ el-collapse(v-model='activeTabs')
       @confirm='untrackFranchise(franchise.name)'
     )
       template(#reference)
-        el-button(type='danger', style='margin-top: 10px') Удалить
+        el-button.mt-3(type='danger') Удалить
 </template>
 
 <script setup lang="ts">

@@ -24,21 +24,16 @@ el-popover(
     h3.my-3.font-bold.text-lg Добро пожаловать, {{ authStore.user.login }}!
     el-row.mb-4(align='middle')
       h4.m-0.text-base.font-bold Поделиться приложением:
-      el-button(
+      el-button.ml-2(
         circle,
         plain,
         size='small',
         :icon='ElIconShare',
-        style='margin-left: 5px',
         @click='copyLink'
       )
     ListEditor
-    el-row(justify='center', style='margin: 10px 5px')
-      el-button(
-        type='primary',
-        style='width: 100%',
-        @click='trackedFranchisesDialog = true'
-      ) Отслеживаемые франшизы
+    el-row.my-3(justify='center')
+      el-button.w-full(type='primary', @click='trackedFranchisesDialog = true') Отслеживаемые франшизы
       client-only
         AppDialog(
           v-model='trackedFranchisesDialog',
@@ -46,7 +41,7 @@ el-popover(
           max-width='700px'
         )
           TrackedFranchisesEditor
-    el-row(justify='end', style='margin-top: 10px')
+    el-row.mt-3(justify='end')
       el-button(type='danger', @click='handleUserAction("logout")') Выход
   div(v-else)
     h3 Войдите в аккаунт!
