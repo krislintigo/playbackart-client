@@ -13,7 +13,7 @@ div
       el-button.ml-3(link, type='primary', @click='navigateTo("/")') На свою страницу
     el-row(v-if='!authStore.isAuthenticated && !route.query.userId')
       h2.text-2xl.font-bold.my-5 Войдите, чтобы продолжить!
-    el-row.mb-8(v-else)
+    el-row.mb-8(v-else-if='queryFilters.filters')
       el-row(align='middle')
         h2.text-2xl.font-bold.my-5 {{ navigationTabs.find((tab) => tab.searchType === (route.query.type ?? ''))?.header }}
         el-button.ml-3(
@@ -38,7 +38,7 @@ div
             placeholder='Поиск по названию...',
             clearable
           )
-          el-collapse(v-if='queryFilters.filters', v-model='activeItems')
+          el-collapse(v-model='activeItems')
             StatusCollapseTable(
               v-for='(block, i) in statuses',
               :key='block.value',
@@ -48,9 +48,14 @@ div
               @update-item='updateItemHandler',
               @delete-item='deleteItem'
             )
-          SummaryFooter(v-if='queryFilters.filters')
+          SummaryFooter
         el-col(:lg='6')
-          AsideFilters(v-if='queryFilters.filters')
+          AsideFilters
+    el-row(v-else, :gutter='40')
+      el-col(:lg='18')
+        el-skeleton(animated, :rows='10')
+      el-col(:lg='6')
+        el-skeleton(animated, :rows='10')
 </template>
 
 <script setup lang="ts">
