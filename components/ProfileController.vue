@@ -8,23 +8,22 @@ el-popover(
   template(#reference)
     div
       client-only
-        el-avatar(
+        el-avatar.cursor-pointer(
           :size='50',
           :icon='authStore.isAuthenticated ? ElIconUserFilled : ElIconUser',
-          style='cursor: pointer',
           @click='visible = !visible'
         )
   el-row(justify='space-between', align='middle')
-    h2(style='margin-bottom: 10px') Профиль
+    h2.mb-3.font-bold.text-2xl Профиль
     //el-button(circle, text, size='large', @click='toggleDark()')
     //  el-icon(v-if='isDark', :size='24')
     //    ElIconSunny
     //  el-icon(v-else, :size='24')
     //    ElIconMoon
   div(v-if='authStore.isAuthenticated')
-    h3 Добро пожаловать, {{ authStore.user.login }}!
-    el-row(align='middle', style='margin-bottom: 15px')
-      h4(style='margin: 0') Поделиться приложением:
+    h3.my-3.font-bold.text-lg Добро пожаловать, {{ authStore.user.login }}!
+    el-row.mb-4(align='middle')
+      h4.m-0.text-base.font-bold Поделиться приложением:
       el-button(
         circle,
         plain,

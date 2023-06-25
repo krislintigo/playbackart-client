@@ -1,16 +1,16 @@
 <template lang="pug">
-.stat-wrapper
-  div(style='display: inline-flex; align-items: center')
-    span(style='text-align: center') {{ title }}
+.flex.flex-col.items-center
+  .inline-flex.items-center
+    span {{ title }}
     el-tooltip(
       v-if='tooltip',
       effect='dark',
       :content='tooltip',
       placement='top'
     )
-      el-icon(style='margin-left: 4px', :size='14')
+      el-icon.ml-1(:size='14')
         ElIconWarning
-  h2(style='margin: 0') {{ content }}
+  h2.text-xl.font-bold.m-0 {{ content }}
 </template>
 
 <script setup lang="ts">

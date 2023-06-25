@@ -77,8 +77,4 @@ const options = {
 }
 </script>
 
-<style scoped>
-canvas {
-  display: flex;
-}
-</style>
+<style scoped></style>

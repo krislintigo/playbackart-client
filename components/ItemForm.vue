@@ -18,8 +18,7 @@ el-form.item-form(
       :texts='rating.texts',
       :colors='rating.colors'
     )
-    el-button(
-      style='margin-left: 5px',
+    el-button.ml-1(
       :icon='ElIconClose',
       size='small',
       circle,
@@ -48,8 +47,7 @@ el-form.item-form(
         :key='restriction',
         :label='restriction'
       )
-    el-button(
-      style='margin-left: 5px',
+    el-button.ml-1(
       :icon='ElIconClose',
       size='small',
       circle,
@@ -68,13 +66,13 @@ el-form.item-form(
     el-row(justify='space-between')
       el-col(:span='8')
         el-input-number(v-model='item.time.count', :min='1')
-        h4(style='margin: 0; text-align: center') Кол-во элементов
+        h4.m-0.text-center Кол-во элементов
       el-col(:span='8', :push='1')
         el-input-number(v-model='item.time.duration', :min='0')
-        h4(style='margin: 0; text-align: center') Длительность (мин)
+        h4.m-0.text-center Длительность (мин)
       el-col(:span='8', :push='2')
         el-input-number(v-model='item.time.replays', :min='0')
-        h4(style='margin: 0; text-align: center') Повторы
+        h4.m-0.text-center Повторы
   el-form-item(label='Год выхода:', prop='year')
     el-date-picker(v-model='item.year', value-format='YYYY', type='year')
   el-form-item(

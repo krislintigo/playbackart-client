@@ -4,71 +4,53 @@ div
     template(#fallback)
       el-empty
         template(#description)
-          h3 Пожалуйста, подождите...
+          h3.font-bold.text-lg Пожалуйста, подождите...
         template(#image)
           el-icon.is-loading(:size='150')
             ElIconChromeFilled
     el-row(v-if='route.query.userId', align='middle')
       h3 Вы просматриваете список другого пользователя
-      el-button(
-        link,
-        type='primary',
-        style='margin-left: 10px',
-        @click='navigateTo("/")'
-      ) На свою страницу
+      el-button.ml-3(link, type='primary', @click='navigateTo("/")') На свою страницу
     el-row(v-if='!authStore.isAuthenticated && !route.query.userId')
-      h2 Войдите, чтобы продолжить!
-    el-row(v-else, justify='center', :gutter='20', style='margin-bottom: 30px')
-      el-col(:span='24', :lg='18')
-        el-row(align='middle')
-          h2 {{ navigationTabs.find((tab) => tab.searchType === (route.query.type ?? ''))?.header }}
-          el-button(
-            v-if='authStore.isAuthenticated && !route.query.userId',
-            circle,
-            plain,
-            :icon='ElIconPlus',
-            size='small',
-            style='margin-left: 10px',
-            @click='createItemHandler'
-          )
+      h2.text-2xl.font-bold.my-5 Войдите, чтобы продолжить!
+    el-row.mb-8(v-else)
+      el-row(align='middle')
+        h2.text-2xl.font-bold.my-5 {{ navigationTabs.find((tab) => tab.searchType === (route.query.type ?? ''))?.header }}
+        el-button.ml-3(
+          v-if='authStore.isAuthenticated && !route.query.userId',
+          circle,
+          plain,
+          :icon='ElIconPlus',
+          size='small',
+          @click='createItemHandler'
+        )
         AppDialog(
           v-model='dialog',
-          :title='(updateItemId ? "Обновить" : "Добавить") + " элемент"'
+          :title='(item?._id ? "Обновить" : "Добавить") + " элемент"'
         )
           ItemForm(ref='itemForm', v-model='item')
           template(#footer)
             el-button(type='success', @click='save') Подтвердить
-        div(style='margin-bottom: 20px')
-          el-input(
+      el-row(:gutter='40')
+        el-col(:lg='18')
+          el-input.mb-5(
             v-model='queryFilters.searchQuery',
             placeholder='Поиск по названию...',
             clearable
           )
-        el-collapse(v-if='queryFilters.filters', v-model='activeItems')
-          StatusCollapseTable(
-            v-for='(block, i) in statuses',
-            :key='block.value',
-            :title='block.title.toUpperCase()',
-            :status='block.value',
-            :index='i',
-            @update-item='updateItemHandler',
-            @delete-item='deleteItem'
-          )
-        el-row(justify='center', style='column-gap: 50px; margin-top: 20px')
-          StatisticItem(
-            title='Всего',
-            :content='queryFilters.filters?.total.reduce((acc, cur) => acc + cur.count, 0) + " шт."'
-          )
-          StatisticItem(
-            title='Продолжительность без повторов',
-            :content='formatDuration(queryFilters.filters?.total.reduce((acc, cur) => acc + cur.duration, 0)) || "---"'
-          )
-          StatisticItem(
-            title='Полная продолжительность',
-            :content='formatDuration(queryFilters.filters?.total.reduce((acc, cur) => acc + cur.fullDuration, 0)) || "---"'
-          )
-      el-col(:span='24', :lg='6', style='margin-top: 68px')
-        AsideFilters(v-if='queryFilters.filters')
+          el-collapse(v-if='queryFilters.filters', v-model='activeItems')
+            StatusCollapseTable(
+              v-for='(block, i) in statuses',
+              :key='block.value',
+              :title='block.title.toUpperCase()',
+              :status='block.value',
+              :index='i',
+              @update-item='updateItemHandler',
+              @delete-item='deleteItem'
+            )
+          SummaryFooter(v-if='queryFilters.filters')
+        el-col(:lg='6')
+          AsideFilters(v-if='queryFilters.filters')
 </template>
 
 <script setup lang="ts">
@@ -86,7 +68,6 @@ const itemForm = ref<any>(null)
 const activeItems = ref([0, 1, 2, 3, 4])
 const dialog = ref(false)
 const item = ref()
-const updateItemId = ref<string | null>(null)
 
 // reset clone
 watch(dialog, (open) => {

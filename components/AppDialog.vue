@@ -8,7 +8,7 @@ el-dialog.dialog(
 )
   template(#header)
     slot(name='header')
-      h3 {{ title }}
+      h3.font-bold.text-2xl {{ title }}
   template(#default)
     slot(name='default')
   template(#footer)
@@ -43,7 +43,7 @@ watch(dialog, (open) => {
 <style scoped lang="scss"></style>
 <style lang="scss">
 .dialog .el-dialog__body {
-  padding-top: 0;
+  padding-top: 20px;
 }
 
 .dialog .el-rate__item {

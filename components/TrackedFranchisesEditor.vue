@@ -61,6 +61,7 @@ const untrackFranchise = (franchise: string) => {
   _user.value.trackedFranchises = _user.value.trackedFranchises.filter(
     (f) => f.name !== franchise
   )
+  activeTabs.value = activeTabs.value.filter((tab) => tab !== franchise)
 }
 
 const save = _throttle(async () => {

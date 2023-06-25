@@ -1,23 +1,12 @@
 <template lang="pug">
-el-input(
-  v-model='input',
-  style='width: 300px; margin-bottom: 5px',
-  @keyup.enter='emit("add")'
-)
-el-button(
-  text,
-  circle,
-  :icon='ElIconMore',
-  style='margin-left: 5px',
-  @click='emit("split")'
-)
-el-button(text, style='margin: 0 10px', @click='emit("add")') Добавить
-el-tag(
+el-input.mb-1(v-model='input', style='width: 300px', @keyup.enter='emit("add")')
+el-button.ml-1(text, circle, :icon='ElIconMore', @click='emit("split")')
+el-button.mx-3.my-0(text, @click='emit("add")') Добавить
+el-tag.mr-3(
   v-for='(item, i) in items',
   :key='item',
   size='large',
   type='info',
-  style='margin-right: 10px',
   closable,
   @close='emit("remove", i)'
 ) {{ item }}

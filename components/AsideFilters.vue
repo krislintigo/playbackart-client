@@ -1,8 +1,8 @@
 <template lang="pug">
-el-aside.aside(width='350px')
+el-aside.flex.flex-col.gap-7(width='350px')
   el-row
     el-col
-      h3.filter-header Оценки
+      h3.filter-header.mt-0.mb-3.p-2.font-bold.uppercase(class='pl-2.5') Оценки
       HorizontalBarChart(
         :labels='ratings.map((r) => r.value)',
         :data='ratings.map((r) => r.count)',
@@ -11,7 +11,7 @@ el-aside.aside(width='350px')
       )
   el-row
     el-col
-      h3.filter-header Возрастные ограничения
+      h3.filter-header.mt-0.mb-3.p-2.font-bold.uppercase(class='pl-2.5') Возрастные ограничения
       HorizontalBarChart(
         :labels='restrictions.map((r) => r.value)',
         :data='restrictions.map((r) => r.count)',
@@ -20,33 +20,34 @@ el-aside.aside(width='350px')
       )
   el-row
     el-col
-      h3.filter-header Жанры
+      h3.filter-header.mt-0.mb-3.p-2.font-bold.uppercase(class='pl-2.5') Жанры
       el-row
-        el-link.item(
+        el-link.mx-2(
           v-for='genre in genres',
           :key='genre',
           :class='{ [textClass("genre", genre)]: true, "item-selected": selectedGenres.includes(genre.value) }',
+          class='my-0.5',
           @click='genreClick(genre.value)'
         ) {{ genre.value }}
   el-row
     el-col
-      h3.filter-header Создатели
+      h3.filter-header.mt-0.mb-3.p-2.font-bold.uppercase(class='pl-2.5') Создатели
       el-row
-        el-link.item(
+        el-link.mx-2(
           v-for='developer in developers.primary',
           :key='developer',
           :class='{ [textClass("developer", developer)]: true, "item-selected": selectedDevelopers.includes(developer.value) }',
+          class='my-0.5',
           @click='developerClick(developer.value)'
         ) {{ developer.value }}
-        el-select(
+        el-select.w-full.mt-3(
           v-if='developers.secondary.length',
           v-model='selectedDevelopers',
           filterable,
           multiple,
           collapse-tags,
           collapse-tags-tooltip,
-          placeholder='Другие создатели...',
-          style='width: 100%; margin-top: 10px'
+          placeholder='Другие создатели...'
         )
           el-option(
             v-for='item in developers.secondary',
@@ -56,23 +57,23 @@ el-aside.aside(width='350px')
           )
   el-row
     el-col
-      h3.filter-header Франшизы
+      h3.filter-header.mt-0.mb-3.p-2.font-bold.uppercase(class='pl-2.5') Франшизы
       el-row
-        el-link.item(
+        el-link.mx-2(
           v-for='franchise in franchises.primary',
           :key='franchise',
           :class='{ [textClass("franchise", franchise)]: true, "item-selected": selectedFranchises.includes(franchise.value) }',
+          class='my-0.5',
           @click='franchiseClick(franchise.value)'
         ) {{ franchise.value }}
-        el-select(
+        el-select.w-full.mt-3(
           v-if='franchises.secondary.length',
           v-model='selectedFranchises',
           filterable,
           multiple,
           collapse-tags,
           collapse-tags-tooltip,
-          placeholder='Другие франшизы...',
-          style='width: 100%; margin-top: 10px'
+          placeholder='Другие франшизы...'
         )
           el-option(
             v-for='item in franchises.secondary',
@@ -251,24 +252,9 @@ const resetFilters = () => {
 </script>
 
 <style scoped lang="scss">
-.aside {
-  display: flex;
-  flex-direction: column;
-  row-gap: 30px;
-}
-
 .filter-header {
   background-color: var(--el-color-info-light-8);
-  padding: 10px;
-  margin-top: 0;
-  margin-bottom: 10px;
   border-left: 5px solid var(--el-text-color-primary);
-  font-size: 16px;
-  text-transform: uppercase;
-}
-
-.item {
-  margin: 4px 8px;
 }
 
 .item-selected {

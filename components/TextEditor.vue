@@ -1,56 +1,46 @@
 <template lang="pug">
-div(style='margin: 1px')
-  el-button-group(v-if='editor', style='margin-bottom: 10px; display: flex')
-    el-button(
+.m-px
+  el-button-group.flex.mb-3(v-if='editor')
+    el-button.grow(
       :disabled='!editor.can().chain().focus().toggleBold().run()',
       :class='{ "is-active": editor.isActive("bold") }',
-      style='flex-grow: 1',
       @click='editor.chain().focus().toggleBold().run()'
     )
       strong Ж
-    el-button(
+    el-button.grow(
       :disabled='!editor.can().chain().focus().toggleItalic().run()',
       :class='{ "is-active": editor.isActive("italic") }',
-      style='flex-grow: 1',
       @click='editor.chain().focus().toggleItalic().run()'
     )
       em К
-    el-button(
+    el-button.grow(
       :disabled='!editor.can().chain().focus().toggleStrike().run()',
       :class='{ "is-active": editor.isActive("strike") }',
-      style='flex-grow: 1',
       @click='editor.chain().focus().toggleStrike().run()'
     )
       del del
-    el-button(
+    el-button.grow(
       :class='{ "is-active": editor.isActive("heading", { level: 1 }) }',
-      style='flex-grow: 1',
       @click='editor.chain().focus().toggleHeading({ level: 1 }).run()'
     )
-      span(style='font-size: 20px') A
-    el-button(
+      span.text-xl A
+    el-button.grow(
       :class='{ "is-active": editor.isActive("heading", { level: 2 }) }',
-      style='flex-grow: 1',
       @click='editor.chain().focus().toggleHeading({ level: 2 }).run()'
     )
-      span(style='font-size: 17px') A
-    el-button(
+      span.text-base A
+    el-button.grow(
       :class='{ "is-active": editor.isActive("heading", { level: 3 }) }',
-      style='flex-grow: 1',
       @click='editor.chain().focus().toggleHeading({ level: 3 }).run()'
     )
-      span(style='font-size: 14px') A
-    el-button(
+      span.text-sm A
+    el-button.grow(
       :class='{ "is-active": editor.isActive("blockquote") }',
-      style='flex-grow: 1',
       @click='editor.chain().focus().toggleBlockquote().run()'
     )
       el-icon
         ElIconExpand
-    el-button(
-      style='flex-grow: 1',
-      @click='editor.chain().focus().setHorizontalRule().run()'
-    )
+    el-button.grow(@click='editor.chain().focus().setHorizontalRule().run()')
       el-icon
         ElIconSemiSelect
   EditorContent(:editor='editor')
@@ -77,7 +67,7 @@ onMounted(() => {
 })
 </script>
 
-<style>
+<style lang="scss">
 .ProseMirror {
   padding: 5px 10px;
   outline: 1px solid #dcdfe6;
@@ -96,13 +86,27 @@ onMounted(() => {
 }
 
 .ProseMirror p {
-  margin: 3px 0;
+  margin: 5px 0;
 }
 
 .ProseMirror h1,
 .ProseMirror h2,
 .ProseMirror h3 {
   line-height: 1;
+  margin: 16px 0;
+  font-weight: bold;
+}
+
+.ProseMirror h1 {
+  font-size: 30px;
+}
+
+.ProseMirror h2 {
+  font-size: 24px;
+}
+
+.ProseMirror h3 {
+  font-size: 18px;
 }
 
 .ProseMirror blockquote {

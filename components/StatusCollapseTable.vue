@@ -5,7 +5,7 @@ el-collapse-item.status-table(
   :class='[status]'
 )
   template(#title)
-    h2(style='font-size: 18px') {{ title }}
+    h2.font-bold.text-lg {{ title }}
   el-table(v-loading='isPending', :data='items', @sort-change='onSortChange')
     el-table-column(type='index', label='#', width='57', :index='indexHandler')
     el-table-column(
@@ -41,7 +41,7 @@ el-collapse-item.status-table(
           :persistent='false'
         )
           template(#reference)
-            el-row(style='width: 50%') {{ scope.row.rating || '-' }}
+            el-row(class='w-1/2') {{ scope.row.rating || '-' }}
           el-rate(
             :model-value='scope.row.rating',
             :max='10',
@@ -64,11 +64,10 @@ el-collapse-item.status-table(
             div
               span(v-if='scope.row.time.count > 1') {{ scope.row.time.count }} x&nbsp;
               span {{ formatDuration(scope.row.time.duration) }}
-            el-tag(
+            el-tag.ml-2(
               v-if='scope.row.time.replays',
               effect='plain',
-              type='info',
-              style='margin-left: 5px'
+              type='info'
             ) x{{ scope.row.time.replays }}
     el-table-column(
       v-if='authStore.isAuthenticated && !route.query.userId',
@@ -100,16 +99,15 @@ el-collapse-item.status-table(
               text
             )
   // find problem with total (hybrid)
-  el-pagination(
+  el-pagination.mt-3(
     v-model:current-page='currentPage',
     v-model:page-size='limit',
     :hide-on-single-page='limit === 20',
     layout='prev, pager, next, sizes',
     :page-sizes='[20, 50, 100]',
-    :total='total',
-    style='margin-top: 10px'
+    :total='total'
   )
-  el-row(style='column-gap: 30px; margin-top: 10px', align='middle')
+  el-row.gap-x-7.mt-3(align='middle')
     StatisticItem(title='Всего', :content='total')
     StatisticItem(
       title='Продолжительность',
