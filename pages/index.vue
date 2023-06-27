@@ -13,7 +13,7 @@ div
       el-button.ml-3(link, type='primary', @click='navigateTo("/")') На свою страницу
     el-row(v-if='!authStore.isAuthenticated && !route.query.userId')
       h2.text-2xl.font-bold.my-5 Войдите, чтобы продолжить!
-    el-row.mb-8(v-else-if='queryFilters.filters')
+    .mb-8(v-else-if='queryFilters.filters')
       el-row(align='middle')
         h2.text-2xl.font-bold.my-5 {{ navigationTabs.find((tab) => tab.searchType === (route.query.type ?? ''))?.header }}
         el-button.ml-3(
