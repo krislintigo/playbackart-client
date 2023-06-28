@@ -1,11 +1,15 @@
 <template lang="pug">
 el-row
   el-col(:span='10')
-    el-image.mt-5(:src='item.image')
-      template(#placeholder)
-        p Loading...
+    .w-full.h-60(v-show='imageProgress', v-loading='imageProgress')
+    el-image.mt-5(
+      v-show='!imageProgress',
+      :src='item.image',
+      @load='imageProgress = false',
+      @error='onImageError'
+    )
       template(#error)
-        el-row.image-placeholder
+        el-row
           el-icon(:size='175')
             ElIconPictureRounded
   el-col(:span='13', :push='1')
@@ -58,6 +62,17 @@ const props = defineProps<{ item: Item }>()
 
 const route = useRoute()
 const authStore = useAuthStore()
+
+const imageProgress = ref(true)
+
+const onImageError = () => {
+  imageProgress.value = false
+  if (!props.item.image) return
+  ElNotification.warning({
+    title: 'Кажется, ссылка на фото элемента недействительна...',
+    position: 'bottom-right',
+  })
+}
 
 const updateItemStatus = async (status: string) => {
   try {

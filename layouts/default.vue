@@ -15,7 +15,8 @@ el-main.m-auto(class='max-w-[1550px]')
               el-icon
                 component(:is='tab.icon')
               span.ml-2 {{ tab.label }}
-        ProfileController
+        client-only
+          ProfileController
   el-divider
   slot
   el-backtop

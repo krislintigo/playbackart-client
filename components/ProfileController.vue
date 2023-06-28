@@ -6,13 +6,11 @@ el-popover(
   trigger='click'
 )
   template(#reference)
-    div
-      client-only
-        el-avatar.cursor-pointer(
-          :size='50',
-          :icon='authStore.isAuthenticated ? ElIconUserFilled : ElIconUser',
-          @click='visible = !visible'
-        )
+    el-avatar.cursor-pointer(
+      :size='50',
+      :icon='authStore.isAuthenticated ? ElIconUserFilled : ElIconUser',
+      @click='visible = !visible'
+    )
   el-row(justify='space-between', align='middle')
     h2.mb-3.font-bold.text-2xl Профиль
     //el-button(circle, text, size='large', @click='toggleDark()')
@@ -34,17 +32,16 @@ el-popover(
     ListEditor
     el-row.my-3(justify='center')
       el-button.w-full(type='primary', @click='trackedFranchisesDialog = true') Отслеживаемые франшизы
-      client-only
-        AppDialog(
-          v-model='trackedFranchisesDialog',
-          title='Отслеживаемые франшизы',
-          max-width='700px'
-        )
-          TrackedFranchisesEditor
+      AppDialog(
+        v-model='trackedFranchisesDialog',
+        title='Отслеживаемые франшизы',
+        max-width='700px'
+      )
+        TrackedFranchisesEditor
     el-row.mt-3(justify='end')
       el-button(type='danger', @click='handleUserAction("logout")') Выход
   div(v-else)
-    h3 Войдите в аккаунт!
+    h3.my-3.font-bold.text-base Войдите в аккаунт!
     el-form(v-model='authData', label-position='right', :label-width='65')
       el-form-item(label='Логин')
         el-input(v-model='authData.login')
