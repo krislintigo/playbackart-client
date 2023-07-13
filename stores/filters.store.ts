@@ -66,22 +66,19 @@ export const useFilters = defineStore('filters', () => {
   //   )
   // })
 
-  watch(
-    () => selectedRatings.value,
-    (selectedRatings) => {
-      console.log('QUERY', route.query, selectedRatings)
-      navigateTo(
-        {
-          query: {
-            ...route.query,
-            selectedRatings,
-          },
+  watchEffect(() => {
+    if (process.server) return
+    console.log('QUERY', process.server, route.query, selectedRatings.value)
+    navigateTo(
+      {
+        query: {
+          ...route.query,
+          selectedRatings: selectedRatings.value,
         },
-        { replace: true }
-      )
-    },
-    { deep: true }
-  )
+      },
+      { replace: true }
+    )
+  })
 
   // watch(
   //   [
