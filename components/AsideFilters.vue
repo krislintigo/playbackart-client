@@ -99,51 +99,6 @@ const {
   selectedFranchises,
 } = storeToRefs(queryFilters)
 
-watch(
-  [
-    () => searchQuery.value,
-    () => selectedRatings.value,
-    () => selectedRestrictions.value,
-    () => selectedGenres.value,
-    () => selectedDevelopers.value,
-    () => selectedFranchises.value,
-  ],
-  ([
-    searchQuery,
-    selectedRatings,
-    selectedRestrictions,
-    selectedGenres,
-    selectedDevelopers,
-    selectedFranchises,
-  ]) => {
-    console.log(
-      'QUERY',
-      route.query,
-      searchQuery,
-      selectedRatings,
-      selectedRestrictions,
-      selectedGenres,
-      selectedDevelopers,
-      selectedFranchises
-    )
-    navigateTo(
-      {
-        query: {
-          ...route.query,
-          searchQuery: searchQuery || undefined,
-          selectedRatings,
-          selectedRestrictions,
-          selectedGenres,
-          selectedDevelopers,
-          selectedFranchises,
-        },
-      },
-      { replace: true }
-    )
-  },
-  { deep: true }
-)
-
 const ratings = computed(() =>
   [...filters.value.ratings.filter((i) => i.value)].sort(
     (a, b) => b.value - a.value

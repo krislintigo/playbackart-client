@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 export const useFilters = defineStore('filters', () => {
   const { api } = useFeathers()
   const route = useRoute()
+  const router = useRouter()
   const authStore = useAuthStore()
 
   const filterFn = api.service('items').filters
@@ -38,6 +39,33 @@ export const useFilters = defineStore('filters', () => {
     selectedDevelopers.value,
     selectedFranchises.value
   )
+
+  watchEffect(() => {
+    console.log(
+      'QUERY',
+      route.query,
+      searchQuery.value,
+      selectedRatings.value,
+      selectedRestrictions.value,
+      selectedGenres.value,
+      selectedDevelopers.value,
+      selectedFranchises.value
+    )
+    router.replace(
+      {
+        query: {
+          ...route.query,
+          searchQuery: searchQuery.value || undefined,
+          selectedRatings: selectedRatings.value,
+          selectedRestrictions: selectedRestrictions.value,
+          selectedGenres: selectedGenres.value,
+          selectedDevelopers: selectedDevelopers.value,
+          selectedFranchises: selectedFranchises.value,
+        },
+      },
+      { replace: true }
+    )
+  })
 
   // watch(
   //   [
