@@ -28,17 +28,6 @@ export const useFilters = defineStore('filters', () => {
     [route.query.selectedFranchises ?? []].flat(1) as string[]
   )
 
-  console.log(
-    'AFTER INIT',
-    route.query,
-    searchQuery.value,
-    selectedRatings.value,
-    selectedRestrictions.value,
-    selectedGenres.value,
-    selectedDevelopers.value,
-    selectedFranchises.value
-  )
-
   // watchEffect(async () => {
   //   console.log(
   //     'QUERY',
@@ -65,20 +54,6 @@ export const useFilters = defineStore('filters', () => {
   //     { replace: true }
   //   )
   // })
-
-  watchEffect(() => {
-    if (process.server) return
-    console.log('QUERY', process.server, route.query, searchQuery.value)
-    navigateTo(
-      {
-        query: {
-          ...route.query,
-          searchQuery: searchQuery.value,
-        },
-      },
-      { replace: true }
-    )
-  })
 
   // watch(
   //   [
