@@ -37,26 +37,19 @@ export const useFilters = defineStore('filters', () => {
       selectedDevelopers,
       selectedFranchises,
     ],
-    ([
-      searchQuery,
-      selectedRatings,
-      selectedRestrictions,
-      selectedGenres,
-      selectedDevelopers,
-      selectedFranchises,
-    ]) => {
+    () => {
       console.log('QUERY', process.server)
       // TODO: performance
       navigateTo(
         {
           query: {
             ...route.query,
-            searchQuery: searchQuery || undefined,
-            selectedRatings,
-            selectedRestrictions,
-            selectedGenres,
-            selectedDevelopers,
-            selectedFranchises,
+            searchQuery: searchQuery.value || undefined,
+            selectedRatings: selectedRatings.value,
+            selectedRestrictions: selectedRestrictions.value,
+            selectedGenres: selectedGenres.value,
+            selectedDevelopers: selectedDevelopers.value,
+            selectedFranchises: selectedFranchises.value,
           },
         },
         { replace: true }
@@ -64,6 +57,25 @@ export const useFilters = defineStore('filters', () => {
     },
     { deep: true }
   )
+
+  // watchEffect(() => {
+  //   console.log('QUERY watchEffect')
+  //   // TODO: performance
+  //   // navigateTo(
+  //   //   {
+  //   // query: {
+  //   // ...route.query,
+  //   // searchQuery: searchQuery.value || undefined,
+  //   // selectedRatings: selectedRatings.value,
+  //   // selectedRestrictions: selectedRestrictions.value,
+  //   // selectedGenres: selectedGenres.value,
+  //   // selectedDevelopers: selectedDevelopers.value,
+  //   // selectedFranchises: selectedFranchises.value,
+  //   // },
+  //   // }
+  //   // { replace: true }
+  //   // )
+  // })
 
   const fetchFilters = async () => {
     try {
