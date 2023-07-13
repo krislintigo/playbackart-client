@@ -1,6 +1,6 @@
 <template lang="pug">
 .m-px
-  el-button-group.flex.mb-3(v-if='editor')
+  el-button-group.mb-3(v-if='editor', class='!flex')
     el-button.grow(
       :disabled='!editor.can().chain().focus().toggleBold().run()',
       :class='{ "is-active": editor.isActive("bold") }',

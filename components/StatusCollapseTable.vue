@@ -58,17 +58,22 @@ el-collapse-item.status-table(
       width='170'
     )
       template(#default='scope')
-        span(v-if='!scope.row.time.duration') -
-        div(v-else)
-          el-row(justify='space-between')
-            div
-              span(v-if='scope.row.time.count > 1') {{ scope.row.time.count }} x&nbsp;
-              span {{ formatDuration(scope.row.time.duration) }}
-            el-tag.ml-2(
-              v-if='scope.row.time.replays',
-              effect='plain',
-              type='info'
-            ) x{{ scope.row.time.replays }}
+        el-tooltip(
+          placement='left',
+          effect='light',
+          :content='formatDuration(scope.row.time.count * scope.row.time.duration)'
+        )
+          span(v-if='!scope.row.time.duration') -
+          div(v-else)
+            el-row(justify='space-between')
+              div
+                span(v-if='scope.row.time.count > 1') {{ scope.row.time.count }} x&nbsp;
+                span {{ formatDuration(scope.row.time.duration) }}
+              el-tag.ml-2(
+                v-if='scope.row.time.replays',
+                effect='plain',
+                type='info'
+              ) x{{ scope.row.time.replays }}
     el-table-column(
       v-if='authStore.isAuthenticated && !route.query.userId',
       label='Операции',
