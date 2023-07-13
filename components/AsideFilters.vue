@@ -87,15 +87,62 @@ el-aside.flex.flex-col.gap-7(width='350px')
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 
+const route = useRoute()
 const queryFilters = useFilters()
 const {
   filters,
+  searchQuery,
   selectedRatings,
   selectedRestrictions,
   selectedGenres,
   selectedDevelopers,
   selectedFranchises,
 } = storeToRefs(queryFilters)
+
+watch(
+  [
+    () => searchQuery.value,
+    () => selectedRatings.value,
+    () => selectedRestrictions.value,
+    () => selectedGenres.value,
+    () => selectedDevelopers.value,
+    () => selectedFranchises.value,
+  ],
+  ([
+    searchQuery,
+    selectedRatings,
+    selectedRestrictions,
+    selectedGenres,
+    selectedDevelopers,
+    selectedFranchises,
+  ]) => {
+    console.log(
+      'QUERY',
+      route.query,
+      searchQuery,
+      selectedRatings,
+      selectedRestrictions,
+      selectedGenres,
+      selectedDevelopers,
+      selectedFranchises
+    )
+    navigateTo(
+      {
+        query: {
+          ...route.query,
+          searchQuery: searchQuery || undefined,
+          selectedRatings,
+          selectedRestrictions,
+          selectedGenres,
+          selectedDevelopers,
+          selectedFranchises,
+        },
+      },
+      { replace: true }
+    )
+  },
+  { deep: true }
+)
 
 const ratings = computed(() =>
   [...filters.value.ratings.filter((i) => i.value)].sort(

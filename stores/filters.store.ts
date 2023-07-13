@@ -39,50 +39,49 @@ export const useFilters = defineStore('filters', () => {
     selectedFranchises.value
   )
 
-  watch(
-    [
-      () => searchQuery.value,
-      () => selectedRatings.value,
-      () => selectedRestrictions.value,
-      () => selectedGenres.value,
-      () => selectedDevelopers.value,
-      () => selectedFranchises.value,
-    ],
-    ([
-      searchQuery,
-      selectedRatings,
-      selectedRestrictions,
-      selectedGenres,
-      selectedDevelopers,
-      selectedFranchises,
-    ]) => {
-      console.log(
-        'QUERY',
-        route.query,
-        searchQuery,
-        selectedRatings,
-        selectedRestrictions,
-        selectedGenres,
-        selectedDevelopers,
-        selectedFranchises
-      )
-      navigateTo(
-        {
-          query: {
-            ...route.query,
-            searchQuery,
-            selectedRatings,
-            selectedRestrictions,
-            selectedGenres,
-            selectedDevelopers,
-            selectedFranchises,
-          },
-        },
-        { replace: true }
-      )
-    },
-    { deep: true }
-  )
+  // watch(
+  //   [
+  //     () => searchQuery.value,
+  //     () => selectedRatings.value,
+  //     () => selectedRestrictions.value,
+  //     () => selectedGenres.value,
+  //     () => selectedDevelopers.value,
+  //     () => selectedFranchises.value,
+  //   ],
+  //   ([
+  //     searchQuery,
+  //     selectedRatings,
+  //     selectedRestrictions,
+  //     selectedGenres,
+  //     selectedDevelopers,
+  //     selectedFranchises,
+  //   ]) => {
+  //     console.log(
+  //       'QUERY',
+  //       route.query,
+  //       searchQuery,
+  //       selectedRatings,
+  //       selectedRestrictions,
+  //       selectedGenres,
+  //       selectedDevelopers,
+  //       selectedFranchises
+  //     )
+  //     navigateTo(
+  //       {
+  //         query: {
+  //           ...route.query,
+  //           searchQuery,
+  //           selectedRatings,
+  //           selectedRestrictions,
+  //           selectedGenres,
+  //           selectedDevelopers,
+  //           selectedFranchises,
+  //         },
+  //       },
+  //       { replace: true }
+  //     )
+  //   }
+  // )
 
   const fetchFilters = async () => {
     try {
