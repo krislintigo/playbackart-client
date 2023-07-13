@@ -28,7 +28,8 @@ export const useFilters = defineStore('filters', () => {
     [route.query.selectedFranchises ?? []].flat(1) as string[]
   )
 
-  watchEffect(() => console.log('string:', searchQuery.value, process.server))
+  watchEffect(() => console.log('string:', searchQuery.value))
+  watchEffect(() => console.log('query:', route.query.searchQuery))
 
   // watchEffect(async () => {
   //   console.log(

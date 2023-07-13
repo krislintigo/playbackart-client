@@ -99,19 +99,19 @@ const {
   selectedFranchises,
 } = storeToRefs(queryFilters)
 
-watchEffect(() => {
-  if (process.server) return
-  console.log('QUERY', process.server, route.query, searchQuery.value)
-  navigateTo(
-    {
-      query: {
-        ...route.query,
-        searchQuery: searchQuery.value,
-      },
-    },
-    { replace: true }
-  )
-})
+// watchEffect(() => {
+//   if (process.server) return
+//   console.log('QUERY', process.server, route.query, searchQuery.value)
+//   navigateTo(
+//     {
+//       query: {
+//         ...route.query,
+//         searchQuery: searchQuery.value,
+//       },
+//     },
+//     { replace: true }
+//   )
+// })
 
 const ratings = computed(() =>
   [...filters.value.ratings.filter((i) => i.value)].sort(
