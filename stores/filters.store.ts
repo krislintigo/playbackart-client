@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore, skipHydrate } from 'pinia'
 
 export const useFilters = defineStore('filters', () => {
   const { api } = useFeathers()
@@ -29,7 +29,6 @@ export const useFilters = defineStore('filters', () => {
   )
 
   watchEffect(() => console.log('string:', searchQuery.value))
-  watchEffect(() => console.log('query:', route.query.searchQuery))
 
   // watchEffect(async () => {
   //   console.log(
@@ -121,7 +120,7 @@ export const useFilters = defineStore('filters', () => {
 
   return {
     filters,
-    searchQuery,
+    searchQuery: skipHydrate(searchQuery),
     selectedRatings,
     selectedRestrictions,
     selectedGenres,
