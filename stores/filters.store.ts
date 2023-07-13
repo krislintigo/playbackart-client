@@ -66,43 +66,60 @@ export const useFilters = defineStore('filters', () => {
   //   )
   // })
 
+  watch(
+    () => selectedRatings.value,
+    (selectedRatings) => {
+      console.log('QUERY', route.query, selectedRatings)
+      navigateTo(
+        {
+          query: {
+            ...route.query,
+            selectedRatings,
+          },
+        },
+        { replace: true }
+      )
+    },
+    { deep: true }
+  )
+
   // watch(
   //   [
-  //     () => searchQuery.value,
+  //     // () => searchQuery.value,
   //     () => selectedRatings.value,
-  //     () => selectedRestrictions.value,
-  //     () => selectedGenres.value,
-  //     () => selectedDevelopers.value,
-  //     () => selectedFranchises.value,
+  //     // () => selectedRestrictions.value,
+  //     // () => selectedGenres.value,
+  //     // () => selectedDevelopers.value,
+  //     // () => selectedFranchises.value,
   //   ],
   //   ([
-  //     searchQuery,
+  //     // searchQuery,
   //     selectedRatings,
-  //     selectedRestrictions,
-  //     selectedGenres,
-  //     selectedDevelopers,
-  //     selectedFranchises,
+  //     // selectedRestrictions,
+  //     // selectedGenres,
+  //     // selectedDevelopers,
+  //     // selectedFranchises,
   //   ]) => {
   //     console.log(
   //       'QUERY',
   //       route.query,
-  //       searchQuery,
-  //       selectedRatings,
-  //       selectedRestrictions,
-  //       selectedGenres,
-  //       selectedDevelopers,
-  //       selectedFranchises
+  //       // searchQuery,
+  //       selectedRatings
+  //       // selectedRestrictions,
+  //       // selectedGenres,
+  //       // selectedDevelopers,
+  //       // selectedFranchises
   //     )
   //     navigateTo(
   //       {
   //         query: {
   //           ...route.query,
-  //           searchQuery,
+  //           // searchQuery,
   //           selectedRatings,
-  //           selectedRestrictions,
-  //           selectedGenres,
-  //           selectedDevelopers,
-  //           selectedFranchises,
+  //           // selectedRestrictions,
+  //           // selectedGenres,
+  //           // selectedDevelopers,
+  //           // selectedFranchises,
   //         },
   //       },
   //       { replace: true }
