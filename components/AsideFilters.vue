@@ -87,11 +87,9 @@ el-aside.flex.flex-col.gap-7(width='350px')
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 
-const route = useRoute()
 const queryFilters = useFilters()
 const {
   filters,
-  searchQuery,
   selectedRatings,
   selectedRestrictions,
   selectedGenres,

@@ -28,21 +28,10 @@ export const useFilters = defineStore('filters', () => {
     [route.query.selectedFranchises ?? []].flat(1) as string[]
   )
 
-  // watchEffect(() => console.log('string:', searchQuery.value))
-
-  watchEffect(async () => {
+  watchEffect(() => {
     if (process.server) return
-    console.log(
-      'QUERY',
-      route.query,
-      searchQuery.value,
-      selectedRatings.value,
-      selectedRestrictions.value,
-      selectedGenres.value,
-      selectedDevelopers.value,
-      selectedFranchises.value
-    )
-    await navigateTo(
+    // @TODO: performance
+    navigateTo(
       {
         query: {
           ...route.query,
@@ -57,50 +46,6 @@ export const useFilters = defineStore('filters', () => {
       { replace: true }
     )
   })
-
-  // watch(
-  //   [
-  //     // () => searchQuery.value,
-  //     () => selectedRatings.value,
-  //     // () => selectedRestrictions.value,
-  //     // () => selectedGenres.value,
-  //     // () => selectedDevelopers.value,
-  //     // () => selectedFranchises.value,
-  //   ],
-  //   ([
-  //     // searchQuery,
-  //     selectedRatings,
-  //     // selectedRestrictions,
-  //     // selectedGenres,
-  //     // selectedDevelopers,
-  //     // selectedFranchises,
-  //   ]) => {
-  //     console.log(
-  //       'QUERY',
-  //       route.query,
-  //       // searchQuery,
-  //       selectedRatings
-  //       // selectedRestrictions,
-  //       // selectedGenres,
-  //       // selectedDevelopers,
-  //       // selectedFranchises
-  //     )
-  //     navigateTo(
-  //       {
-  //         query: {
-  //           ...route.query,
-  //           // searchQuery,
-  //           selectedRatings,
-  //           // selectedRestrictions,
-  //           // selectedGenres,
-  //           // selectedDevelopers,
-  //           // selectedFranchises,
-  //         },
-  //       },
-  //       { replace: true }
-  //     )
-  //   }
-  // )
 
   const fetchFilters = async () => {
     try {
