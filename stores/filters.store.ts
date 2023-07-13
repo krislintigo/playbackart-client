@@ -28,42 +28,42 @@ export const useFilters = defineStore('filters', () => {
     [route.query.selectedFranchises ?? []].flat(1) as string[]
   )
 
-  // watch(
-  //   [
-  //     searchQuery,
-  //     selectedRatings,
-  //     selectedRestrictions,
-  //     selectedGenres,
-  //     selectedDevelopers,
-  //     selectedFranchises,
-  //   ],
-  //   async (newValue) => {
-  //     const [
-  //       searchQuery,
-  //       selectedRatings,
-  //       selectedRestrictions,
-  //       selectedGenres,
-  //       selectedDevelopers,
-  //       selectedFranchises,
-  //     ] = newValue
-  //     // TODO: performance
-  //     await navigateTo(
-  //       {
-  //         query: {
-  //           ...route.query,
-  //           searchQuery,
-  //           selectedRatings,
-  //           selectedRestrictions,
-  //           selectedGenres,
-  //           selectedDevelopers,
-  //           selectedFranchises,
-  //         },
-  //       },
-  //       { replace: true }
-  //     )
-  //   },
-  //   { deep: true }
-  // )
+  watch(
+    [
+      searchQuery,
+      selectedRatings,
+      selectedRestrictions,
+      selectedGenres,
+      selectedDevelopers,
+      selectedFranchises,
+    ],
+    ([
+      searchQuery,
+      selectedRatings,
+      selectedRestrictions,
+      selectedGenres,
+      selectedDevelopers,
+      selectedFranchises,
+    ]) => {
+      console.log('QUERY', process.server)
+      // TODO: performance
+      navigateTo(
+        {
+          query: {
+            ...route.query,
+            searchQuery: searchQuery || undefined,
+            selectedRatings,
+            selectedRestrictions,
+            selectedGenres,
+            selectedDevelopers,
+            selectedFranchises,
+          },
+        },
+        { replace: true }
+      )
+    },
+    { deep: true }
+  )
 
   const fetchFilters = async () => {
     try {
