@@ -28,34 +28,35 @@ export const useFilters = defineStore('filters', () => {
     [route.query.selectedFranchises ?? []].flat(1) as string[]
   )
 
-  watchEffect(() => console.log('string:', searchQuery.value))
+  // watchEffect(() => console.log('string:', searchQuery.value))
 
-  // watchEffect(async () => {
-  //   console.log(
-  //     'QUERY',
-  //     route.query,
-  //     searchQuery.value,
-  //     selectedRatings.value,
-  //     selectedRestrictions.value,
-  //     selectedGenres.value,
-  //     selectedDevelopers.value,
-  //     selectedFranchises.value
-  //   )
-  //   await navigateTo(
-  //     {
-  //       query: {
-  //         ...route.query,
-  //         // searchQuery: searchQuery.value || undefined,
-  //         // selectedRatings: selectedRatings.value,
-  //         // selectedRestrictions: selectedRestrictions.value,
-  //         // selectedGenres: selectedGenres.value,
-  //         // selectedDevelopers: selectedDevelopers.value,
-  //         // selectedFranchises: selectedFranchises.value,
-  //       },
-  //     },
-  //     { replace: true }
-  //   )
-  // })
+  watchEffect(async () => {
+    if (process.server) return
+    console.log(
+      'QUERY',
+      route.query,
+      searchQuery.value,
+      selectedRatings.value,
+      selectedRestrictions.value,
+      selectedGenres.value,
+      selectedDevelopers.value,
+      selectedFranchises.value
+    )
+    await navigateTo(
+      {
+        query: {
+          ...route.query,
+          searchQuery: searchQuery.value || undefined,
+          selectedRatings: selectedRatings.value,
+          selectedRestrictions: selectedRestrictions.value,
+          selectedGenres: selectedGenres.value,
+          selectedDevelopers: selectedDevelopers.value,
+          selectedFranchises: selectedFranchises.value,
+        },
+      },
+      { replace: true }
+    )
+  })
 
   // watch(
   //   [
@@ -121,10 +122,10 @@ export const useFilters = defineStore('filters', () => {
   return {
     filters,
     searchQuery: skipHydrate(searchQuery),
-    selectedRatings,
-    selectedRestrictions,
-    selectedGenres,
-    selectedDevelopers,
-    selectedFranchises,
+    selectedRatings: skipHydrate(selectedRatings),
+    selectedRestrictions: skipHydrate(selectedRestrictions),
+    selectedGenres: skipHydrate(selectedGenres),
+    selectedDevelopers: skipHydrate(selectedDevelopers),
+    selectedFranchises: skipHydrate(selectedFranchises),
   }
 })
