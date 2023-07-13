@@ -3,7 +3,8 @@ el-popover(
   :visible='visible',
   placement='bottom',
   :width='380',
-  trigger='click'
+  trigger='click',
+  popper-class='mr-3'
 )
   template(#reference)
     el-avatar.cursor-pointer(
