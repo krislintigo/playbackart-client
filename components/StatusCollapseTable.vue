@@ -41,7 +41,7 @@ el-collapse-item.status-table(
           :persistent='false'
         )
           template(#reference)
-            el-row(class='w-1/2') {{ scope.row.rating || '-' }}
+            el-row.cursor-pointer(class='w-1/2') {{ scope.row.rating || '-' }}
           el-rate(
             :model-value='scope.row.rating',
             :max='10',
@@ -50,7 +50,7 @@ el-collapse-item.status-table(
             :colors='rating.colors',
             @change='updateItemRating(scope.row, $event)'
           )
-        span(v-else) {{ scope.row.rating || '-' }}
+        span.cursor-pointer(v-else) {{ scope.row.rating || '-' }}
     el-table-column(
       sortable='custom',
       prop='time',
@@ -63,8 +63,8 @@ el-collapse-item.status-table(
           effect='light',
           :content='formatDuration(scope.row.time.count * scope.row.time.duration)'
         )
-          span(v-if='!scope.row.time.duration') -
-          div(v-else)
+          span.cursor-pointer(v-if='!scope.row.time.duration') -
+          .cursor-pointer(v-else)
             el-row(justify='space-between')
               div
                 span(v-if='scope.row.time.count > 1') {{ scope.row.time.count }} x&nbsp;

@@ -4,7 +4,7 @@ el-popover(
   placement='bottom',
   :width='380',
   trigger='click',
-  popper-class='mr-3'
+  popper-class='mr-5'
 )
   template(#reference)
     el-avatar.cursor-pointer(
@@ -32,13 +32,27 @@ el-popover(
       )
     ListEditor
     el-row.my-3(justify='center')
+      el-button.w-full(type='primary', @click='trackedDevelopersDialog = true') Отслеживаемые создатели
+      AppDialog(
+        v-model='trackedDevelopersDialog',
+        title='Отслеживаемые создатели',
+        max-width='700px'
+      )
+        TrackedEditor(
+          filter-target='developers',
+          user-target='trackedDevelopers'
+        )
+    el-row.my-3(justify='center')
       el-button.w-full(type='primary', @click='trackedFranchisesDialog = true') Отслеживаемые франшизы
       AppDialog(
         v-model='trackedFranchisesDialog',
         title='Отслеживаемые франшизы',
         max-width='700px'
       )
-        TrackedFranchisesEditor
+        TrackedEditor(
+          filter-target='franchises',
+          user-target='trackedFranchises'
+        )
     el-row.mt-3(justify='end')
       el-button(type='danger', @click='handleUserAction("logout")') Выход
   div(v-else)
@@ -61,6 +75,7 @@ const authStore = useAuthStore()
 // const toggleDark = useToggle(isDark)
 
 const visible = ref(false)
+const trackedDevelopersDialog = ref(false)
 const trackedFranchisesDialog = ref(false)
 const authData = reactive({
   login: '',

@@ -49,6 +49,7 @@ export default defineNuxtPlugin((nuxt) => {
         setupInstance(data: any) {
           const defaults = {
             list: '',
+            trackedDevelopers: [],
             trackedFranchises: [],
           }
           return useInstanceDefaults(defaults, data)
