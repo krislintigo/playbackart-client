@@ -58,6 +58,17 @@ export default defineNuxtPlugin((nuxt) => {
       items: {
         setupInstance(data: any) {
           const defaults = {
+            config: {
+              seasons: {
+                extended: false,
+                multipleImages: false,
+                multipleRatings: false,
+                multipleDevelopers: false,
+              },
+              time: {
+                extended: false,
+              },
+            },
             name: '',
             image: '',
             rating: 0,
@@ -73,6 +84,7 @@ export default defineNuxtPlugin((nuxt) => {
             year: '',
             developers: [],
             franchise: '',
+            seasons: [],
           }
           return useInstanceDefaults(defaults, data)
         },

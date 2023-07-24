@@ -6,25 +6,36 @@ el-form.item-form(
   :label-width='120',
   :rules='rules'
 )
+  el-form-item(label='Конфигурация', prop='config')
+    el-col
+      el-row
+        el-switch(
+          v-model='item.config.seasons.extended',
+          active-text='Расширенный учет сезонов'
+        )
+        //el-switch.ml-5(
+        //  v-model='item.config.time.extended',
+        //  active-text='Расширенный учет времени'
+        //)
+      el-row.mt-3(v-if='item.config.seasons.extended')
+        el-checkbox-button(
+          v-model='item.config.seasons.multipleImages',
+          label='Множественные постеры'
+        )
+        el-checkbox-button(
+          v-model='item.config.seasons.multipleRatings',
+          label='Множественный рейтинг'
+        )
+        el-checkbox-button(
+          v-model='item.config.seasons.multipleDevelopers',
+          label='Множественные студии'
+        )
   el-form-item(label='Название:', prop='name')
     el-input(v-model='item.name')
-  el-form-item(label='Фото:', prop='image')
-    el-input(v-model='item.image', placeholder='Ссылка на фото')
+  el-form-item(label='Постер:', prop='image')
+    el-input(v-model='item.image', placeholder='Вставьте ссылку')
   el-form-item(label='Рейтинг:', prop='rating')
-    el-rate(
-      v-model='item.rating',
-      :max='10',
-      show-text,
-      :texts='rating.texts',
-      :colors='rating.colors'
-    )
-    el-button.ml-1(
-      :icon='ElIconClose',
-      size='small',
-      circle,
-      text,
-      @click='item.rating = 0'
-    )
+    RatingInput(v-model='item.rating')
   el-form-item(label='Статус:', prop='status')
     el-radio-group(v-model='item.status')
       el-radio-button(
@@ -40,6 +51,12 @@ el-form.item-form(
         :key='type.value',
         :label='type.value'
       ) {{ type.title }}
+  el-form-item(
+    v-if='item.type === "series"',
+    label='Конфигурация',
+    prop='config.seasons'
+  )
+
   el-form-item(label='Ограничение:', prop='restriction')
     el-radio-group(v-model='item.restriction')
       el-radio-button(

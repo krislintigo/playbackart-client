@@ -42,12 +42,8 @@ el-collapse-item.status-table(
         )
           template(#reference)
             el-row.cursor-pointer(class='w-1/2') {{ scope.row.rating || '-' }}
-          el-rate(
+          RatingInput(
             :model-value='scope.row.rating',
-            :max='10',
-            show-text,
-            :texts='rating.texts',
-            :colors='rating.colors',
             @change='updateItemRating(scope.row, $event)'
           )
         span.cursor-pointer(v-else) {{ scope.row.rating || '-' }}
