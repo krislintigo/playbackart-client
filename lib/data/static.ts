@@ -1,5 +1,3 @@
-import { FormRules } from 'element-plus'
-
 export const statuses = [
   {
     title: 'В процессе',
@@ -84,23 +82,3 @@ export const types = [
 ]
 
 export const restrictionsTemplate = ['G', 'PG', 'PG-13', 'R', 'NC-17']
-
-export const rules: FormRules = {
-  name: [
-    {
-      required: true,
-      message: 'Пожалуйста, введите название',
-      trigger: 'blur',
-    },
-  ],
-  status: [
-    {
-      required: true,
-      message: 'Пожалуйста, выберите статус',
-      trigger: 'change',
-    },
-  ],
-  type: [
-    { required: true, message: 'Пожалуйста, выберите тип', trigger: 'change' },
-  ],
-}

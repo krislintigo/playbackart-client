@@ -39,6 +39,18 @@ el-form(
 </template>
 
 <script setup lang="ts">
+import { type FormRules } from 'element-plus'
+
+const rules: FormRules = {
+  name: [
+    {
+      required: true,
+      message: 'Введите название',
+      trigger: 'change',
+    },
+  ],
+}
+
 const props = defineProps<{ modelValue: Item['season']; config: any }>()
 
 const emit = defineEmits<{
@@ -70,6 +82,17 @@ const splitDevelopers = () => {
 const removeDeveloper = (index: number) => {
   season.value.developers.splice(index, 1)
 }
+
+const validate = async () => {
+  try {
+    await form.value.validate()
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
+defineExpose({ validate })
 </script>
 
 <style scoped></style>

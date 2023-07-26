@@ -81,31 +81,29 @@ watch(dialog, (open) => {
 })
 
 const save = async () => {
-  item.value.name = item.value.name.trim()
-  item.value.poster = item.value.poster.trim()
-  item.value.franchise = item.value.franchise.trim()
+  clearItemBeforeSave(item.value)
 
   const valid = await itemForm.value.validate()
   if (!valid) {
-    return ElNotification.error({
+    return ElNotification.warning({
       title: 'Пожалуйста, заполните все поля',
       position: 'bottom-right',
     })
   }
 
-  try {
-    await item.value.save()
-    dialog.value = false
-    ElNotification.success({
-      title: 'Элемент успешно сохранен!',
-      position: 'bottom-right',
-    })
-  } catch (e: any) {
-    ElNotification.error({
-      title: 'Что-то пошло не так...',
-      position: 'bottom-right',
-    })
-  }
+  // try {
+  //   await item.value.save()
+  //   dialog.value = false
+  //   ElNotification.success({
+  //     title: 'Элемент успешно сохранен!',
+  //     position: 'bottom-right',
+  //   })
+  // } catch (e: any) {
+  //   ElNotification.error({
+  //     title: 'Что-то пошло не так...',
+  //     position: 'bottom-right',
+  //   })
+  // }
 }
 
 const createItemHandler = () => {

@@ -3,8 +3,7 @@ el-col
   el-row
     el-switch(
       v-model='config.seasons.extended',
-      active-text='Расширенный учет сезонов',
-      @change='extendedSeasonsChangeHandler'
+      active-text='Расширенный учет сезонов'
     )
     //el-switch.ml-5(
     //  v-model='item.config.time.extended',
@@ -21,7 +20,7 @@ el-col
     )
     el-checkbox-button(
       v-model='config.seasons.multipleDevelopers',
-      label='Множественные студии'
+      label='Множественные создатели'
     )
 </template>
 
@@ -43,21 +42,13 @@ const item = computed({
   set: (value) => emit('update:item', value),
 })
 
-const extendedSeasonsChangeHandler = (newValue: boolean) => {
-  // CLEAR DATA BEFORE SAVE
-  if (newValue) {
-    config.value.multiplePosters = false
-    config.value.multiplePosters = false
-    config.value.multiplePosters = false
-    item.value.time = {
-      count: 1,
-      duration: 0,
-      replays: 0,
-    }
-    item.value.year = ''
+watch(
+  () => config.value.seasons.extended,
+  (newValue) => {
+    if (!newValue || item.value.seasons.length) return
     item.value.seasons = [_cloneDeep(EMPTY_SEASON_DATA)]
   }
-}
+)
 </script>
 
 <style scoped></style>

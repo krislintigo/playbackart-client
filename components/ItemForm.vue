@@ -103,10 +103,34 @@ el-form.item-form(
               type='danger',
               @click='removeSeason(i)'
             )
-        SeasonForm(v-model='item.seasons[i]', :config='item.config.seasons')
+        SeasonForm(
+          ref='seasonForms',
+          v-model='item.seasons[i]',
+          :config='item.config.seasons'
+        )
 </template>
 
 <script setup lang="ts">
+import { type FormRules } from 'element-plus'
+
+const rules: FormRules = {
+  name: [
+    {
+      required: true,
+      message: 'Введите название',
+      trigger: 'change',
+    },
+  ],
+  status: [
+    {
+      required: true,
+      message: 'Выберите статус',
+      trigger: 'change',
+    },
+  ],
+  type: [{ required: true, message: 'Выберите тип', trigger: 'change' }],
+}
+
 const props = defineProps<{ modelValue: Item }>()
 
 const emit = defineEmits<{ (e: 'update:modelValue', value: boolean): void }>()
@@ -117,6 +141,7 @@ const item = computed({
 })
 
 const form = ref<any>(null)
+const seasonForms = ref<any>(null)
 const genreInput = ref('')
 const developerInput = ref('')
 
@@ -167,7 +192,11 @@ const removeDeveloper = (index: number) => {
 const validate = async () => {
   try {
     await form.value.validate()
-    return true
+    if (!seasonForms.value) return true
+    const validations = await Promise.all(
+      seasonForms.value.map((form) => form.validate())
+    )
+    return validations.every((v) => v)
   } catch (error) {
     return false
   }
