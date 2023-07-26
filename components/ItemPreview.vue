@@ -1,12 +1,12 @@
 <template lang="pug">
 el-row
   el-col(:span='10')
-    .w-full.h-60(v-show='imageProgress', v-loading='imageProgress')
+    .w-full.h-60(v-show='posterProgress', v-loading='posterProgress')
     el-image.mt-5(
-      v-show='!imageProgress',
-      :src='item.image',
-      @load='imageProgress = false',
-      @error='onImageError'
+      v-show='!posterProgress',
+      :src='item.poster',
+      @load='posterProgress = false',
+      @error='onPosterError'
     )
       template(#error)
         el-row
@@ -63,11 +63,11 @@ const props = defineProps<{ item: Item }>()
 const route = useRoute()
 const authStore = useAuthStore()
 
-const imageProgress = ref(true)
+const posterProgress = ref(true)
 
-const onImageError = () => {
-  imageProgress.value = false
-  if (!props.item.image) return
+const onPosterError = () => {
+  posterProgress.value = false
+  if (!props.item.poster) return
   ElNotification.warning({
     title: 'Кажется, ссылка на фото элемента недействительна...',
     position: 'bottom-right',

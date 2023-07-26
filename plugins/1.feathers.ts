@@ -61,7 +61,7 @@ export default defineNuxtPlugin((nuxt) => {
             config: {
               seasons: {
                 extended: false,
-                multipleImages: false,
+                multiplePosters: false,
                 multipleRatings: false,
                 multipleDevelopers: false,
               },
@@ -70,7 +70,7 @@ export default defineNuxtPlugin((nuxt) => {
               },
             },
             name: '',
-            image: '',
+            poster: '',
             rating: 0,
             status: '',
             type: '',

@@ -82,7 +82,7 @@ watch(dialog, (open) => {
 
 const save = async () => {
   item.value.name = item.value.name.trim()
-  item.value.image = item.value.image.trim()
+  item.value.poster = item.value.poster.trim()
   item.value.franchise = item.value.franchise.trim()
 
   const valid = await itemForm.value.validate()

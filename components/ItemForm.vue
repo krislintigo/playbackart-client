@@ -7,34 +7,20 @@ el-form.item-form(
   :rules='rules'
 )
   el-form-item(label='Конфигурация', prop='config')
-    el-col
-      el-row
-        el-switch(
-          v-model='item.config.seasons.extended',
-          active-text='Расширенный учет сезонов'
-        )
-        //el-switch.ml-5(
-        //  v-model='item.config.time.extended',
-        //  active-text='Расширенный учет времени'
-        //)
-      el-row.mt-3(v-if='item.config.seasons.extended')
-        el-checkbox-button(
-          v-model='item.config.seasons.multipleImages',
-          label='Множественные постеры'
-        )
-        el-checkbox-button(
-          v-model='item.config.seasons.multipleRatings',
-          label='Множественный рейтинг'
-        )
-        el-checkbox-button(
-          v-model='item.config.seasons.multipleDevelopers',
-          label='Множественные студии'
-        )
+    ConfigInput(v-model='item.config', v-model:item='item')
   el-form-item(label='Название:', prop='name')
     el-input(v-model='item.name')
-  el-form-item(label='Постер:', prop='image')
-    el-input(v-model='item.image', placeholder='Вставьте ссылку')
-  el-form-item(label='Рейтинг:', prop='rating')
+  el-form-item(
+    v-if='!item.config.seasons.extended || !item.config.seasons.multiplePosters',
+    label='Постер:',
+    prop='poster'
+  )
+    el-input(v-model='item.poster', placeholder='Вставьте ссылку')
+  el-form-item(
+    v-if='!item.config.seasons.extended || !item.config.seasons.multipleRatings',
+    label='Рейтинг:',
+    prop='rating'
+  )
     RatingInput(v-model='item.rating')
   el-form-item(label='Статус:', prop='status')
     el-radio-group(v-model='item.status')
@@ -51,12 +37,6 @@ el-form.item-form(
         :key='type.value',
         :label='type.value'
       ) {{ type.title }}
-  el-form-item(
-    v-if='item.type === "series"',
-    label='Конфигурация',
-    prop='config.seasons'
-  )
-
   el-form-item(label='Ограничение:', prop='restriction')
     el-radio-group(v-model='item.restriction')
       el-radio-button(
@@ -79,20 +59,20 @@ el-form.item-form(
       @split='splitGenres',
       @remove='removeGenre'
     )
-  el-form-item(label='Длительность:', prop='time')
-    el-row(justify='space-between')
-      el-col(:span='8')
-        el-input-number(v-model='item.time.count', :min='1')
-        h4.m-0.text-center Кол-во элементов
-      el-col(:span='8', :push='1')
-        el-input-number(v-model='item.time.duration', :min='0')
-        h4.m-0.text-center Длительность (мин)
-      el-col(:span='8', :push='2')
-        el-input-number(v-model='item.time.replays', :min='0')
-        h4.m-0.text-center Повторы
-  el-form-item(label='Год выхода:', prop='year')
+  el-form-item(
+    v-if='!item.config.seasons.extended',
+    label='Длительность:',
+    prop='time'
+  )
+    TimeInput(v-model='item.time')
+  el-form-item(
+    v-if='!item.config.seasons.extended',
+    label='Год выхода:',
+    prop='year'
+  )
     el-date-picker(v-model='item.year', value-format='YYYY', type='year')
   el-form-item(
+    v-if='!item.config.seasons.extended || !item.config.seasons.multipleDevelopers',
     :label='getDeveloperWordByType(item.type, 2) + ":"',
     prop='developers'
   )
@@ -105,6 +85,25 @@ el-form.item-form(
     )
   el-form-item(label='Франшиза:', prop='franchise')
     el-input(v-model='item.franchise')
+  el-form-item(
+    v-if='item.config.seasons.extended',
+    label='Сезоны:',
+    prop='seasons'
+  )
+    el-row.gap-y-5.w-full
+      el-button(@click='appendSeason') Добавить
+      el-card.w-full(v-for='(season, i) in item.seasons', :key='i')
+        template(#header)
+          el-row(justify='space-between', align='middle')
+            h2 {{ season.name || '&nbsp;' }}
+            el-button(
+              v-if='item.seasons.length > 1',
+              :icon='ElIconDelete',
+              circle,
+              type='danger',
+              @click='removeSeason(i)'
+            )
+        SeasonForm(v-model='item.seasons[i]', :config='item.config.seasons')
 </template>
 
 <script setup lang="ts">
@@ -120,6 +119,14 @@ const item = computed({
 const form = ref<any>(null)
 const genreInput = ref('')
 const developerInput = ref('')
+
+const appendSeason = () => {
+  item.value.seasons.push(_cloneDeep(EMPTY_SEASON_DATA))
+}
+
+const removeSeason = (index: string | number) => {
+  item.value.seasons.splice(index, 1)
+}
 
 const addGenre = () => {
   if (!genreInput.value.trim()) return
