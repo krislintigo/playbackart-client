@@ -91,19 +91,19 @@ const save = async () => {
     })
   }
 
-  // try {
-  //   await item.value.save()
-  //   dialog.value = false
-  //   ElNotification.success({
-  //     title: 'Элемент успешно сохранен!',
-  //     position: 'bottom-right',
-  //   })
-  // } catch (e: any) {
-  //   ElNotification.error({
-  //     title: 'Что-то пошло не так...',
-  //     position: 'bottom-right',
-  //   })
-  // }
+  try {
+    await item.value.save()
+    dialog.value = false
+    ElNotification.success({
+      title: 'Элемент успешно сохранен!',
+      position: 'bottom-right',
+    })
+  } catch (e: any) {
+    ElNotification.error({
+      title: 'Что-то пошло не так...',
+      position: 'bottom-right',
+    })
+  }
 }
 
 const createItemHandler = () => {

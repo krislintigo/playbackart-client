@@ -29,13 +29,7 @@ el-form(
     label='Создатели',
     prop='developers'
   )
-    TagsInput(
-      v-model='developerInput',
-      :items='season.developers',
-      @add='addDeveloper',
-      @split='splitDevelopers',
-      @remove='removeDeveloper'
-    )
+    TagsInput(v-model='season.developers')
 </template>
 
 <script setup lang="ts">
@@ -58,30 +52,11 @@ const emit = defineEmits<{
 }>()
 
 const form = ref<any>(null)
-const developerInput = ref('')
 
 const season = computed({
   get: () => props.modelValue,
   set: (value) => emit('update:modelValue', value),
 })
-
-const addDeveloper = () => {
-  if (!developerInput.value.trim()) return
-  season.value.developers.push(developerInput.value.trim())
-  developerInput.value = ''
-}
-
-const splitDevelopers = () => {
-  const array = developerInput.value.trim().split(', ')
-  season.value.developers.push(
-    ...array.map((i) => i.charAt(0).toUpperCase() + i.slice(1))
-  )
-  developerInput.value = ''
-}
-
-const removeDeveloper = (index: number) => {
-  season.value.developers.splice(index, 1)
-}
 
 const validate = async () => {
   try {

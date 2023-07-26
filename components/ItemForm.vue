@@ -52,13 +52,7 @@ el-form.item-form(
       @click='item.restriction = ""'
     )
   el-form-item(label='Жанры:', prop='genres')
-    TagsInput(
-      v-model='genreInput',
-      :items='item.genres',
-      @add='addGenre',
-      @split='splitGenres',
-      @remove='removeGenre'
-    )
+    TagsInput(v-model='item.genres')
   el-form-item(
     v-if='!item.config.seasons.extended',
     label='Длительность:',
@@ -76,13 +70,7 @@ el-form.item-form(
     :label='getDeveloperWordByType(item.type, 2) + ":"',
     prop='developers'
   )
-    TagsInput(
-      v-model='developerInput',
-      :items='item.developers',
-      @add='addDeveloper',
-      @split='splitDevelopers',
-      @remove='removeDeveloper'
-    )
+    TagsInput(v-model='item.developers')
   el-form-item(label='Франшиза:', prop='franchise')
     el-input(v-model='item.franchise')
   el-form-item(
@@ -142,8 +130,6 @@ const item = computed({
 
 const form = ref<any>(null)
 const seasonForms = ref<any>(null)
-const genreInput = ref('')
-const developerInput = ref('')
 
 const appendSeason = () => {
   item.value.seasons.push(_cloneDeep(EMPTY_SEASON_DATA))
@@ -151,42 +137,6 @@ const appendSeason = () => {
 
 const removeSeason = (index: string | number) => {
   item.value.seasons.splice(index, 1)
-}
-
-const addGenre = () => {
-  if (!genreInput.value.trim()) return
-  item.value.genres.push(genreInput.value.trim())
-  genreInput.value = ''
-}
-
-const splitGenres = () => {
-  const array = genreInput.value.trim().split(', ')
-  item.value.genres.push(
-    ...array.map((i) => i.charAt(0).toUpperCase() + i.slice(1))
-  )
-  genreInput.value = ''
-}
-
-const removeGenre = (index: number) => {
-  item.value.genres.splice(index, 1)
-}
-
-const addDeveloper = () => {
-  if (!developerInput.value.trim()) return
-  item.value.developers.push(developerInput.value.trim())
-  developerInput.value = ''
-}
-
-const splitDevelopers = () => {
-  const array = developerInput.value.trim().split(', ')
-  item.value.developers.push(
-    ...array.map((i) => i.charAt(0).toUpperCase() + i.slice(1))
-  )
-  developerInput.value = ''
-}
-
-const removeDeveloper = (index: number) => {
-  item.value.developers.splice(index, 1)
 }
 
 const validate = async () => {
