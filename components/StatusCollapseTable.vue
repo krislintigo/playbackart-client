@@ -14,24 +14,25 @@ el-collapse-item.status-table(
       label='Название',
       min-width='350'
     )
-      template(#default='scope')
+      template(#default='{ row: item }')
         el-popover(
           placement='right',
           :width='420',
           trigger='hover',
           :show-after='300',
+          :hide-after='50000',
           :persistent='false'
         )
           template(#reference)
-            el-link {{ scope.row.name }}
-          ItemPreview(:item='scope.row')
+            el-link {{ item.name }}
+          ItemPreview(:item='item')
     el-table-column(
       sortable='custom',
       prop='rating',
       label='Рейтинг',
       width='120'
     )
-      template(#default='scope')
+      template(#default='{ row: item }')
         el-popover(
           v-if='authStore.isAuthenticated && !route.query.userId',
           placement='right',
@@ -41,35 +42,60 @@ el-collapse-item.status-table(
           :persistent='false'
         )
           template(#reference)
-            el-row.cursor-pointer(class='w-1/2') {{ scope.row.rating || '-' }}
+            el-row.cursor-pointer(class='w-1/2') {{ item.rating || '-' }}
           RatingInput(
-            :model-value='scope.row.rating',
-            @change='updateItemRating(scope.row, $event)'
+            :model-value='item.rating',
+            @change='updateItemRating(item, $event)'
           )
-        span.cursor-pointer(v-else) {{ scope.row.rating || '-' }}
+        span.cursor-pointer(v-else) {{ item.rating || '-' }}
     el-table-column(
       sortable='custom',
       prop='time',
       label='Длительность',
       width='170'
     )
-      template(#default='scope')
-        el-tooltip(
-          placement='left',
-          effect='light',
-          :content='formatDuration(scope.row.time.count * scope.row.time.duration)'
-        )
-          span.cursor-pointer(v-if='!scope.row.time.duration') -
+      template(#default='{ row: item }')
+        el-tooltip(placement='left', effect='light')
+          template(#content)
+            div(v-if='item.config.seasons.extended')
+              el-row(
+                v-for='(season, i) in item.seasons',
+                :key='i',
+                justify='space-between',
+                align='bottom'
+              )
+                .text-sm
+                  h3.text-base.font-bold {{ season.name + ': ' }}
+                  span(v-if='season.time.count > 1') {{ season.time.count }} x&nbsp;
+                  span {{ formatDuration(season.time.duration) }}
+                  span ( {{ formatDuration(season.time.count * season.time.duration) }} )
+                el-tag.ml-2(
+                  v-if='season.time.replays',
+                  effect='plain',
+                  type='info'
+                ) x{{ season.time.replays }}
+            .text-sm(v-else) {{ formatDuration(item.time.count * item.time.duration) }}
+          .cursor-pointer(v-if='item.config.seasons.extended')
+            el-row(justify='space-between')
+              div
+                span {{ item.seasons.reduce((acc, cur) => acc + cur.time.count, 0) }} x&nbsp;
+                span {{ formatDuration(averageSeasonDuration(item)) }}
+              el-tag.ml-2(
+                v-if='averageSeasonReplays(item)',
+                effect='plain',
+                type='info'
+              ) x{{ averageSeasonReplays(item) }}
+          span.cursor-pointer(v-else-if='!item.time.duration') -
           .cursor-pointer(v-else)
             el-row(justify='space-between')
               div
-                span(v-if='scope.row.time.count > 1') {{ scope.row.time.count }} x&nbsp;
-                span {{ formatDuration(scope.row.time.duration) }}
+                span(v-if='item.time.count > 1') {{ item.time.count }} x&nbsp;
+                span {{ formatDuration(item.time.duration) }}
               el-tag.ml-2(
-                v-if='scope.row.time.replays',
+                v-if='item.time.replays',
                 effect='plain',
                 type='info'
-              ) x{{ scope.row.time.replays }}
+              ) x{{ item.time.replays }}
     el-table-column(
       v-if='authStore.isAuthenticated && !route.query.userId',
       label='Операции',
