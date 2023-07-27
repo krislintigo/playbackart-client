@@ -81,13 +81,11 @@ watch(dialog, (open) => {
 })
 
 const save = async () => {
-  item.value.name = item.value.name.trim()
-  item.value.image = item.value.image.trim()
-  item.value.franchise = item.value.franchise.trim()
+  clearItemBeforeSave(item.value)
 
   const valid = await itemForm.value.validate()
   if (!valid) {
-    return ElNotification.error({
+    return ElNotification.warning({
       title: 'Пожалуйста, заполните все поля',
       position: 'bottom-right',
     })

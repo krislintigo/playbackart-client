@@ -14,7 +14,7 @@ el-collapse-item.status-table(
       label='Название',
       min-width='350'
     )
-      template(#default='scope')
+      template(#default='{ row: item }')
         el-popover(
           placement='right',
           :width='420',
@@ -23,77 +23,112 @@ el-collapse-item.status-table(
           :persistent='false'
         )
           template(#reference)
-            el-link {{ scope.row.name }}
-          ItemPreview(:item='scope.row')
+            el-link {{ item.name }}
+          ItemPreview(:item='item')
     el-table-column(
       sortable='custom',
       prop='rating',
       label='Рейтинг',
       width='120'
     )
-      template(#default='scope')
+      template(#default='{ row: item }')
         el-popover(
           v-if='authStore.isAuthenticated && !route.query.userId',
           placement='right',
-          :width='380',
+          :width='400',
           trigger='hover',
           :show-after='300',
           :persistent='false'
         )
           template(#reference)
-            el-row.cursor-pointer(class='w-1/2') {{ scope.row.rating || '-' }}
-          el-rate(
-            :model-value='scope.row.rating',
-            :max='10',
-            show-text,
-            :texts='rating.texts',
-            :colors='rating.colors',
-            @change='updateItemRating(scope.row, $event)'
+            .cursor-pointer(v-if='item.config.seasons.multipleRatings') {{ averageSeasonRating(item) }}
+            .cursor-pointer(v-else, class='w-1/2') {{ item.rating || '-' }}
+          el-row(v-if='item.config.seasons.multipleRatings')
+            template(v-for='(season, i) in item.seasons', :key='i')
+              h3.text-base.font-bold {{ season.name }}:
+              RatingInput(
+                :model-value='season.rating',
+                @change='updateItemRating(item, i, $event)'
+              )
+          RatingInput(
+            v-else,
+            :model-value='item.rating',
+            @change='updateItemRating(item, null, $event)'
           )
-        span.cursor-pointer(v-else) {{ scope.row.rating || '-' }}
+        .cursor-pointer(v-else)
+          el-tooltip(v-if='item.rating', placement='right', effect='light')
+            template(#content)
+              .text-sm {{ rating.texts[item.rating - 1] }}
+            div(class='w-1/2') {{ item.rating || '-' }}
+          span(v-else) -
     el-table-column(
       sortable='custom',
       prop='time',
       label='Длительность',
       width='170'
     )
-      template(#default='scope')
-        el-tooltip(
-          placement='left',
-          effect='light',
-          :content='formatDuration(scope.row.time.count * scope.row.time.duration)'
-        )
-          span.cursor-pointer(v-if='!scope.row.time.duration') -
+      template(#default='{ row: item }')
+        el-tooltip(placement='left', effect='light')
+          template(#content)
+            div(v-if='item.config.seasons.extended')
+              el-row(
+                v-for='(season, i) in item.seasons',
+                :key='i',
+                justify='space-between',
+                align='bottom'
+              )
+                .text-sm
+                  h3.text-base.font-bold {{ season.name + ': ' }}
+                  span(v-if='season.time.count > 1') {{ season.time.count }} x&nbsp;
+                  span {{ formatDuration(season.time.duration) }}
+                  span ( {{ formatDuration(season.time.count * season.time.duration) }} )
+                el-tag.ml-2(
+                  v-if='season.time.replays',
+                  effect='plain',
+                  type='info'
+                ) x{{ season.time.replays }}
+            .text-sm(v-else) {{ formatDuration(item.time.count * item.time.duration) }}
+          .cursor-pointer(v-if='item.config.seasons.extended')
+            el-row(justify='space-between')
+              div
+                span {{ item.seasons.reduce((acc, cur) => acc + cur.time.count, 0) }} x&nbsp;
+                span {{ formatDuration(averageSeasonDuration(item)) }}
+              el-tag.ml-2(
+                v-if='averageSeasonReplays(item)',
+                effect='plain',
+                type='info'
+              ) x{{ averageSeasonReplays(item) }}
+          span.cursor-pointer(v-else-if='!item.time.duration') -
           .cursor-pointer(v-else)
             el-row(justify='space-between')
               div
-                span(v-if='scope.row.time.count > 1') {{ scope.row.time.count }} x&nbsp;
-                span {{ formatDuration(scope.row.time.duration) }}
+                span(v-if='item.time.count > 1') {{ item.time.count }} x&nbsp;
+                span {{ formatDuration(item.time.duration) }}
               el-tag.ml-2(
-                v-if='scope.row.time.replays',
+                v-if='item.time.replays',
                 effect='plain',
                 type='info'
-              ) x{{ scope.row.time.replays }}
+              ) x{{ item.time.replays }}
     el-table-column(
       v-if='authStore.isAuthenticated && !route.query.userId',
       label='Операции',
       width='100'
     )
-      template(#default='scope')
+      template(#default='{ row: item }')
         el-button(
           :icon='ElIconEditPen',
           type='warning',
           circle,
           size='small',
           text,
-          @click='emit("update-item", scope.row._id)'
+          @click='emit("update-item", item._id)'
         )
         el-popconfirm(
           title='Вы действительно хотите удалить?',
           width='285',
           confirm-button-text='Да',
           cancel-button-text='Нет',
-          @confirm='emit("delete-item", scope.row._id)'
+          @confirm='emit("delete-item", item._id)'
         )
           template(#reference)
             el-button(
@@ -116,7 +151,7 @@ el-collapse-item.status-table(
     StatisticItem(title='Всего', :content='total')
     StatisticItem(
       title='Продолжительность',
-      :content='(formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || "-") + " / " + (formatDuration(items.reduce((acc, cur) => acc + (cur.time.replays + 1) * cur.time.count * cur.time.duration, 0)) || "-")',
+      :content='(formatDuration(items.reduce((acc, cur) => acc + computeDuration(cur, false), 0)) || "-") + " / " + (formatDuration(items.reduce((acc, cur) => acc + computeDuration(cur, true), 0)) || "-")',
       tooltip='Без повторов / Полная'
     )
     StatisticItem(
@@ -190,9 +225,8 @@ const {
 
 watch(limit, () => (currentPage.value = 1))
 
-const indexHandler = (index: number) => {
-  return (currentPage.value - 1) * limit.value + index + 1
-}
+const indexHandler = (index: number) =>
+  (currentPage.value - 1) * limit.value + index + 1
 
 const onSortChange = ({ prop, order }: Sort) => {
   const sortRef = { ascending: 1, descending: -1 }
@@ -200,9 +234,35 @@ const onSortChange = ({ prop, order }: Sort) => {
   sort.order = sortRef[order] ?? 1
 }
 
-const updateItemRating = async (item: Item, rating: number) => {
+// const updateItemRating = async (item: Item, rating: number) => {
+//   try {
+//     await item.save({ diff: { rating } })
+//     ElNotification.success({
+//       title: 'Рейтинг изменен',
+//       position: 'bottom-right',
+//     })
+//   } catch (error: any) {
+//     ElNotification.error({
+//       title: 'Что-то пошло не так...',
+//       position: 'bottom-right',
+//     })
+//   }
+// }
+
+const updateItemRating = async (
+  item: Item,
+  seasonIndex: number | string | null,
+  rating: number
+) => {
   try {
-    await item.save({ diff: { rating } })
+    const _item = await item.clone()
+    if (seasonIndex !== null) {
+      _item.seasons[seasonIndex].rating = rating
+    } else {
+      _item.rating = rating
+    }
+    await _item.save()
+    await _item.reset()
     ElNotification.success({
       title: 'Рейтинг изменен',
       position: 'bottom-right',

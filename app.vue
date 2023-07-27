@@ -21,4 +21,8 @@ NuxtLayout
 .page-leave-to {
   opacity: 0;
 }
+
+.el-form-item .el-form-item {
+  margin-bottom: 18px !important;
+}
 </style>
