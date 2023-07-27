@@ -7,8 +7,8 @@ export const averageSeasonRating = (item: Item) => {
 
 export const averageSeasonDuration = (item: Item) =>
   Math.round(
-    item.seasons.reduce((acc, cur) => acc + cur.time.duration, 0) /
-      item.seasons.length
+    computeDuration(item, false) /
+      item.seasons.reduce((acc, cur) => acc + cur.time.count, 0)
   )
 
 export const averageSeasonReplays = (item: Item) =>

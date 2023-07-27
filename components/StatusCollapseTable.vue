@@ -151,7 +151,7 @@ el-collapse-item.status-table(
     StatisticItem(title='Всего', :content='total')
     StatisticItem(
       title='Продолжительность',
-      :content='(formatDuration(items.reduce((acc, cur) => acc + cur.time.count * cur.time.duration, 0)) || "-") + " / " + (formatDuration(items.reduce((acc, cur) => acc + (cur.time.replays + 1) * cur.time.count * cur.time.duration, 0)) || "-")',
+      :content='(formatDuration(items.reduce((acc, cur) => acc + computeDuration(cur, false), 0)) || "-") + " / " + (formatDuration(items.reduce((acc, cur) => acc + computeDuration(cur, true), 0)) || "-")',
       tooltip='Без повторов / Полная'
     )
     StatisticItem(
