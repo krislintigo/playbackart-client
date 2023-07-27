@@ -9,29 +9,13 @@ el-row
       :autoplay='false'
     )
       el-carousel-item(v-for='(season, i) in item.seasons', :key='i')
-        .w-full.h-60(v-show='posterProgress', v-loading='posterProgress')
-        el-image.mt-5(
-          v-show='!posterProgress',
+        LoadablePoster(
           :src='season.poster',
-          @load='posterProgress = false',
+          :size='170',
           @error='onPosterError'
         )
-          template(#error)
-            el-row
-              el-icon(:size='175')
-                ElIconPictureRounded
     template(v-else)
-      .w-full.h-60(v-show='posterProgress', v-loading='posterProgress')
-      el-image.mt-5(
-        v-show='!posterProgress',
-        :src='item.poster',
-        @load='posterProgress = false',
-        @error='onPosterError'
-      )
-        template(#error)
-          el-row
-            el-icon(:size='175')
-              ElIconPictureRounded
+      LoadablePoster(:src='item.poster', :size='170', @error='onPosterError')
   el-col(:span='13', :push='1')
     h2.mt-4.break-normal.text-left.font-bold.text-xl {{ item.name }}
     h3.text-base(v-if='item.config.seasons.extended') {{ item.seasons[currentSeason].name }} ({{ item.seasons[currentSeason].year }})
@@ -40,6 +24,7 @@ el-row
         :icon='ElIconArrowLeft',
         circle,
         size='small',
+        text,
         :disabled='currentSeason === 0',
         @click='currentSeason--'
       )
@@ -48,11 +33,12 @@ el-row
         :icon='ElIconArrowRight',
         circle,
         size='small',
+        text,
         :disabled='currentSeason === item.seasons.length - 1',
         @click='currentSeason++'
       )
     h4.mt-4.mb-2.font-bold Информация:
-    .flex.flex-wrap.gap-x-2.gap-y-2.mb-5
+    .tags-container
       el-tag(type='info') {{ getTypeWord(item.type) }}
       el-tag(
         v-if='item.config.seasons.extended && item.seasons.at(0).year && item.seasons.at(-1).year',
@@ -62,11 +48,11 @@ el-row
       el-tag(v-if='item.restriction', type='info') {{ item.restriction }}
     template(v-if='item.genres.length')
       h4.mb-2.font-bold Жанры:
-      .flex.flex-wrap.gap-x-2.gap-y-2.mb-5
+      .tags-container
         el-tag(v-for='(genre, i) in item.genres', :key='i', type='info') {{ genre }}
     template(v-if='item.developers.length')
       h4.mb-2.font-bold {{ getDeveloperWordByType(item.type, item.developers.length) }}:
-      .flex.flex-wrap.gap-x-2.gap-y-2.mb-5
+      .tags-container
         el-tag(
           v-for='(developer, i) in item.developers',
           :key='i',
@@ -74,22 +60,13 @@ el-row
         ) {{ developer }}
     template(v-if='uniqueSeasonDevelopers(item).length')
       h4.mb-2.font-bold {{ getDeveloperWordByType(item.type, uniqueSeasonDevelopers(item).length) }}:
-      .flex.flex-wrap.gap-x-2.gap-y-2.mb-5
+      .tags-container
         el-tag(
           v-for='(developer, i) in uniqueSeasonDevelopers(item)',
           :key='i',
           type='info',
           :hit='item.seasons[currentSeason].developers.includes(developer)'
         ) {{ developer }}
-    //el-divider
-    //template(v-if='item.developers.length')
-    //  h4.mb-2.font-bold {{ getDeveloperWordByType(item.type, item.developers.length) }} сезона:
-    //  .flex.flex-wrap.gap-x-2.gap-y-2.mb-5
-    //    el-tag(
-    //      v-for='(developer, i) in item.developers',
-    //      :key='i',
-    //      type='info'
-    //    ) {{ developer }}
     el-collapse(v-if='authStore.isAuthenticated && !route.query.userId')
       el-collapse-item(:class='["set-status-collapse", item.status]')
         template(#title)
@@ -124,16 +101,10 @@ const authStore = useAuthStore()
 
 const carousel = ref<any>(null)
 const currentSeason = ref(0)
-const posterProgress = ref(true)
 
-watchEffect(() => {
-  if (!carousel.value) return
-  carousel.value.setActiveItem(currentSeason.value)
-})
+watch(currentSeason, () => carousel.value.setActiveItem(currentSeason.value))
 
 const onPosterError = () => {
-  posterProgress.value = false
-  if (!props.item.poster) return
   ElNotification.warning({
     title: 'Кажется, ссылка на фото элемента недействительна...',
     position: 'bottom-right',
@@ -156,9 +127,13 @@ const updateItemStatus = async (status: string) => {
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.tags-container {
+  @apply flex flex-wrap gap-x-2 gap-y-2 mb-5;
+}
+</style>
 
-<style>
+<style lang="scss">
 .set-status-collapse .el-collapse-item__header {
   padding: 0 15px;
   border-bottom: 0;
