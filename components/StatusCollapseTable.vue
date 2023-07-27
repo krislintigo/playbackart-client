@@ -191,10 +191,16 @@ const query = computed(() => ({
     userId: route.query.userId || authStore.user?._id,
     ...(route.query.type && { type: route.query.type }),
     ...(queryFilters.searchQuery && {
-      name: { $regex: queryFilters.searchQuery, $options: 'i' },
+      $or: [
+        { name: { $regex: queryFilters.searchQuery, $options: 'i' } },
+        { 'seasons.name': { $regex: queryFilters.searchQuery, $options: 'i' } },
+      ],
     }),
     ...(queryFilters.selectedRatings.length && {
-      rating: { $in: queryFilters.selectedRatings },
+      $or: [
+        { rating: { $in: queryFilters.selectedRatings } },
+        { 'seasons.rating': { $in: queryFilters.selectedRatings } },
+      ],
     }),
     ...(queryFilters.selectedRestrictions.length && {
       restriction: { $in: queryFilters.selectedRestrictions },
@@ -203,7 +209,10 @@ const query = computed(() => ({
       genres: { $in: queryFilters.selectedGenres },
     }),
     ...(queryFilters.selectedDevelopers.length && {
-      developers: { $in: queryFilters.selectedDevelopers },
+      $or: [
+        { developers: { $in: queryFilters.selectedDevelopers } },
+        { 'seasons.developers': { $in: queryFilters.selectedDevelopers } },
+      ],
     }),
     ...(queryFilters.selectedFranchises.length && {
       franchise: { $in: queryFilters.selectedFranchises },
