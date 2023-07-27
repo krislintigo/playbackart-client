@@ -18,7 +18,9 @@ el-row
       LoadablePoster(:src='item.poster', :size='170', @error='onPosterError')
   el-col(:span='13', :push='1')
     h2.mt-4.break-normal.text-left.font-bold.text-xl {{ item.name }}
-    h3.text-base(v-if='item.config.seasons.extended') {{ item.seasons[currentSeason].name }} ({{ item.seasons[currentSeason].year }})
+    h3.text-base(v-if='item.config.seasons.extended')
+      span.mr-1 {{ item.seasons[currentSeason].name }}
+      span(v-if='item.seasons[currentSeason].year') ({{ item.seasons[currentSeason].year }})
     el-row.mt-2(v-if='item.config.seasons.extended', align='middle')
       el-button(
         :icon='ElIconArrowLeft',

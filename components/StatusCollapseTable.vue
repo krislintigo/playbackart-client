@@ -41,10 +41,10 @@ el-collapse-item.status-table(
           :persistent='false'
         )
           template(#reference)
-            .cursor-pointer(v-if='item.config.seasons.multipleRatings') {{ averageSeasonRating(item) }}
+            .cursor-pointer(v-if='item.config.seasons.multipleRatings') {{ averageSeasonRating(item) || '-' }}
             .cursor-pointer(v-else, class='w-1/2') {{ item.rating || '-' }}
           el-row(v-if='item.config.seasons.multipleRatings')
-            template(v-for='(season, i) in item.seasons', :key='i')
+            div(v-for='(season, i) in item.seasons', :key='i')
               h3.text-base.font-bold {{ season.name }}:
               RatingInput(
                 :model-value='season.rating',
@@ -56,10 +56,25 @@ el-collapse-item.status-table(
             @change='updateItemRating(item, null, $event)'
           )
         .cursor-pointer(v-else)
-          el-tooltip(v-if='item.rating', placement='right', effect='light')
+          el-tooltip(
+            v-if='item.rating || averageSeasonRating(item)',
+            placement='right',
+            effect='light'
+          )
             template(#content)
-              .text-sm {{ rating.texts[item.rating - 1] }}
-            div(class='w-1/2') {{ item.rating || '-' }}
+              div(v-if='item.config.seasons.multipleRatings')
+                el-row(
+                  v-for='(season, i) in item.seasons',
+                  :key='i',
+                  justify='space-between'
+                )
+                  .text-sm
+                    h3.text-base.font-bold
+                      span.mr-1 {{ season.name + ': ' + (season.rating || '-') }}
+                      span(v-if='season.rating') ({{ rating.texts[season.rating - 1] }})
+              .text-sm(v-else) {{ rating.texts[item.rating - 1] }}
+            div(v-if='item.config.seasons.multipleRatings') {{ averageSeasonRating(item) }}
+            div(v-else, class='w-1/2') {{ item.rating || '-' }}
           span(v-else) -
     el-table-column(
       sortable='custom',

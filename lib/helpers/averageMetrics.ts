@@ -1,5 +1,6 @@
 export const averageSeasonRating = (item: Item) => {
   const filtered = item.seasons.filter((season) => season.rating)
+  if (!filtered.length) return 0
   return Math.round(
     filtered.reduce((acc, cur) => acc + cur.rating, 0) / filtered.length
   )
