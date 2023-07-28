@@ -92,6 +92,7 @@ const save = async () => {
   }
 
   try {
+    console.log('save', item.value)
     await item.value.save()
     dialog.value = false
     ElNotification.success({

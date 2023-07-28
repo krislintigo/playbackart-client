@@ -1,6 +1,6 @@
 export const clearItemBeforeSave = (item: Item) => {
   item.name = item.name.trim()
-  item.poster = item.poster.trim()
+  // item.poster = item.poster.trim()
   item.franchise = item.franchise.trim()
 
   if (item.config.seasons.extended) {
