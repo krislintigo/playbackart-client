@@ -60,11 +60,11 @@ el-row
           :key='i',
           type='info'
         ) {{ developer }}
-    template(v-if='uniqueSeasonDevelopers(item).length')
-      h4.mb-2.font-bold {{ getDeveloperWordByType(item.type, uniqueSeasonDevelopers(item).length) }}:
+    template(v-if='uniqueSeasonsDevelopers(item).length')
+      h4.mb-2.font-bold {{ getDeveloperWordByType(item.type, uniqueSeasonsDevelopers(item).length) }}:
       .tags-container
         el-tag(
-          v-for='(developer, i) in uniqueSeasonDevelopers(item)',
+          v-for='(developer, i) in uniqueSeasonsDevelopers(item)',
           :key='i',
           type='info',
           :hit='item.seasons[currentSeason].developers.includes(developer)'

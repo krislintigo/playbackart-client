@@ -41,7 +41,7 @@ el-collapse-item.status-table(
           :persistent='false'
         )
           template(#reference)
-            .cursor-pointer(v-if='item.config.seasons.multipleRatings') {{ averageSeasonRating(item) || '-' }}
+            .cursor-pointer(v-if='item.config.seasons.multipleRatings') {{ averageSeasonsRating(item) || '-' }}
             .cursor-pointer(v-else, class='w-1/2') {{ item.rating || '-' }}
           el-row(v-if='item.config.seasons.multipleRatings')
             div(v-for='(season, i) in item.seasons', :key='i')
@@ -57,7 +57,7 @@ el-collapse-item.status-table(
           )
         .cursor-pointer(v-else)
           el-tooltip(
-            v-if='item.rating || averageSeasonRating(item)',
+            v-if='item.rating || averageSeasonsRating(item)',
             placement='right',
             effect='light'
           )
@@ -73,7 +73,7 @@ el-collapse-item.status-table(
                       span.mr-1 {{ season.name + ': ' + (season.rating || '-') }}
                       span(v-if='season.rating') ({{ rating.texts[season.rating - 1] }})
               .text-sm(v-else) {{ rating.texts[item.rating - 1] }}
-            div(v-if='item.config.seasons.multipleRatings') {{ averageSeasonRating(item) }}
+            div(v-if='item.config.seasons.multipleRatings') {{ averageSeasonsRating(item) }}
             div(v-else, class='w-1/2') {{ item.rating || '-' }}
           span(v-else) -
     el-table-column(
@@ -94,25 +94,28 @@ el-collapse-item.status-table(
               )
                 .text-sm
                   h3.text-base.font-bold {{ season.name + ': ' }}
-                  span(v-if='season.time.count > 1') {{ season.time.count }} x&nbsp;
-                  span {{ formatDuration(season.time.duration) }}
-                  span ( {{ formatDuration(season.time.count * season.time.duration) }} )
+                  template(v-if='season.time.duration')
+                    span(v-if='season.time.count > 1') {{ season.time.count }} x&nbsp;
+                    span {{ formatDuration(season.time.duration) }}
+                    span ( {{ formatDuration(season.time.count * season.time.duration) }} )
+                  span(v-else) -
                 el-tag.ml-2(
                   v-if='season.time.replays',
                   effect='plain',
                   type='info'
                 ) x{{ season.time.replays }}
-            .text-sm(v-else) {{ formatDuration(item.time.count * item.time.duration) }}
+            .text-sm(v-else) {{ formatDuration(item.time.count * item.time.duration) || '-' }}
           .cursor-pointer(v-if='item.config.seasons.extended')
             el-row(justify='space-between')
-              div
-                span {{ item.seasons.reduce((acc, cur) => acc + cur.time.count, 0) }} x&nbsp;
-                span {{ formatDuration(averageSeasonDuration(item)) }}
+              div(v-if='averageSeasonsDuration(item)')
+                span {{ totalSeasonsCount(item) }} x&nbsp;
+                span {{ formatDuration(averageSeasonsDuration(item)) }}
+              span(v-else) -
               el-tag.ml-2(
-                v-if='averageSeasonReplays(item)',
+                v-if='averageSeasonsReplays(item)',
                 effect='plain',
                 type='info'
-              ) x{{ averageSeasonReplays(item) }}
+              ) x{{ averageSeasonsReplays(item) }}
           span.cursor-pointer(v-else-if='!item.time.duration') -
           .cursor-pointer(v-else)
             el-row(justify='space-between')

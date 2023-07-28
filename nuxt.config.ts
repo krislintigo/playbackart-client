@@ -1,5 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use "~/assets/css/element-plus.scss" as *;`,
+        },
+      },
+    },
+  },
   modules: [
     '@pinia/nuxt',
     '@element-plus/nuxt',
