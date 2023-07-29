@@ -9,25 +9,18 @@ el-form.item-form(
   el-row
     el-form-item(label='Конфигурация', prop='config')
       ConfigInput(v-model='item.config', v-model:item='item')
-  .flex.gap-x-7
-    div
-      el-form-item(
-        v-if='!item.config.seasons.extended || !item.config.seasons.multiplePosters',
-        label='Постер:',
-        prop='poster'
-      )
-        ImageLoader(v-model='item.poster')
+  .flex
+    el-form-item.mr-7(
+      v-if='!item.config.seasons.extended || !item.config.seasons.multiplePosters',
+      label='Постер:',
+      prop='poster'
+    )
+      ImageLoader(v-model='item.poster')
     .w-full
       el-form-item(label='Название:', prop='name')
         el-input(v-model='item.name')
       el-form-item(label='Франшиза:', prop='franchise')
         el-input(v-model='item.franchise')
-      //el-form-item(
-      //  v-if='!item.config.seasons.extended || !item.config.seasons.multiplePosters',
-      //  label='Постер:',
-      //  prop='poster'
-      //)
-      //  el-input(v-model='item.poster', placeholder='Вставьте ссылку')
       el-form-item(
         v-if='!item.config.seasons.extended || !item.config.seasons.multipleRatings',
         label='Рейтинг:',

@@ -21,9 +21,9 @@ const image = computed({
   set: (value) => emit('update:modelValue', value),
 })
 
-const loadedPreview = ref('')
+// const loadedPreview = ref('')
 
-const preview = computed(() => loadedPreview.value || fileUrl(image.value.key))
+const preview = computed(() => image.value.preview || fileUrl(image.value.key))
 
 const toBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -35,9 +35,10 @@ const toBase64 = (file) =>
 
 const onSuccess = async (_, uploadFile) => {
   console.log(uploadFile)
-  loadedPreview.value = URL.createObjectURL(uploadFile.raw)
+  // loadedPreview.value = URL.createObjectURL(uploadFile.raw)
   image.value.name = uploadFile.name
   image.value.buffer = await toBase64(uploadFile.raw)
+  image.value.preview = URL.createObjectURL(uploadFile.raw)
   console.log(image.value)
   console.log('preview', preview.value)
 }

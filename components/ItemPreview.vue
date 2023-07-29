@@ -2,7 +2,7 @@
 el-row
   el-col(:span='10')
     el-carousel(
-      v-if='item.config.seasons.extended',
+      v-if='item.config.seasons.multiplePosters',
       ref='carousel',
       indicator-position='none',
       arrow='never',
@@ -108,7 +108,10 @@ const authStore = useAuthStore()
 const carousel = ref<any>(null)
 const currentSeason = ref(0)
 
-watch(currentSeason, () => carousel.value.setActiveItem(currentSeason.value))
+watch(currentSeason, () => {
+  if (!props.item.config.seasons.multiplePosters) return
+  carousel.value.setActiveItem(currentSeason.value)
+})
 
 const onPosterError = () => {
   ElMessage.warning('Кажется, ссылка на фото элемента недействительна...')

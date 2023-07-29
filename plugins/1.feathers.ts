@@ -65,17 +65,17 @@ export default defineNuxtPlugin((nuxt) => {
                 multipleRatings: false,
                 multipleDevelopers: false,
               },
-              time: {
-                extended: false,
-              },
+              // time: {
+              //   extended: false,
+              // },
             },
             name: '',
-            // poster: '',
             poster: {
               name: '',
               key: '',
               uploadedAt: '',
               buffer: '',
+              preview: '',
             },
             rating: 0,
             status: '',
