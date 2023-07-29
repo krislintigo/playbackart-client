@@ -261,21 +261,6 @@ const onSortChange = ({ prop, order }: Sort) => {
   sort.order = sortRef[order] ?? 1
 }
 
-// const updateItemRating = async (item: Item, rating: number) => {
-//   try {
-//     await item.save({ diff: { rating } })
-//     ElNotification.success({
-//       title: 'Рейтинг изменен',
-//       position: 'bottom-right',
-//     })
-//   } catch (error: any) {
-//     ElNotification.error({
-//       title: 'Что-то пошло не так...',
-//       position: 'bottom-right',
-//     })
-//   }
-// }
-
 const updateItemRating = async (
   item: Item,
   seasonIndex: number | string | null,
@@ -290,15 +275,9 @@ const updateItemRating = async (
     }
     await _item.save()
     await _item.reset()
-    ElNotification.success({
-      title: 'Рейтинг изменен',
-      position: 'bottom-right',
-    })
+    ElMessage.success('Рейтинг изменен')
   } catch (error: any) {
-    ElNotification.error({
-      title: 'Что-то пошло не так...',
-      position: 'bottom-right',
-    })
+    ElMessage.error('Что-то пошло не так...')
   }
 }
 </script>

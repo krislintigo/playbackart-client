@@ -1,6 +1,5 @@
 <template lang="pug">
 el-upload.w-40.avatar-uploader(
-  v-model:file-list='file',
   :show-file-list='false',
   method='get',
   :on-success='onSuccess'
@@ -22,8 +21,9 @@ const image = computed({
   set: (value) => emit('update:modelValue', value),
 })
 
-const file = ref<any>()
-const preview = ref('')
+const loadedPreview = ref('')
+
+const preview = computed(() => loadedPreview.value || fileUrl(image.value.key))
 
 const toBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -35,7 +35,7 @@ const toBase64 = (file) =>
 
 const onSuccess = async (_, uploadFile) => {
   console.log(uploadFile)
-  preview.value = URL.createObjectURL(uploadFile.raw)
+  loadedPreview.value = URL.createObjectURL(uploadFile.raw)
   image.value.name = uploadFile.name
   image.value.buffer = await toBase64(uploadFile.raw)
   console.log(image.value)

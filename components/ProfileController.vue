@@ -91,15 +91,9 @@ const copyLink = async () => {
         ? '?userId=' + authStore.user._id
         : route.fullPath + '&userId=' + authStore.user._id
     await navigator.clipboard.writeText(location.origin + query)
-    ElNotification.success({
-      title: 'Ссылка успешно скопирована!',
-      position: 'bottom-right',
-    })
+    ElMessage.success('Ссылка успешно скопирована!')
   } catch (e: Error) {
-    ElNotification.error({
-      title: e.message,
-      position: 'bottom-right',
-    })
+    ElMessage.error(e.message)
   }
 }
 
@@ -124,15 +118,9 @@ const handleUserAction = async (action: 'register' | 'login' | 'logout') => {
         await authStore.authenticate({ strategy: 'local', ...authData })
       }
     }
-    ElNotification.success({
-      title: 'Успешно!',
-      position: 'bottom-right',
-    })
+    ElMessage.success('Успешно!')
   } catch (e: Error) {
-    ElNotification.error({
-      title: e.message,
-      position: 'bottom-right',
-    })
+    ElMessage.error(e.message)
   }
 }
 </script>
