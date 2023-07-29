@@ -1,6 +1,14 @@
+export const EMPTY_FILE_DATA = {
+  name: '',
+  key: '',
+  uploadedAt: '',
+  buffer: '',
+  preview: '',
+}
+
 export const EMPTY_SEASON_DATA = {
   name: '',
-  poster: '',
+  poster: _cloneDeep(EMPTY_FILE_DATA),
   rating: 0,
   time: {
     count: 1,

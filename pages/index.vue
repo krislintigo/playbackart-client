@@ -30,7 +30,7 @@ div
         )
           ItemForm(ref='itemForm', v-model='item')
           template(#footer)
-            el-button(type='success', @click='save') Подтвердить
+            el-button(type='success', :loading='savePending', @click='save') Подтвердить
       el-row(:gutter='40')
         el-col(:lg='18')
           el-input.mb-5(
@@ -73,6 +73,7 @@ const itemForm = ref<any>(null)
 const activeItems = ref([0, 1, 2, 3, 4])
 const dialog = ref(false)
 const item = ref()
+const savePending = ref(false)
 
 // reset clone
 watch(dialog, (open) => {
@@ -85,24 +86,18 @@ const save = async () => {
 
   const valid = await itemForm.value.validate()
   if (!valid) {
-    return ElNotification.warning({
-      title: 'Пожалуйста, заполните все поля',
-      position: 'bottom-right',
-    })
+    return ElMessage.warning('Пожалуйста, заполните все поля')
   }
 
   try {
+    console.log('save', item.value)
+    savePending.value = true
     await item.value.save()
+    savePending.value = false
     dialog.value = false
-    ElNotification.success({
-      title: 'Элемент успешно сохранен!',
-      position: 'bottom-right',
-    })
+    ElMessage.success('Элемент успешно сохранен!')
   } catch (e: any) {
-    ElNotification.error({
-      title: 'Что-то пошло не так...',
-      position: 'bottom-right',
-    })
+    ElMessage.error('Что-то пошло не так...')
   }
 }
 
@@ -119,15 +114,9 @@ const updateItemHandler = (id: string) => {
 const deleteItem = async (id: string) => {
   try {
     await api.service('items').remove(id)
-    ElNotification.success({
-      title: 'Элемент успешно удален!',
-      position: 'bottom-right',
-    })
+    ElMessage.success('Элемент успешно удален!')
   } catch (e: any) {
-    ElNotification.error({
-      title: 'Что-то пошло не так...',
-      position: 'bottom-right',
-    })
+    ElMessage.error('Что-то пошло не так...')
   }
 }
 </script>

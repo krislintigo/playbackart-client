@@ -90,10 +90,7 @@ const save = _throttle(async () => {
     await _user.value.save({ diff: props.userTarget })
     await _user.value.reset()
   } catch (e: any) {
-    ElNotification.error({
-      title: 'Что-то пошло не так...',
-      position: 'bottom-right',
-    })
+    ElMessage.error('Что-то пошло не так...')
   }
 }, 5000)
 

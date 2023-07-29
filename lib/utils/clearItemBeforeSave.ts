@@ -1,12 +1,12 @@
+import { EMPTY_FILE_DATA } from '~/lib/data/default'
+
 export const clearItemBeforeSave = (item: Item) => {
   item.name = item.name.trim()
-  item.poster = item.poster.trim()
   item.franchise = item.franchise.trim()
 
   if (item.config.seasons.extended) {
     item.seasons.forEach((season) => {
       season.name = season.name.trim()
-      season.poster = season.poster.trim()
     })
     item.time = {
       count: 1,
@@ -15,9 +15,11 @@ export const clearItemBeforeSave = (item: Item) => {
     }
     item.year = ''
     if (item.config.seasons.multiplePosters) {
-      item.poster = ''
+      item.poster = _cloneDeep(EMPTY_FILE_DATA)
     } else {
-      item.seasons.forEach((season) => (season.poster = ''))
+      item.seasons.forEach(
+        (season) => (season.poster = _cloneDeep(EMPTY_FILE_DATA))
+      )
     }
     if (item.config.seasons.multipleRatings) {
       item.rating = 0

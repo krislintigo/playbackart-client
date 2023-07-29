@@ -13,10 +13,7 @@ const save = _throttle(async () => {
     await _user.value.save({ diff: 'list' })
     await _user.value.reset()
   } catch (e: any) {
-    ElNotification.error({
-      title: 'Что-то пошло не так...',
-      position: 'bottom-right',
-    })
+    ElMessage.error('Что-то пошло не так...')
   }
 }, 5000)
 

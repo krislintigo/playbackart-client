@@ -2,7 +2,7 @@
 .w-full.h-60(v-show='progress', v-loading='progress')
 el-image.mt-5(
   v-show='!progress',
-  :src='src',
+  :src='fileUrl(src)',
   @load='progress = false',
   @error='onError'
 )

@@ -2,7 +2,7 @@
 el-row
   el-col(:span='10')
     el-carousel(
-      v-if='item.config.seasons.extended',
+      v-if='item.config.seasons.multiplePosters',
       ref='carousel',
       indicator-position='none',
       arrow='never',
@@ -10,12 +10,16 @@ el-row
     )
       el-carousel-item(v-for='(season, i) in item.seasons', :key='i')
         LoadablePoster(
-          :src='season.poster',
+          :src='season.poster.key',
           :size='170',
           @error='onPosterError'
         )
     template(v-else)
-      LoadablePoster(:src='item.poster', :size='170', @error='onPosterError')
+      LoadablePoster(
+        :src='item.poster.key',
+        :size='170',
+        @error='onPosterError'
+      )
   el-col(:span='13', :push='1')
     h2.mt-4.break-normal.text-left.font-bold.text-xl {{ item.name }}
     h3.text-base(v-if='item.config.seasons.extended')
@@ -104,27 +108,21 @@ const authStore = useAuthStore()
 const carousel = ref<any>(null)
 const currentSeason = ref(0)
 
-watch(currentSeason, () => carousel.value.setActiveItem(currentSeason.value))
+watch(currentSeason, () => {
+  if (!props.item.config.seasons.multiplePosters) return
+  carousel.value.setActiveItem(currentSeason.value)
+})
 
 const onPosterError = () => {
-  ElNotification.warning({
-    title: 'Кажется, ссылка на фото элемента недействительна...',
-    position: 'bottom-right',
-  })
+  ElMessage.warning('Кажется, ссылка на фото элемента недействительна...')
 }
 
 const updateItemStatus = async (status: string) => {
   try {
     await props.item.save({ diff: { status } })
-    ElNotification.success({
-      title: 'Статус изменен',
-      position: 'bottom-right',
-    })
+    ElMessage.success('Статус изменен')
   } catch (error: any) {
-    ElNotification.error({
-      title: 'Что-то пошло не так...',
-      position: 'bottom-right',
-    })
+    ElMessage.error('Что-то пошло не так...')
   }
 }
 </script>
