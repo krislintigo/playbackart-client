@@ -25,4 +25,13 @@ NuxtLayout
 .el-form-item .el-form-item {
   margin-bottom: 18px !important;
 }
+
+.el-popconfirm__main {
+  word-break: normal;
+  text-align: left;
+}
+
+.el-popconfirm__icon {
+  margin-right: 10px !important;
+}
 </style>

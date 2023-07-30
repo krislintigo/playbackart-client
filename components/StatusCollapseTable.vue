@@ -128,30 +128,47 @@ el-collapse-item.status-table(
                 type='info'
               ) x{{ item.time.replays }}
     el-table-column(
-      v-if='authStore.isAuthenticated && !route.query.userId',
+      v-if='authStore.isAuthenticated',
       label='Операции',
       width='100'
     )
       template(#default='{ row: item }')
-        el-button(
-          :icon='ElIconEditPen',
-          type='warning',
-          circle,
-          size='small',
-          text,
-          @click='emit("update-item", item._id)'
-        )
+        template(v-if='!route.query.userId')
+          el-button.ml-1(
+            :icon='ElIconEditPen',
+            type='warning',
+            circle,
+            size='small',
+            text,
+            @click='emit("update-item", item._id)'
+          )
+          el-popconfirm(
+            title='Вы действительно хотите удалить элемент?',
+            width='250',
+            confirm-button-text='Да',
+            cancel-button-text='Нет',
+            @confirm='emit("delete-item", item._id)'
+          )
+            template(#reference)
+              el-button(
+                :icon='ElIconDelete',
+                type='danger',
+                circle,
+                size='small',
+                text
+              )
         el-popconfirm(
-          title='Вы действительно хотите удалить?',
-          width='285',
+          v-if='route.query.userId',
+          title='Перенести элемент к себе?',
+          width='250',
           confirm-button-text='Да',
           cancel-button-text='Нет',
-          @confirm='emit("delete-item", item._id)'
+          @confirm='transferItem(item)'
         )
           template(#reference)
-            el-button(
-              :icon='ElIconDelete',
-              type='danger',
+            el-button.ml-5(
+              :icon='ElIconSwitch',
+              type='success',
               circle,
               size='small',
               text
@@ -276,6 +293,24 @@ const updateItemRating = async (
     await _item.save()
     await _item.reset()
     ElMessage.success('Рейтинг изменен')
+  } catch (error: any) {
+    ElMessage.error('Что-то пошло не так...')
+  }
+}
+
+const transferItem = async (item: Item) => {
+  try {
+    ElMessage.warning('Функция находится в разработке')
+    // const newItem = api.service('items').new({
+    //   ...item,
+    //   _id: undefined,
+    //   userId: authStore.user._id,
+    //   status: 'postponed',
+    //   rating: 0,
+    //   seasons: item.seasons.map((i) => ({ ...i, rating: 0 })),
+    // })
+    // await newItem.save()
+    // ElMessage.success('Элемент перенесен!')
   } catch (error: any) {
     ElMessage.error('Что-то пошло не так...')
   }
