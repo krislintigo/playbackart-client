@@ -21,8 +21,6 @@ const image = computed({
   set: (value) => emit('update:modelValue', value),
 })
 
-// const loadedPreview = ref('')
-
 const preview = computed(() => image.value.preview || fileUrl(image.value.key))
 
 const toBase64 = (file) =>
@@ -34,16 +32,12 @@ const toBase64 = (file) =>
   })
 
 const onSuccess = async (_, uploadFile) => {
-  console.log(uploadFile)
-  // loadedPreview.value = URL.createObjectURL(uploadFile.raw)
   image.value.name = uploadFile.name
   image.value.buffer = await toBase64(uploadFile.raw)
   image.value.preview = URL.createObjectURL(uploadFile.raw)
-  console.log(image.value)
-  console.log('preview', preview.value)
 }
 
-// const beforeAvatarUpload = (rawFile) => {
+// const beforeUpload = (rawFile) => {
 //   console.log(rawFile)
 //   if (rawFile.size / 1024 / 1024 > 2) {
 //     ElMessage.error('Avatar picture size can not exceed 2MB!')
