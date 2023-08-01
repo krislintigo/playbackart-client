@@ -1,7 +1,7 @@
 export const formatDuration = (min: number) => {
-  const days = min > 10080 ? Math.floor(min / 1440) : 0
+  const days = min > 14400 ? Math.floor(min / 1440) : 0
   const hours =
-    min > 10080 ? Math.floor((min % 1440) / 60) : Math.floor(min / 60)
+    min > 14400 ? Math.floor((min % 1440) / 60) : Math.floor(min / 60)
   const minutes = min % 60
   return (
     (days > 0 ? days + 'д ' : '') +

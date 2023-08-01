@@ -45,7 +45,7 @@ el-row
       )
     h4.mt-4.mb-2.font-bold Информация:
     .tags-container
-      el-tag(type='info') {{ getTypeWord(item.type) }}
+      el-tag(type='info') {{ types.find((t) => t.value === item.type).title }}
       el-tag(
         v-if='item.config.seasons.extended && item.seasons.at(0).year && item.seasons.at(-1).year',
         type='info'
@@ -57,7 +57,7 @@ el-row
       .tags-container
         el-tag(v-for='(genre, i) in item.genres', :key='i', type='info') {{ genre }}
     template(v-if='item.developers.length')
-      h4.mb-2.font-bold {{ getDeveloperWordByType(item.type, item.developers.length) }}:
+      h4.mb-2.font-bold Создатели:
       .tags-container
         el-tag(
           v-for='(developer, i) in item.developers',
@@ -65,7 +65,7 @@ el-row
           type='info'
         ) {{ developer }}
     template(v-if='uniqueSeasonsDevelopers(item).length')
-      h4.mb-2.font-bold {{ getDeveloperWordByType(item.type, uniqueSeasonsDevelopers(item).length) }}:
+      h4.mb-2.font-bold Создатели:
       .tags-container
         el-tag(
           v-for='(developer, i) in uniqueSeasonsDevelopers(item)',
