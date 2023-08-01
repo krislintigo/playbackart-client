@@ -1,12 +1,28 @@
 <template lang="pug">
-el-upload.w-40.avatar-uploader(
+el-upload.avatar-uploader(
+  v-if='!preview',
   :show-file-list='false',
   method='get',
   :on-success='onSuccess'
 )
-  img.avatar(v-if='preview', :src='preview')
-  el-icon.avatar-uploader-icon(v-else)
+  el-icon.avatar-uploader-icon
     ElIconPlus
+.image-container(
+  v-else,
+  @mouseover='showControl = true',
+  @mouseleave='showControl = false'
+)
+  img.avatar.transition-all(
+    :src='preview',
+    :class='showControl ? "opacity-60 blur-[1px]" : "opacity-100"'
+  )
+  transition(name='el-fade-in-linear')
+    .absolute.w-full.h-full.inset-0.flex.justify-center.items-center(
+      v-show='showControl'
+    )
+      el-button(link, size='large', @click='remove')
+        el-icon(:size='20')
+          ElIconDelete
 </template>
 
 <script setup lang="ts">
@@ -15,6 +31,8 @@ const props = defineProps<{ modelValue: any }>()
 const emit = defineEmits<{
   (e: 'update:modelValue', value: any): void
 }>()
+
+const showControl = ref(false)
 
 const image = computed({
   get: () => props.modelValue,
@@ -37,6 +55,10 @@ const onSuccess = async (_, uploadFile) => {
   image.value.preview = URL.createObjectURL(uploadFile.raw)
 }
 
+const remove = () => {
+  image.value = _cloneDeep(EMPTY_FILE_DATA)
+}
+
 // const beforeUpload = (rawFile) => {
 //   console.log(rawFile)
 //   if (rawFile.size / 1024 / 1024 > 2) {
@@ -49,13 +71,15 @@ const onSuccess = async (_, uploadFile) => {
 
 <style scoped lang="scss"></style>
 <style lang="scss">
-.avatar-uploader .el-upload {
-  border: 1px dashed var(--el-border-color);
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
+.image-container {
+  @apply w-40 relative rounded-md;
   transition: var(--el-transition-duration-fast);
+}
+.avatar-uploader .el-upload {
+  @apply image-container;
+  border: 1px dashed var(--el-border-color);
+  cursor: pointer;
+  overflow: hidden;
 }
 
 .avatar-uploader .el-upload:hover {
