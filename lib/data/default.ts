@@ -6,7 +6,7 @@ export const EMPTY_FILE_DATA = {
   preview: '',
 }
 
-export const EMPTY_SEASON_DATA = {
+export const EMPTY_PART_DATA = {
   name: '',
   poster: _cloneDeep(EMPTY_FILE_DATA),
   rating: 0,

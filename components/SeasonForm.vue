@@ -1,7 +1,7 @@
 <template lang="pug">
 el-form(
   ref='form',
-  :model='season',
+  :model='part',
   label-position='right',
   :label-width='120',
   :rules='rules'
@@ -13,26 +13,26 @@ el-form(
       prop='poster',
       label-width='60'
     )
-      ImageLoader(v-model='season.poster')
+      ImageLoader(v-model='part.poster')
     .w-full
       el-form-item.mb-4(label='Имя', prop='name')
-        el-input(v-model='season.name')
+        el-input(v-model='part.name')
       el-form-item.mb-4(
         v-if='config.multipleRatings',
         label='Рейтинг',
         prop='rating'
       )
-        RatingInput(v-model='season.rating')
+        RatingInput(v-model='part.rating')
       el-form-item.mb-4(label='Длительность', prop='time')
-        TimeInput(v-model='season.time')
+        TimeInput(v-model='part.time')
       el-form-item.mb-4(label='Год выхода', prop='year')
-        el-date-picker(v-model='season.year', value-format='YYYY', type='year')
+        el-date-picker(v-model='part.year', value-format='YYYY', type='year')
       el-form-item.mb-4(
         v-if='config.multipleDevelopers',
         label='Создатели:',
         prop='developers'
       )
-        TagsInput(v-model='season.developers')
+        TagsInput(v-model='part.developers')
 </template>
 
 <script setup lang="ts">
@@ -48,15 +48,15 @@ const rules: FormRules = {
   ],
 }
 
-const props = defineProps<{ modelValue: Item['season']; config: any }>()
+const props = defineProps<{ modelValue: Item['part']; config: any }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: Item['season']): void
+  (e: 'update:modelValue', value: Item['part']): void
 }>()
 
 const form = ref<any>(null)
 
-const season = computed({
+const part = computed({
   get: () => props.modelValue,
   set: (value) => emit('update:modelValue', value),
 })

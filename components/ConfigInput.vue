@@ -2,24 +2,24 @@
 el-col
   el-row
     el-switch(
-      v-model='config.seasons.extended',
+      v-model='config.parts.extended',
       active-text='Расширенный учет сезонов'
     )
     //el-switch.ml-5(
     //  v-model='item.config.time.extended',
     //  active-text='Расширенный учет времени'
     //)
-  el-row.mt-3(v-if='config.seasons.extended')
+  el-row.mt-3(v-if='config.parts.extended')
     el-checkbox-button(
-      v-model='config.seasons.multiplePosters',
+      v-model='config.parts.multiplePosters',
       label='Множественные постеры'
     )
     el-checkbox-button(
-      v-model='config.seasons.multipleRatings',
+      v-model='config.parts.multipleRatings',
       label='Множественный рейтинг'
     )
     el-checkbox-button(
-      v-model='config.seasons.multipleDevelopers',
+      v-model='config.parts.multipleDevelopers',
       label='Множественные создатели'
     )
 </template>
@@ -43,10 +43,10 @@ const item = computed({
 })
 
 watch(
-  () => config.value.seasons.extended,
+  () => config.value.parts.extended,
   (newValue) => {
-    if (!newValue || item.value.seasons.length) return
-    item.value.seasons = [_cloneDeep(EMPTY_SEASON_DATA)]
+    if (!newValue || item.value.parts.length) return
+    item.value.parts = [_cloneDeep(EMPTY_PART_DATA)]
   }
 )
 </script>

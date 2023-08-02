@@ -48,13 +48,13 @@ el-collapse-item.status-table(
           :persistent='false'
         )
           template(#reference)
-            .cursor-pointer(v-if='item.config.seasons.multipleRatings') {{ averageSeasonsRating(item) || '-' }}
+            .cursor-pointer(v-if='item.config.parts.multipleRatings') {{ averagePartsRating(item) || '-' }}
             .cursor-pointer(v-else, class='w-1/2') {{ item.rating || '-' }}
-          el-row(v-if='item.config.seasons.multipleRatings')
-            div(v-for='(season, i) in item.seasons', :key='i')
-              h3.text-base.font-bold {{ season.name }}:
+          el-row(v-if='item.config.parts.multipleRatings')
+            div(v-for='(part, i) in item.parts', :key='i')
+              h3.text-base.font-bold {{ part.name }}:
               RatingInput(
-                :model-value='season.rating',
+                :model-value='part.rating',
                 @change='updateItemRating(item, i, $event)'
               )
           RatingInput(
@@ -64,23 +64,23 @@ el-collapse-item.status-table(
           )
         .cursor-pointer(v-else)
           el-tooltip(
-            v-if='item.rating || averageSeasonsRating(item)',
+            v-if='item.rating || averagePartsRating(item)',
             placement='right',
             effect='light'
           )
             template(#content)
-              div(v-if='item.config.seasons.multipleRatings')
+              div(v-if='item.config.parts.multipleRatings')
                 el-row(
-                  v-for='(season, i) in item.seasons',
+                  v-for='(part, i) in item.parts',
                   :key='i',
                   justify='space-between'
                 )
                   .text-sm
                     h3.text-base.font-bold
-                      span.mr-1 {{ season.name + ': ' + (season.rating || '-') }}
-                      span(v-if='season.rating') ({{ rating.texts[season.rating - 1] }})
+                      span.mr-1 {{ part.name + ': ' + (part.rating || '-') }}
+                      span(v-if='part.rating') ({{ rating.texts[part.rating - 1] }})
               .text-sm(v-else) {{ rating.texts[item.rating - 1] }}
-            div(v-if='item.config.seasons.multipleRatings') {{ averageSeasonsRating(item) }}
+            div(v-if='item.config.parts.multipleRatings') {{ averagePartsRating(item) }}
             div(v-else, class='w-1/2') {{ item.rating || '-' }}
           span(v-else) -
     el-table-column(
@@ -93,37 +93,37 @@ el-collapse-item.status-table(
       template(#default='{ row: item }')
         el-tooltip(placement='left', effect='light')
           template(#content)
-            div(v-if='item.config.seasons.extended')
+            div(v-if='item.config.parts.extended')
               el-row(
-                v-for='(season, i) in item.seasons',
+                v-for='(part, i) in item.parts',
                 :key='i',
                 justify='space-between',
                 align='bottom'
               )
                 .text-sm
-                  h3.text-base.font-bold {{ season.name + ': ' }}
-                  template(v-if='season.time.duration')
-                    span(v-if='season.time.count > 1') {{ season.time.count }} x&nbsp;
-                    span {{ formatDuration(season.time.duration) }}
-                    span ( {{ formatDuration(season.time.count * season.time.duration) }} )
+                  h3.text-base.font-bold {{ part.name + ': ' }}
+                  template(v-if='part.time.duration')
+                    span(v-if='part.time.count > 1') {{ part.time.count }} x&nbsp;
+                    span {{ formatDuration(part.time.duration) }}
+                    span ( {{ formatDuration(part.time.count * part.time.duration) }} )
                   span(v-else) -
                 el-tag.ml-2(
-                  v-if='season.time.replays',
+                  v-if='part.time.replays',
                   effect='plain',
                   type='info'
-                ) x{{ season.time.replays }}
+                ) x{{ part.time.replays }}
             .text-sm(v-else) {{ formatDuration(item.time.count * item.time.duration) || '-' }}
-          .cursor-pointer(v-if='item.config.seasons.extended')
+          .cursor-pointer(v-if='item.config.parts.extended')
             el-row(justify='space-between')
-              div(v-if='averageSeasonsDuration(item)')
-                span {{ totalSeasonsCount(item) }} x&nbsp;
-                span {{ formatDuration(averageSeasonsDuration(item)) }}
+              div(v-if='averagePartsDuration(item)')
+                span {{ totalPartsCount(item) }} x&nbsp;
+                span {{ formatDuration(averagePartsDuration(item)) }}
               span(v-else) -
               el-tag.ml-2(
-                v-if='averageSeasonsReplays(item)',
+                v-if='averagePartsReplays(item)',
                 effect='plain',
                 type='info'
-              ) x{{ averageSeasonsReplays(item) }}
+              ) x{{ averagePartsReplays(item) }}
           span.cursor-pointer(v-else-if='!item.time.duration') -
           .cursor-pointer(v-else)
             el-row(justify='space-between')
@@ -237,13 +237,13 @@ const query = computed(() => ({
     ...(queryFilters.searchQuery && {
       $or: [
         { name: { $regex: queryFilters.searchQuery, $options: 'i' } },
-        { 'seasons.name': { $regex: queryFilters.searchQuery, $options: 'i' } },
+        { 'parts.name': { $regex: queryFilters.searchQuery, $options: 'i' } },
       ],
     }),
     ...(queryFilters.selectedRatings.length && {
       $or: [
         { rating: { $in: queryFilters.selectedRatings } },
-        { 'seasons.rating': { $in: queryFilters.selectedRatings } },
+        { 'parts.rating': { $in: queryFilters.selectedRatings } },
       ],
     }),
     ...(queryFilters.selectedRestrictions.length && {
@@ -255,7 +255,7 @@ const query = computed(() => ({
     ...(queryFilters.selectedDevelopers.length && {
       $or: [
         { developers: { $in: queryFilters.selectedDevelopers } },
-        { 'seasons.developers': { $in: queryFilters.selectedDevelopers } },
+        { 'parts.developers': { $in: queryFilters.selectedDevelopers } },
       ],
     }),
     ...(queryFilters.selectedFranchises.length && {
@@ -289,13 +289,13 @@ const onSortChange = ({ prop, order }: Sort) => {
 
 const updateItemRating = async (
   item: Item,
-  seasonIndex: number | string | null,
+  partIndex: number | string | null,
   rating: number
 ) => {
   try {
     const _item = await item.clone()
-    if (seasonIndex !== null) {
-      _item.seasons[seasonIndex].rating = rating
+    if (partIndex !== null) {
+      _item.parts[partIndex].rating = rating
     } else {
       _item.rating = rating
     }
@@ -316,7 +316,7 @@ const transferItem = async (item: Item) => {
     //   userId: authStore.user._id,
     //   status: 'postponed',
     //   rating: 0,
-    //   seasons: item.seasons.map((i) => ({ ...i, rating: 0 })),
+    //   parts: item.parts.map((i) => ({ ...i, rating: 0 })),
     // })
     // await newItem.save()
     // ElMessage.success('Элемент перенесен!')

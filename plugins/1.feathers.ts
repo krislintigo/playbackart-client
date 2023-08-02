@@ -59,7 +59,7 @@ export default defineNuxtPlugin((nuxt) => {
         setupInstance(data: any) {
           const defaults = {
             config: {
-              seasons: {
+              parts: {
                 extended: false,
                 multiplePosters: false,
                 multipleRatings: false,
@@ -90,7 +90,7 @@ export default defineNuxtPlugin((nuxt) => {
             year: '',
             developers: [],
             franchise: '',
-            seasons: [],
+            parts: [],
           }
           return useInstanceDefaults(defaults, data)
         },

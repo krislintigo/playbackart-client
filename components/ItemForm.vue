@@ -11,7 +11,7 @@ el-form.item-form(
       ConfigInput(v-model='item.config', v-model:item='item')
   .flex
     el-form-item.mr-7(
-      v-if='!item.config.seasons.extended || !item.config.seasons.multiplePosters',
+      v-if='!item.config.parts.extended || !item.config.parts.multiplePosters',
       label='Постер:',
       prop='poster'
     )
@@ -22,13 +22,13 @@ el-form.item-form(
       el-form-item(label='Франшиза:', prop='franchise')
         el-input(v-model='item.franchise')
       el-form-item(
-        v-if='!item.config.seasons.extended || !item.config.seasons.multipleRatings',
+        v-if='!item.config.parts.extended || !item.config.parts.multipleRatings',
         label='Рейтинг:',
         prop='rating'
       )
         RatingInput(v-model='item.rating')
       el-form-item(
-        v-if='!item.config.seasons.extended',
+        v-if='!item.config.parts.extended',
         label='Длительность:',
         prop='time'
       )
@@ -65,39 +65,39 @@ el-form.item-form(
   el-form-item(label='Жанры:', prop='genres')
     TagsInput(v-model='item.genres')
   el-form-item(
-    v-if='!item.config.seasons.extended',
+    v-if='!item.config.parts.extended',
     label='Год выхода:',
     prop='year'
   )
     el-date-picker(v-model='item.year', value-format='YYYY', type='year')
   el-form-item(
-    v-if='!item.config.seasons.extended || !item.config.seasons.multipleDevelopers',
+    v-if='!item.config.parts.extended || !item.config.parts.multipleDevelopers',
     label='Создатели:',
     prop='developers'
   )
     TagsInput(v-model='item.developers')
   el-form-item(
-    v-if='item.config.seasons.extended',
+    v-if='item.config.parts.extended',
     label='Сезоны:',
-    prop='seasons'
+    prop='parts'
   )
     el-row.gap-y-5.w-full
-      el-button(@click='appendSeason') Добавить
-      el-card.w-full(v-for='(season, i) in item.seasons', :key='i')
+      el-button(@click='appendPart') Добавить
+      el-card.w-full(v-for='(part, i) in item.parts', :key='i')
         template(#header)
           el-row(justify='space-between', align='middle')
-            h2 {{ season.name || '&nbsp;' }}
+            h2 {{ part.name || '&nbsp;' }}
             el-button(
-              v-if='item.seasons.length > 1',
+              v-if='item.parts.length > 1',
               :icon='ElIconDelete',
               circle,
               type='danger',
-              @click='removeSeason(i)'
+              @click='removePart(i)'
             )
-        SeasonForm(
-          ref='seasonForms',
-          v-model='item.seasons[i]',
-          :config='item.config.seasons'
+        PartForm(
+          ref='partForms',
+          v-model='item.parts[i]',
+          :config='item.config.parts'
         )
 </template>
 
@@ -132,22 +132,22 @@ const item = computed({
 })
 
 const form = ref<any>(null)
-const seasonForms = ref<any>(null)
+const partForms = ref<any>(null)
 
-const appendSeason = () => {
-  item.value.seasons.push(_cloneDeep(EMPTY_SEASON_DATA))
+const appendPart = () => {
+  item.value.parts.push(_cloneDeep(EMPTY_PART_DATA))
 }
 
-const removeSeason = (index: string | number) => {
-  item.value.seasons.splice(index, 1)
+const removePart = (index: string | number) => {
+  item.value.parts.splice(index, 1)
 }
 
 const validate = async () => {
   try {
     await form.value.validate()
-    if (!seasonForms.value) return true
+    if (!partForms.value) return true
     const validations = await Promise.all(
-      seasonForms.value.map((form) => form.validate())
+      partForms.value.map((form) => form.validate())
     )
     return validations.every((v) => v)
   } catch (error) {
