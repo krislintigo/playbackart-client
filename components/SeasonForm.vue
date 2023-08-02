@@ -29,7 +29,7 @@ el-form(
         el-date-picker(v-model='season.year', value-format='YYYY', type='year')
       el-form-item.mb-4(
         v-if='config.multipleDevelopers',
-        label='Создатели',
+        label='Создатели:',
         prop='developers'
       )
         TagsInput(v-model='season.developers')

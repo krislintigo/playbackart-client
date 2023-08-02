@@ -32,6 +32,8 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: any): void
 }>()
 
+const { trackObjectUrl } = useResources()
+
 const showControl = ref(false)
 
 const image = computed({
@@ -53,6 +55,7 @@ const onSuccess = async (_, uploadFile) => {
   image.value.name = uploadFile.name
   image.value.buffer = await toBase64(uploadFile.raw)
   image.value.preview = URL.createObjectURL(uploadFile.raw)
+  trackObjectUrl(image.value.preview)
 }
 
 const remove = () => {

@@ -5,10 +5,7 @@ export const useFilters = defineStore('filters', () => {
   const route = useRoute()
   const authStore = useAuthStore()
 
-  const filterFn = api.service('items').filters
-  type FilterReturnType = Awaited<ReturnType<typeof filterFn>>
-
-  const filters = ref<FilterReturnType | null>(null)
+  const filters = ref<any>(null)
   const searchQuery = ref<string>((route.query.searchQuery as string) || '')
   const selectedRatings = ref<number[]>(
     [route.query.selectedRatings ?? []]
@@ -30,7 +27,7 @@ export const useFilters = defineStore('filters', () => {
 
   watchEffect(() => {
     if (process.server) return
-    // @TODO: performance
+    // @TODO: performance?
     navigateTo(
       {
         query: {
@@ -53,7 +50,6 @@ export const useFilters = defineStore('filters', () => {
         userId: route.query.userId || authStore.user?._id,
         type: route.query.type as Item['type'] | undefined,
       })
-      console.log(filters.value)
     } catch (e: any) {
       console.error(e.message)
     }

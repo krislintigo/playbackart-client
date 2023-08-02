@@ -72,7 +72,7 @@ el-form.item-form(
     el-date-picker(v-model='item.year', value-format='YYYY', type='year')
   el-form-item(
     v-if='!item.config.seasons.extended || !item.config.seasons.multipleDevelopers',
-    label='Создатели',
+    label='Создатели:',
     prop='developers'
   )
     TagsInput(v-model='item.developers')

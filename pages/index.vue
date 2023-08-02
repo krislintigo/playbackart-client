@@ -68,6 +68,7 @@ const { api } = useFeathers()
 const route = useRoute()
 const authStore = useAuthStore()
 const queryFilters = useFilters()
+const { clearObjectUrls } = useResources()
 
 const itemForm = ref<any>(null)
 const activeItems = ref([0, 1, 2, 3, 4])
@@ -75,10 +76,11 @@ const dialog = ref(false)
 const item = ref()
 const savePending = ref(false)
 
-// reset clone
+// reset clone / clear object urls
 watch(dialog, (open) => {
   if (open) return
   item.value.reset()
+  clearObjectUrls()
 })
 
 const save = async () => {
@@ -90,11 +92,10 @@ const save = async () => {
   }
 
   try {
-    console.log('save', item.value)
     savePending.value = true
     await item.value.save()
-    savePending.value = false
     dialog.value = false
+    savePending.value = false
     ElMessage.success('Элемент успешно сохранен!')
   } catch (e: any) {
     ElMessage.error('Что-то пошло не так...')
