@@ -32,27 +32,13 @@ el-popover(
       )
     ListEditor
     el-row.my-3(justify='center')
-      el-button.w-full(type='primary', @click='trackedDevelopersDialog = true') Отслеживаемые создатели
+      el-button.w-full(type='primary', @click='trackedDialog = true') Отслеживаемое
       AppDialog(
-        v-model='trackedDevelopersDialog',
-        title='Отслеживаемые создатели',
+        v-model='trackedDialog',
+        title='Отслеживаемое',
         max-width='700px'
       )
-        TrackedEditor(
-          filter-target='developers',
-          user-target='trackedDevelopers'
-        )
-    el-row.my-3(justify='center')
-      el-button.w-full(type='primary', @click='trackedFranchisesDialog = true') Отслеживаемые франшизы
-      AppDialog(
-        v-model='trackedFranchisesDialog',
-        title='Отслеживаемые франшизы',
-        max-width='700px'
-      )
-        TrackedEditor(
-          filter-target='franchises',
-          user-target='trackedFranchises'
-        )
+        TrackedController
     el-row.mt-3(justify='end')
       el-button(type='danger', @click='handleUserAction("logout")') Выход
   div(v-else)
@@ -68,6 +54,8 @@ el-popover(
 </template>
 
 <script setup lang="ts">
+import TrackedController from '~/components/TrackedController.vue'
+
 const { api } = useFeathers()
 const route = useRoute()
 const authStore = useAuthStore()
@@ -75,8 +63,7 @@ const authStore = useAuthStore()
 // const toggleDark = useToggle(isDark)
 
 const visible = ref(false)
-const trackedDevelopersDialog = ref(false)
-const trackedFranchisesDialog = ref(false)
+const trackedDialog = ref(false)
 const authData = reactive({
   login: '',
   password: '',

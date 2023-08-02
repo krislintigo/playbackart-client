@@ -1,12 +1,20 @@
 <template lang="pug">
-el-select.w-full.mb-4(
+el-select.w-full(
+  v-if='inputType === "select"',
   v-model='input',
   filterable,
-  placeholder='Добавить...',
+  placeholder='Выберите...',
   @change='track'
 )
   el-option(v-for='item in items', :key='item', :label='item', :value='item')
-el-collapse(v-model='activeTabs')
+el-row(v-else-if='inputType === "input"', align='middle')
+  el-input.flex-1(
+    v-model='input',
+    placeholder='Введите...',
+    @keyup.enter='track(input)'
+  )
+  el-button.ml-2(@click='track(input)') Добавить
+el-collapse.mt-4(v-model='activeTabs')
   el-collapse-item(
     v-for='(item, i) in _user[userTarget]',
     :key='item.name',
@@ -34,8 +42,9 @@ el-collapse(v-model='activeTabs')
 
 <script setup lang="ts">
 const props = defineProps<{
-  filterTarget: 'developers' | 'franchises'
-  userTarget: 'trackedDevelopers' | 'trackedFranchises'
+  inputType: 'input' | 'select'
+  filterTarget?: 'developers' | 'franchises'
+  userTarget: 'trackedItems' | 'trackedDevelopers' | 'trackedFranchises'
 }>()
 
 const authStore = useAuthStore()
@@ -45,13 +54,14 @@ const activeTabs = ref([])
 const input = ref('')
 const _user = ref(authStore.user.clone())
 
-const items = computed(
-  () =>
-    queryFilters.filters?.[props.filterTarget]
-      .map((i) => i.value)
-      .filter(
-        (i) => !!i && !_user.value[props.userTarget].find((t) => t.name === i)
-      ) ?? []
+const items = computed(() =>
+  props.filterTarget
+    ? queryFilters.filters[props.filterTarget]
+        .map((i) => i.value)
+        .filter(
+          (i) => !!i && !_user.value[props.userTarget].find((t) => t.name === i)
+        ) ?? []
+    : []
 )
 
 const track = (item: string) => {
