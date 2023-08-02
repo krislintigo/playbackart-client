@@ -34,4 +34,13 @@ NuxtLayout
 .el-popconfirm__icon {
   margin-right: 10px !important;
 }
+
+.el-tabs__header.is-right {
+  float: none !important;
+}
+
+.el-drawer__header {
+  margin-bottom: 0 !important;
+  padding-bottom: 10px !important;
+}
 </style>

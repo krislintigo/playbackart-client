@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "~/assets/css/element-plus.scss" as *;`,
+          additionalData: `@use "@/assets/css/element-plus.scss" as element;`,
         },
       },
     },
@@ -28,8 +28,9 @@ export default defineNuxtConfig({
   },
   elementPlus: {
     themes: ['dark'],
+    importStyle: 'scss',
   },
-  css: ['~/assets/css/main.scss'],
+  css: ['~/assets/css/main.scss', 'element-plus/theme-chalk/src/display.scss'],
   components: {
     global: true,
     dirs: [

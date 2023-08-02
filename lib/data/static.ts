@@ -82,3 +82,10 @@ export const types = [
 ]
 
 export const restrictionsTemplate = ['G', 'PG', 'PG-13', 'R', 'NC-17']
+
+export const tableBreakpoints = {
+  operations: 600,
+  time: 800,
+  rating: 900,
+  item: 1050,
+}

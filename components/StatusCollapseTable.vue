@@ -7,15 +7,21 @@ el-collapse-item.status-table(
   template(#title)
     h2.font-bold.text-lg {{ title }}
   el-table(v-loading='isPending', :data='items', @sort-change='onSortChange')
+    el-table-column(v-if='width < tableBreakpoints.item', type='expand')
+      template(#default='{ row: item }')
+        //ItemPreview(:item='item')
+        el-card(body-style='padding: 10px')
+          ItemPreview(:item='item')
     el-table-column(type='index', label='#', width='57', :index='indexHandler')
     el-table-column(
       sortable='custom',
       prop='name',
       label='Название',
-      min-width='350'
+      min-width='200'
     )
       template(#default='{ row: item }')
         el-popover(
+          v-if='width > tableBreakpoints.item',
           placement='right',
           :width='420',
           trigger='hover',
@@ -26,6 +32,7 @@ el-collapse-item.status-table(
             el-link {{ item.name }}
           ItemPreview(:item='item')
     el-table-column(
+      v-if='width > tableBreakpoints.rating',
       sortable='custom',
       prop='rating',
       label='Рейтинг',
@@ -77,6 +84,7 @@ el-collapse-item.status-table(
             div(v-else, class='w-1/2') {{ item.rating || '-' }}
           span(v-else) -
     el-table-column(
+      v-if='width > tableBreakpoints.time',
       sortable='custom',
       prop='time',
       label='Длительность',
@@ -128,7 +136,7 @@ el-collapse-item.status-table(
                 type='info'
               ) x{{ item.time.replays }}
     el-table-column(
-      v-if='authStore.isAuthenticated',
+      v-if='authStore.isAuthenticated && width > 600',
       label='Операции',
       width='100'
     )
@@ -213,6 +221,7 @@ const emit = defineEmits(['update-item', 'delete-item'])
 
 const { api } = useFeathers()
 const route = useRoute()
+const { width } = useWindowSize()
 const authStore = useAuthStore()
 const queryFilters = useFilters()
 

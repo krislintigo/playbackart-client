@@ -31,8 +31,8 @@ div
           ItemForm(ref='itemForm', v-model='item')
           template(#footer)
             el-button(type='success', :loading='savePending', @click='save') Подтвердить
-      el-row(:gutter='40')
-        el-col(:lg='18')
+      .flex.gap-x-8
+        .flex.flex-col.w-full.overflow-hidden
           el-input.mb-5(
             v-model='queryFilters.searchQuery',
             placeholder='Поиск по названию...',
@@ -49,8 +49,7 @@ div
               @delete-item='deleteItem'
             )
           SummaryFooter
-        el-col(:lg='6')
-          AsideFilters
+        AsideFilters.hidden-md-and-down
     el-row(v-else, :gutter='40')
       el-col(:lg='18')
         el-skeleton(animated, :rows='10')

@@ -1,5 +1,5 @@
 <template lang="pug">
-el-aside.flex.flex-col.gap-7(width='350px')
+el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
   el-row
     el-col
       h3.filter-header.mt-0.mb-3.p-2.font-bold.uppercase(class='pl-2.5') Оценки
@@ -87,6 +87,7 @@ el-aside.flex.flex-col.gap-7(width='350px')
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 
+const { width } = useWindowSize()
 const queryFilters = useFilters()
 const {
   filters,

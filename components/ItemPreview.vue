@@ -1,5 +1,5 @@
 <template lang="pug">
-el-row
+el-row.max-w-md
   el-col(:span='10')
     el-carousel(
       v-if='item.config.seasons.multiplePosters',
