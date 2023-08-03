@@ -73,30 +73,17 @@ el-row.max-w-md
           type='info',
           :hit='item.parts[currentPart].developers.includes(developer)'
         ) {{ developer }}
-    el-collapse(v-if='authStore.isAuthenticated && !route.query.userId')
-      el-collapse-item(:class='["set-status-collapse", item.status]')
-        template(#title)
-          el-row.gap-x-3(align='middle')
-            el-icon(size='large')
-              component(
-                :is='statuses.find((s) => s.value === item.status).icon'
-              )
-            h3.font-bold.text-base {{ statuses.find((s) => s.value === item.status).title }}
-        el-row(
-          v-for='status in statuses.filter((i) => i.value !== item.status)',
-          :key='status.value',
-          align='middle',
-          :class='status.value'
-        )
-          el-button(
-            text,
-            :style='{ fontSize: "18px", color: status.color }',
-            @click='updateItemStatus(status.value)'
-          )
-            el-row.gap-x-3(justify='space-between', align='middle')
-              el-icon(size='large')
-                component(:is='status.icon')
-              h3.font-bold.text-base {{ status.title }}
+    template(v-if='authStore.isAuthenticated && !route.query.userId')
+      SetStatusCollapseButton.hidden-xs-only(
+        :current-status='item.status',
+        @update='updateItemStatus($event)'
+      )
+el-row.hidden-sm-and-up(justify='center', class='max-w-[250px]')
+  el-col(:span='24')
+    SetStatusCollapseButton(
+      :current-status='item.status',
+      @update='updateItemStatus($event)'
+    )
 </template>
 
 <script setup lang="ts">
@@ -130,19 +117,5 @@ const updateItemStatus = async (status: string) => {
 <style scoped lang="scss">
 .tags-container {
   @apply flex flex-wrap gap-x-2 gap-y-2 mb-5;
-}
-</style>
-
-<style lang="scss">
-.set-status-collapse .el-collapse-item__header {
-  padding: 0 15px;
-  border-bottom: 0;
-}
-
-.set-status-collapse .el-collapse-item__content {
-  display: flex;
-  flex-direction: column;
-  padding: 10px 0 0 2px;
-  row-gap: 10px;
 }
 </style>

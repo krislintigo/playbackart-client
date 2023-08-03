@@ -38,7 +38,26 @@ el-popover(
         title='Отслеживаемое',
         max-width='700px'
       )
-        TrackedController
+        el-tabs(
+          v-if='queryFilters.filters',
+          v-model='active',
+          stretch,
+          type='border-card'
+        )
+          el-tab-pane(name='trackedItems', label='Элементы')
+            TrackedEditor(input-type='input', user-target='trackedItems')
+          el-tab-pane(name='trackedDevelopers', label='Создатели')
+            TrackedEditor(
+              input-type='select',
+              filter-target='developers',
+              user-target='trackedDevelopers'
+            )
+          el-tab-pane(name='trackedFranchises', label='Франшизы')
+            TrackedEditor(
+              input-type='select',
+              filter-target='franchises',
+              user-target='trackedFranchises'
+            )
     el-row.mt-3(justify='end')
       el-button(type='danger', @click='handleUserAction("logout")') Выход
   div(v-else)
@@ -54,15 +73,15 @@ el-popover(
 </template>
 
 <script setup lang="ts">
-import TrackedController from '~/components/TrackedController.vue'
-
 const { api } = useFeathers()
 const route = useRoute()
+const queryFilters = useFilters()
 const authStore = useAuthStore()
 // const isDark = useDark({ storageKey: 'theme' })
 // const toggleDark = useToggle(isDark)
 
 const visible = ref(false)
+const active = ref('trackedItems')
 const trackedDialog = ref(false)
 const authData = reactive({
   login: '',

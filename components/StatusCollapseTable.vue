@@ -9,7 +9,6 @@ el-collapse-item.status-table(
   el-table(v-loading='isPending', :data='items', @sort-change='onSortChange')
     el-table-column(v-if='width < tableBreakpoints.item', type='expand')
       template(#default='{ row: item }')
-        //ItemPreview(:item='item')
         el-card(body-style='padding: 10px')
           ItemPreview(:item='item')
     el-table-column(type='index', label='#', width='57', :index='indexHandler')
@@ -326,9 +325,9 @@ const transferItem = async (item: Item) => {
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="scss"></style>
 <style lang="scss">
-.status-table .el-collapse-item__header {
+.status-table > div > .el-collapse-item__header {
   background-color: var(--el-color-info-light-8);
   padding: 0 20px;
   border-left: 7px solid;
