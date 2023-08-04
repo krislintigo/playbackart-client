@@ -111,6 +111,8 @@ el-collapse-item.status-table(
                   effect='plain',
                   type='info'
                 ) x{{ part.time.replays }}
+              el-divider(class='!my-2')
+              h3.text-base.font-bold Итого: {{ formatDuration(computeDuration(item, false)) }}
             .text-sm(v-else) {{ formatDuration(item.time.count * item.time.duration) || '-' }}
           .cursor-pointer(v-if='item.config.parts.extended')
             el-row(justify='space-between')
@@ -273,7 +275,7 @@ const {
   currentPage,
   pageCount,
   total,
-} = api.service('items').useFind(query, { paginateOn: 'hybrid' })
+} = api.service('items').useFind(query, { paginateOn: 'server' })
 
 watch(limit, () => (currentPage.value = 1))
 
