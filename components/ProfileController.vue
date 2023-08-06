@@ -22,7 +22,8 @@ el-popover(
   div(v-if='authStore.isAuthenticated')
     h3.my-3.font-normal.text-lg
       span Добро пожаловать,
-      span.ml-1.font-medium {{ authStore.user.login }}!
+      span.ml-1.font-medium.italic {{ authStore.user.login }}
+      span !
     el-row.mb-4(align='middle')
       h4.m-0.text-base.font-light Поделиться приложением:
       el-button.ml-2(
