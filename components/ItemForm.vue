@@ -33,6 +33,13 @@ el-form.item-form(
         prop='time'
       )
         TimeInput(v-model='item.time')
+  el-form-item(label='Тип:', prop='type')
+    el-radio-group(v-model='item.type')
+      el-radio-button(
+        v-for='type in types',
+        :key='type.value',
+        :label='type.value'
+      ) {{ type.title }}
   el-form-item(label='Статус:', prop='status')
     el-radio-group(v-model='item.status')
       el-radio-button(
@@ -41,13 +48,14 @@ el-form.item-form(
         :label='status.value',
         :style='{ "--el-radio-button-checked-bg-color": status.color }'
       ) {{ status.title }}
-  el-form-item(label='Тип:', prop='type')
-    el-radio-group(v-model='item.type')
-      el-radio-button(
-        v-for='type in types',
-        :key='type.value',
-        :label='type.value'
-      ) {{ type.title }}
+  el-form-item(label='Жанры:', prop='genres')
+    TagsInput(v-model='item.genres')
+  el-form-item(
+    v-if='!item.config.parts.extended || !item.config.parts.multipleDevelopers',
+    label='Создатели:',
+    prop='developers'
+  )
+    TagsInput(v-model='item.developers')
   el-form-item(label='Ограничение:', prop='restriction')
     el-radio-group(v-model='item.restriction')
       el-radio-button(
@@ -62,20 +70,13 @@ el-form.item-form(
       text,
       @click='item.restriction = ""'
     )
-  el-form-item(label='Жанры:', prop='genres')
-    TagsInput(v-model='item.genres')
   el-form-item(
     v-if='!item.config.parts.extended',
     label='Год выхода:',
     prop='year'
   )
     el-date-picker(v-model='item.year', value-format='YYYY', type='year')
-  el-form-item(
-    v-if='!item.config.parts.extended || !item.config.parts.multipleDevelopers',
-    label='Создатели:',
-    prop='developers'
-  )
-    TagsInput(v-model='item.developers')
+
   el-form-item(
     v-if='item.config.parts.extended',
     label='Сезоны:',
@@ -163,9 +164,13 @@ defineExpose({ validate, clearValidation })
 </script>
 
 <style scoped lang="scss"></style>
-<style>
+<style lang="scss">
 .item-form .el-radio-button__original-radio:checked + .el-radio-button__inner {
   border-color: transparent;
   box-shadow: none;
 }
+
+//.item-form .el-radio-button > .el-radio-button__inner:hover {
+//  color: red;
+//}
 </style>

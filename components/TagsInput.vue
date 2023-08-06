@@ -1,5 +1,5 @@
 <template lang="pug">
-el-input.mb-1(v-model='input', style='width: 300px', @keyup.enter='append')
+el-input.mb-1(v-model='input', class='!w-72', @keyup.enter='append')
 el-button.ml-1(text, circle, :icon='ElIconMore', @click='split')
 el-button.mx-3.my-0(text, @click='append') Добавить
 el-tag.mr-3(
