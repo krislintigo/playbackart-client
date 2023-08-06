@@ -8,7 +8,7 @@ el-dialog.dialog(
 )
   template(#header)
     slot(name='header')
-      h3.font-bold.text-2xl {{ title }}
+      h3.font-normal.text-2xl {{ title }}
   template(#default)
     slot(name='default')
   template(#footer)

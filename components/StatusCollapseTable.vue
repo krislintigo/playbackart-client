@@ -5,7 +5,7 @@ el-collapse-item.status-table(
   :class='[status]'
 )
   template(#title)
-    h2.font-bold.text-lg {{ title }}
+    h2.font-medium.text-lg {{ title }}
   el-table(v-loading='isPending', :data='items', @sort-change='onSortChange')
     el-table-column(v-if='width < tableBreakpoints.item', type='expand')
       template(#default='{ row: item }')
@@ -51,7 +51,7 @@ el-collapse-item.status-table(
             .cursor-pointer(v-else, class='w-1/2') {{ item.rating || '-' }}
           el-row(v-if='item.config.parts.multipleRatings')
             div(v-for='(part, i) in item.parts', :key='i')
-              h3.text-base.font-bold {{ part.name }}:
+              h3.text-base.font-normal {{ part.name }}:
               RatingInput(
                 :model-value='part.rating',
                 @change='updateItemRating(item, i, $event)'
@@ -75,7 +75,7 @@ el-collapse-item.status-table(
                   justify='space-between'
                 )
                   .text-sm
-                    h3.text-base.font-bold
+                    h3.text-base.font-medium
                       span.mr-1 {{ part.name + ': ' + (part.rating || '-') }}
                       span(v-if='part.rating') ({{ rating.texts[part.rating - 1] }})
               .text-sm(v-else) {{ rating.texts[item.rating - 1] }}
@@ -100,7 +100,7 @@ el-collapse-item.status-table(
                 align='bottom'
               )
                 .text-sm
-                  h3.text-base.font-bold {{ part.name + ': ' }}
+                  h3.text-base.font-medium {{ part.name + ': ' }}
                   template(v-if='part.time.duration')
                     span(v-if='part.time.count > 1') {{ part.time.count }} x&nbsp;
                     span {{ formatDuration(part.time.duration) }}
@@ -112,7 +112,7 @@ el-collapse-item.status-table(
                   type='info'
                 ) x{{ part.time.replays }}
               el-divider(class='!my-2')
-              h3.text-base.font-bold Итого: {{ formatDuration(computeDuration(item, false)) }}
+              h3.text-base.font-medium Итого: {{ formatDuration(computeDuration(item, false)) }}
             .text-sm(v-else) {{ formatDuration(item.time.count * item.time.duration) || '-' }}
           .cursor-pointer(v-if='item.config.parts.extended')
             el-row(justify='space-between')
@@ -355,6 +355,7 @@ const transferItem = async (item: Item) => {
 
 .status-table .el-table .el-table__cell {
   padding: 4px 0;
+  font-weight: 300;
 }
 
 .status-table .el-link__inner {

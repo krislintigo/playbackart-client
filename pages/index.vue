@@ -4,7 +4,7 @@ div
     template(#fallback)
       el-empty
         template(#description)
-          h3.font-bold.text-lg Пожалуйста, подождите...
+          h3.font-normal.text-lg Пожалуйста, подождите...
         template(#image)
           el-icon.is-loading(:size='150')
             ElIconChromeFilled
@@ -12,10 +12,10 @@ div
       h3 Вы просматриваете список другого пользователя
       el-button.ml-3(link, type='primary', @click='navigateTo("/")') На свою страницу
     el-row(v-if='!authStore.isAuthenticated && !route.query.userId')
-      h2.text-2xl.font-bold.my-5 Войдите, чтобы продолжить!
+      h2.text-2xl.font-medium.my-5 Войдите, чтобы продолжить!
     .mb-8(v-else-if='queryFilters.filters')
       el-row(align='middle')
-        h2.text-2xl.font-bold.my-5 {{ navigationTabs.find((tab) => tab.searchType === (route.query.type ?? ''))?.header }}
+        h2.text-2xl.font-light.my-5 {{ navigationTabs.find((tab) => tab.searchType === (route.query.type ?? ''))?.header }}
         el-button.ml-3(
           v-if='authStore.isAuthenticated && !route.query.userId',
           circle,

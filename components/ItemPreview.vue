@@ -21,8 +21,8 @@ el-row.max-w-md
         @error='onPosterError'
       )
   el-col(:span='13', :push='1')
-    h2.mt-4.break-normal.text-left.font-bold.text-xl {{ item.name }}
-    h3.text-base(v-if='item.config.parts.extended')
+    h2.mt-4.break-normal.text-left.font-medium.text-xl {{ item.name }}
+    h3.text-base.font-light(v-if='item.config.parts.extended')
       span.mr-1 {{ item.parts[currentPart].name }}
       span(v-if='item.parts[currentPart].year') ({{ item.parts[currentPart].year }})
     el-row.mt-2(v-if='item.config.parts.extended', align='middle')
@@ -43,7 +43,7 @@ el-row.max-w-md
         :disabled='currentPart === item.parts.length - 1',
         @click='currentPart++'
       )
-    h4.mt-4.mb-2.font-bold Информация:
+    h4.mt-4.mb-2.font-normal Информация:
     .tags-container
       el-tag(type='info') {{ types.find((t) => t.value === item.type).title }}
       el-tag(
@@ -53,11 +53,11 @@ el-row.max-w-md
       el-tag(v-else-if='item.year', type='info') {{ item.year }}
       el-tag(v-if='item.restriction', type='info') {{ item.restriction }}
     template(v-if='item.genres.length')
-      h4.mb-2.font-bold Жанры:
+      h4.mb-2.font-normal Жанры:
       .tags-container
         el-tag(v-for='(genre, i) in item.genres', :key='i', type='info') {{ genre }}
     template(v-if='item.developers.length')
-      h4.mb-2.font-bold Создатели:
+      h4.mb-2.font-normal Создатели:
       .tags-container
         el-tag(
           v-for='(developer, i) in item.developers',
@@ -65,7 +65,7 @@ el-row.max-w-md
           type='info'
         ) {{ developer }}
     template(v-if='uniquePartsDevelopers(item).length')
-      h4.mb-2.font-bold Создатели:
+      h4.mb-2.font-normal Создатели:
       .tags-container
         el-tag(
           v-for='(developer, i) in uniquePartsDevelopers(item)',

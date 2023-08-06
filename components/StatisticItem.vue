@@ -10,7 +10,7 @@
     )
       el-icon.ml-1(:size='14')
         ElIconWarning
-  h2.text-xl.font-bold.m-0 {{ content }}
+  h2.text-xl.font-light.m-0 {{ content }}
 </template>
 
 <script setup lang="ts">

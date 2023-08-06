@@ -2,8 +2,7 @@
 el-main.m-auto(class='max-w-[1550px]')
   el-header.px-7.header(height='70px')
     el-row(justify='space-between', align='middle')
-      el-col(:span='12', :md='4')
-        h1.text-4xl.my-5.font-bold PlaybackArt
+      h1.mt-4.mb-5.font-light(class='text-[40px]') PlaybackArt
       .flex.items-center.gap-x-8
         client-only
           el-tabs.hidden-sm-and-down(v-model='active', @tab-click='tabClick')
@@ -15,14 +14,14 @@ el-main.m-auto(class='max-w-[1550px]')
               template(#label)
                 el-icon
                   component(:is='tab.icon')
-                span.ml-2 {{ tab.label }}
+                span.ml-2.font-normal {{ tab.label }}
           ProfileController
           el-button.hidden-lg-and-up(text, @click='drawer = true')
             el-icon(:size='30')
               ElIconMenu
           el-drawer(v-model='drawer', :size='width > 400 ? "400px" : "100%"')
             template(#header)
-              h2.text-2xl.font-bold.text-white Меню
+              h2.text-2xl.font-medium.text-white Меню
             el-tabs.hidden-md-and-up.mb-10(
               v-model='active',
               tab-position='right',
@@ -36,7 +35,7 @@ el-main.m-auto(class='max-w-[1550px]')
                 template(#label)
                   el-icon
                     component(:is='tab.icon')
-                  span.ml-2 {{ tab.label }}
+                  span.ml-2.font-normal {{ tab.label }}
             AsideFilters
   el-divider
   slot

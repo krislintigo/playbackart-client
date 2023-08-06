@@ -5,7 +5,7 @@ el-collapse.set-status-collapse
       el-row.gap-x-3(align='middle')
         el-icon(size='large')
           component(:is='statuses.find((s) => s.value === currentStatus).icon')
-        h3.font-bold.text-base {{ statuses.find((s) => s.value === currentStatus).title }}
+        h3.font-medium.text-base {{ statuses.find((s) => s.value === currentStatus).title }}
     el-row(
       v-for='status in statuses.filter((i) => i.value !== currentStatus)',
       :key='status.value',
@@ -20,7 +20,7 @@ el-collapse.set-status-collapse
         el-row.gap-x-3(justify='space-between', align='middle')
           el-icon(size='large')
             component(:is='status.icon')
-          h3.font-bold.text-base {{ status.title }}
+          h3.font-medium.text-base {{ status.title }}
 </template>
 
 <script setup lang="ts">

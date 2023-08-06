@@ -94,7 +94,7 @@ onMounted(() => {
 .ProseMirror h3 {
   line-height: 1;
   margin: 16px 0;
-  font-weight: bold;
+  font-weight: 400;
 }
 
 .ProseMirror h1 {

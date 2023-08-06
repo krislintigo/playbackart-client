@@ -2,7 +2,7 @@
 el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
   el-row
     el-col
-      h3.filter-header.mt-0.mb-3.p-2.font-bold.uppercase(class='pl-2.5') Оценки
+      h3.filter-header.mt-0.mb-3.p-2.font-medium.uppercase(class='pl-2.5') Оценки
       HorizontalBarChart(
         :labels='ratings.map((r) => r.value)',
         :data='ratings.map((r) => r.count)',
@@ -11,7 +11,7 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
       )
   el-row
     el-col
-      h3.filter-header.mt-0.mb-3.p-2.font-bold.uppercase(class='pl-2.5') Возрастные ограничения
+      h3.filter-header.mt-0.mb-3.p-2.font-medium.uppercase(class='pl-2.5') Возрастные ограничения
       HorizontalBarChart(
         :labels='restrictions.map((r) => r.value)',
         :data='restrictions.map((r) => r.count)',
@@ -20,7 +20,7 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
       )
   el-row
     el-col
-      h3.filter-header.mt-0.mb-3.p-2.font-bold.uppercase(class='pl-2.5') Жанры
+      h3.filter-header.mt-0.mb-3.p-2.font-medium.uppercase(class='pl-2.5') Жанры
       el-row
         el-link.mx-2(
           v-for='genre in genres',
@@ -31,7 +31,7 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
         ) {{ genre.value }}
   el-row
     el-col
-      h3.filter-header.mt-0.mb-3.p-2.font-bold.uppercase(class='pl-2.5') Создатели
+      h3.filter-header.mt-0.mb-3.p-2.font-medium.uppercase(class='pl-2.5') Создатели
       el-row
         el-link.mx-2(
           v-for='developer in developers.primary',
@@ -57,7 +57,7 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
           )
   el-row
     el-col
-      h3.filter-header.mt-0.mb-3.p-2.font-bold.uppercase(class='pl-2.5') Франшизы
+      h3.filter-header.mt-0.mb-3.p-2.font-medium.uppercase(class='pl-2.5') Франшизы
       el-row
         el-link.mx-2(
           v-for='franchise in franchises.primary',
