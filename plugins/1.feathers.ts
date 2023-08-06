@@ -76,6 +76,7 @@ export default defineNuxtPlugin((nuxt) => {
               uploadedAt: '',
               buffer: '',
               preview: '',
+              action: 'none',
             },
             rating: 0,
             status: '',

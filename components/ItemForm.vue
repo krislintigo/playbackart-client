@@ -155,7 +155,11 @@ const validate = async () => {
   }
 }
 
-defineExpose({ validate })
+const clearValidation = () => {
+  form.value.clearValidate()
+}
+
+defineExpose({ validate, clearValidation })
 </script>
 
 <style scoped lang="scss"></style>

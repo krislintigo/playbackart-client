@@ -226,10 +226,16 @@ const { width } = useWindowSize()
 const authStore = useAuthStore()
 const queryFilters = useFilters()
 
-const sort = reactive<Sort>({
+const sortSelected = reactive<Sort>({
   prop: 'name',
   order: 1,
 })
+
+const sort = computed(() =>
+  sortSelected.prop === 'name'
+    ? { name: sortSelected.order }
+    : { [sortSelected.prop]: sortSelected.order, name: 1 }
+)
 
 const query = computed(() => ({
   query: {
@@ -263,7 +269,7 @@ const query = computed(() => ({
       franchise: { $in: queryFilters.selectedFranchises },
     }),
     status: props.status,
-    $sort: { [sort.prop]: sort.order },
+    $sort: sort.value,
     $limit: 20,
   },
 }))
@@ -284,8 +290,8 @@ const indexHandler = (index: number) =>
 
 const onSortChange = ({ prop, order }: Sort) => {
   const sortRef = { ascending: 1, descending: -1 }
-  sort.prop = order ? prop : 'name'
-  sort.order = sortRef[order] ?? 1
+  sortSelected.prop = order ? prop : 'name'
+  sortSelected.order = sortRef[order] ?? 1
 }
 
 const updateItemRating = async (
@@ -310,17 +316,24 @@ const updateItemRating = async (
 
 const transferItem = async (item: Item) => {
   try {
-    ElMessage.warning('Функция находится в разработке')
-    // const newItem = api.service('items').new({
-    //   ...item,
-    //   _id: undefined,
-    //   userId: authStore.user._id,
-    //   status: 'postponed',
-    //   rating: 0,
-    //   parts: item.parts.map((i) => ({ ...i, rating: 0 })),
-    // })
-    // await newItem.save()
-    // ElMessage.success('Элемент перенесен!')
+    const newItem = api.service('items').new({
+      ...item,
+      _id: undefined,
+      userId: authStore.user._id,
+      status: 'postponed',
+      rating: 0,
+      poster: {
+        ...item.poster,
+        action: 'copy',
+      },
+      parts: item.parts.map((i) => ({
+        ...i,
+        rating: 0,
+        poster: { ...i.poster, action: 'copy' },
+      })),
+    })
+    await newItem.save()
+    ElMessage.success('Элемент перенесен!')
   } catch (error: any) {
     ElMessage.error('Что-то пошло не так...')
   }
