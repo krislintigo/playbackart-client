@@ -257,12 +257,24 @@ const query = computed(() => ({
       restriction: { $in: queryFilters.selectedRestrictions },
     }),
     ...(queryFilters.selectedGenres.length && {
-      genres: { $in: queryFilters.selectedGenres },
+      genres: {
+        [queryFilters.genresIntersection]: queryFilters.selectedGenres,
+      },
     }),
     ...(queryFilters.selectedDevelopers.length && {
       $or: [
-        { developers: { $in: queryFilters.selectedDevelopers } },
-        { 'parts.developers': { $in: queryFilters.selectedDevelopers } },
+        {
+          developers: {
+            [queryFilters.developersIntersection]:
+              queryFilters.selectedDevelopers,
+          },
+        },
+        {
+          'parts.developers': {
+            [queryFilters.developersIntersection]:
+              queryFilters.selectedDevelopers,
+          },
+        },
       ],
     }),
     ...(queryFilters.selectedFranchises.length && {

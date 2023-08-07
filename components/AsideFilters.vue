@@ -2,7 +2,8 @@
 el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
   el-row
     el-col
-      h3.filter-header.mt-0.mb-3.p-2.font-medium.uppercase(class='pl-2.5') Оценки
+      el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
+        h3.font-medium.uppercase Рейтинги
       HorizontalBarChart(
         :labels='ratings.map((r) => r.value)',
         :data='ratings.map((r) => r.count)',
@@ -11,7 +12,8 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
       )
   el-row
     el-col
-      h3.filter-header.mt-0.mb-3.p-2.font-medium.uppercase(class='pl-2.5') Возрастные ограничения
+      el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
+        h3.font-medium.uppercase Возрастные ограничения
       HorizontalBarChart(
         :labels='restrictions.map((r) => r.value)',
         :data='restrictions.map((r) => r.count)',
@@ -20,7 +22,16 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
       )
   el-row
     el-col
-      h3.filter-header.mt-0.mb-3.p-2.font-medium.uppercase(class='pl-2.5') Жанры
+      el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
+        h3.font-medium.uppercase Жанры
+        div
+          span.text-sm {{ genresIntersection === '$all' ? 'А и Б' : 'А или Б' }}
+          el-switch.ml-2(
+            v-model='genresIntersection',
+            size='small',
+            active-value='$all',
+            inactive-value='$in'
+          )
       el-row
         el-link.mx-2(
           v-for='genre in genres',
@@ -31,7 +42,16 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
         ) {{ genre.value }}
   el-row
     el-col
-      h3.filter-header.mt-0.mb-3.p-2.font-medium.uppercase(class='pl-2.5') Создатели
+      el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
+        h3.font-medium.uppercase Создатели
+        div
+          span.text-sm {{ developersIntersection === '$all' ? 'А и Б' : 'А или Б' }}
+          el-switch.ml-2(
+            v-model='developersIntersection',
+            size='small',
+            active-value='$all',
+            inactive-value='$in'
+          )
       el-row
         el-link.mx-2(
           v-for='developer in developers.primary',
@@ -57,7 +77,8 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
           )
   el-row
     el-col
-      h3.filter-header.mt-0.mb-3.p-2.font-medium.uppercase(class='pl-2.5') Франшизы
+      el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
+        h3.font-medium.uppercase Франшизы
       el-row
         el-link.mx-2(
           v-for='franchise in franchises.primary',
@@ -94,7 +115,9 @@ const {
   selectedRatings,
   selectedRestrictions,
   selectedGenres,
+  genresIntersection,
   selectedDevelopers,
+  developersIntersection,
   selectedFranchises,
 } = storeToRefs(queryFilters)
 
@@ -112,8 +135,8 @@ const restrictions = computed(() =>
 )
 const genres = computed(() => filters.value.genres.filter((i) => i.value))
 const developers = computed(() => {
-  const primary = []
-  const secondary = []
+  const primary: ExtendedStatistic<string>[] = []
+  const secondary: ExtendedStatistic<string>[] = []
   filters.value.developers
     .filter((i) => i.value)
     .forEach((developer) => {
@@ -127,8 +150,8 @@ const developers = computed(() => {
   return { primary, secondary }
 })
 const franchises = computed(() => {
-  const primary = []
-  const secondary = []
+  const primary: ExtendedStatistic<string>[] = []
+  const secondary: ExtendedStatistic<string>[] = []
   filters.value.franchises
     .filter((i) => i.value)
     .forEach((franchise) => {
@@ -142,7 +165,7 @@ const franchises = computed(() => {
   return { primary, secondary }
 })
 
-const getFilterPercentage = (item) =>
+const getFilterPercentage = (item: ExtendedStatistic<string>) =>
   ((item.fullDurations.reduce((acc, cur) => acc + cur, 0) *
     ratingCoefficient(item.ratings)) /
     filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)) *

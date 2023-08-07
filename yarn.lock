@@ -7921,9 +7921,9 @@ pkg-types@^1.0.2, pkg-types@^1.0.3:
     mlly "^1.2.0"
     pathe "^1.1.0"
 
-playbackart-server@./server/playbackart-server-1.2.1.tgz:
-  version "1.2.1"
-  resolved "./server/playbackart-server-1.2.1.tgz#7d4b4497100a872292539cf5902240d81562fb5c"
+playbackart-server@./server/playbackart-server-1.2.2.tgz:
+  version "1.2.2"
+  resolved "./server/playbackart-server-1.2.2.tgz#3417d94d8ffa41aa23ec7ef40cdbb503ce22aaf0"
   dependencies:
     "@aws-sdk/client-s3" "^3.379.1"
     "@casl/ability" "^6.5.0"
