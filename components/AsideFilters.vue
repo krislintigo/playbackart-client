@@ -25,9 +25,9 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
       el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
         h3.font-medium.uppercase Жанры
         div
-          span.text-sm {{ genresIntersection === '$all' ? 'А и Б' : 'А или Б' }}
+          span.text-sm {{ selectors.genres === '$all' ? 'А и Б' : 'А или Б' }}
           el-switch.ml-2(
-            v-model='genresIntersection',
+            v-model='selectors.genres',
             size='small',
             active-value='$all',
             inactive-value='$in'
@@ -45,9 +45,9 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
       el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
         h3.font-medium.uppercase Создатели
         div
-          span.text-sm {{ developersIntersection === '$all' ? 'А и Б' : 'А или Б' }}
+          span.text-sm {{ selectors.developers === '$all' ? 'А и Б' : 'А или Б' }}
           el-switch.ml-2(
-            v-model='developersIntersection',
+            v-model='selectors.developers',
             size='small',
             active-value='$all',
             inactive-value='$in'
@@ -115,10 +115,9 @@ const {
   selectedRatings,
   selectedRestrictions,
   selectedGenres,
-  genresIntersection,
   selectedDevelopers,
-  developersIntersection,
   selectedFranchises,
+  selectors,
 } = storeToRefs(queryFilters)
 
 const ratings = computed(() =>

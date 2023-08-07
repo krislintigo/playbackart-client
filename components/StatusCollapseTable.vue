@@ -258,20 +258,20 @@ const query = computed(() => ({
     }),
     ...(queryFilters.selectedGenres.length && {
       genres: {
-        [queryFilters.genresIntersection]: queryFilters.selectedGenres,
+        [queryFilters.selectors.genres]: queryFilters.selectedGenres,
       },
     }),
     ...(queryFilters.selectedDevelopers.length && {
       $or: [
         {
           developers: {
-            [queryFilters.developersIntersection]:
+            [queryFilters.selectors.developers]:
               queryFilters.selectedDevelopers,
           },
         },
         {
           'parts.developers': {
-            [queryFilters.developersIntersection]:
+            [queryFilters.selectors.developers]:
               queryFilters.selectedDevelopers,
           },
         },

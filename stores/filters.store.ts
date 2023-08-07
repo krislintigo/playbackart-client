@@ -18,24 +18,35 @@ export const useFilters = defineStore('filters', () => {
   const selectedGenres = ref(
     [route.query.selectedGenres ?? []].flat(1) as string[]
   )
-  const genresIntersection = ref(route.query.genresIntersection || '$in')
   const selectedDevelopers = ref(
     [route.query.selectedDevelopers ?? []].flat(1) as string[]
-  )
-  const developersIntersection = ref(
-    route.query.developersIntersection || '$in'
   )
   const selectedFranchises = ref(
     [route.query.selectedFranchises ?? []].flat(1) as string[]
   )
+  const selectors = ref<{
+    genres: '$in' | '$all'
+    developers: '$in' | '$all'
+  }>({
+    genres: JSON.parse(route.query.selectors || '{}').genres || '$in',
+    developers: JSON.parse(route.query.selectors || '{}').developers || '$in',
+  })
+
+  // watchEffect(() => console.log(selectors.value))
 
   watchEffect(() => {
     if (process.server) return
-    // @TODO: performance?
-    navigateTo(
+    const stringSelectors = JSON.stringify({
+      ...(selectors.value.genres !== '$in' && {
+        genres: selectors.value.genres,
+      }),
+      ...(selectors.value.developers !== '$in' && {
+        developers: selectors.value.developers,
+      }),
+    })
+    return navigateTo(
       {
         query: {
-          // set intersection here
           ...route.query,
           searchQuery: searchQuery.value || undefined,
           selectedRatings: selectedRatings.value,
@@ -43,6 +54,7 @@ export const useFilters = defineStore('filters', () => {
           selectedGenres: selectedGenres.value,
           selectedDevelopers: selectedDevelopers.value,
           selectedFranchises: selectedFranchises.value,
+          selectors: stringSelectors !== '{}' ? stringSelectors : undefined,
         },
       },
       { replace: true }
@@ -72,9 +84,8 @@ export const useFilters = defineStore('filters', () => {
     selectedRatings: skipHydrate(selectedRatings),
     selectedRestrictions: skipHydrate(selectedRestrictions),
     selectedGenres: skipHydrate(selectedGenres),
-    genresIntersection: skipHydrate(genresIntersection),
     selectedDevelopers: skipHydrate(selectedDevelopers),
-    developersIntersection: skipHydrate(developersIntersection),
     selectedFranchises: skipHydrate(selectedFranchises),
+    selectors: skipHydrate(selectors),
   }
 })
