@@ -241,18 +241,48 @@ const query = computed(() => ({
   query: {
     userId: route.query.userId || authStore.user?._id,
     ...(route.query.type && { type: route.query.type }),
-    ...(queryFilters.searchQuery && {
-      $or: [
-        { name: { $regex: queryFilters.searchQuery, $options: 'i' } },
-        { 'parts.name': { $regex: queryFilters.searchQuery, $options: 'i' } },
-      ],
-    }),
-    ...(queryFilters.selectedRatings.length && {
-      $or: [
-        { rating: { $in: queryFilters.selectedRatings } },
-        { 'parts.rating': { $in: queryFilters.selectedRatings } },
-      ],
-    }),
+    $and: [
+      ...(queryFilters.searchQuery && [
+        {
+          $or: [
+            { name: { $regex: queryFilters.searchQuery, $options: 'i' } },
+            {
+              'parts.name': { $regex: queryFilters.searchQuery, $options: 'i' },
+            },
+          ],
+        },
+      ]),
+      ...(queryFilters.selectedRatings.length
+        ? [
+            {
+              $or: [
+                { rating: { $in: queryFilters.selectedRatings } },
+                { 'parts.rating': { $in: queryFilters.selectedRatings } },
+              ],
+            },
+          ]
+        : []),
+      ...(queryFilters.selectedDevelopers.length
+        ? [
+            {
+              $or: [
+                {
+                  developers: {
+                    [queryFilters.selectors.developers]:
+                      queryFilters.selectedDevelopers,
+                  },
+                },
+                {
+                  'parts.developers': {
+                    [queryFilters.selectors.developers]:
+                      queryFilters.selectedDevelopers,
+                  },
+                },
+              ],
+            },
+          ]
+        : []),
+    ],
     ...(queryFilters.selectedRestrictions.length && {
       restriction: { $in: queryFilters.selectedRestrictions },
     }),
@@ -260,22 +290,6 @@ const query = computed(() => ({
       genres: {
         [queryFilters.selectors.genres]: queryFilters.selectedGenres,
       },
-    }),
-    ...(queryFilters.selectedDevelopers.length && {
-      $or: [
-        {
-          developers: {
-            [queryFilters.selectors.developers]:
-              queryFilters.selectedDevelopers,
-          },
-        },
-        {
-          'parts.developers': {
-            [queryFilters.selectors.developers]:
-              queryFilters.selectedDevelopers,
-          },
-        },
-      ],
     }),
     ...(queryFilters.selectedFranchises.length && {
       franchise: { $in: queryFilters.selectedFranchises },
@@ -285,6 +299,8 @@ const query = computed(() => ({
     $limit: 20,
   },
 }))
+
+watchEffect(() => console.log(query.value))
 
 const {
   data: items,
