@@ -241,48 +241,55 @@ const query = computed(() => ({
   query: {
     userId: route.query.userId || authStore.user?._id,
     ...(route.query.type && { type: route.query.type }),
-    $and: [
-      ...(queryFilters.searchQuery && [
-        {
-          $or: [
-            { name: { $regex: queryFilters.searchQuery, $options: 'i' } },
-            {
-              'parts.name': { $regex: queryFilters.searchQuery, $options: 'i' },
-            },
-          ],
-        },
-      ]),
-      ...(queryFilters.selectedRatings.length
-        ? [
-            {
-              $or: [
-                { rating: { $in: queryFilters.selectedRatings } },
-                { 'parts.rating': { $in: queryFilters.selectedRatings } },
-              ],
-            },
-          ]
-        : []),
-      ...(queryFilters.selectedDevelopers.length
-        ? [
-            {
-              $or: [
-                {
-                  developers: {
-                    [queryFilters.selectors.developers]:
-                      queryFilters.selectedDevelopers,
-                  },
+    ...((queryFilters.searchQuery ||
+      queryFilters.selectedRatings.length ||
+      queryFilters.selectedDevelopers.length) && {
+      $and: [
+        ...(queryFilters.searchQuery && [
+          {
+            $or: [
+              { name: { $regex: queryFilters.searchQuery, $options: 'i' } },
+              {
+                'parts.name': {
+                  $regex: queryFilters.searchQuery,
+                  $options: 'i',
                 },
-                {
-                  'parts.developers': {
-                    [queryFilters.selectors.developers]:
-                      queryFilters.selectedDevelopers,
+              },
+            ],
+          },
+        ]),
+        ...(queryFilters.selectedRatings.length
+          ? [
+              {
+                $or: [
+                  { rating: { $in: queryFilters.selectedRatings } },
+                  { 'parts.rating': { $in: queryFilters.selectedRatings } },
+                ],
+              },
+            ]
+          : []),
+        ...(queryFilters.selectedDevelopers.length
+          ? [
+              {
+                $or: [
+                  {
+                    developers: {
+                      [queryFilters.selectors.developers]:
+                        queryFilters.selectedDevelopers,
+                    },
                   },
-                },
-              ],
-            },
-          ]
-        : []),
-    ],
+                  {
+                    'parts.developers': {
+                      [queryFilters.selectors.developers]:
+                        queryFilters.selectedDevelopers,
+                    },
+                  },
+                ],
+              },
+            ]
+          : []),
+      ],
+    }),
     ...(queryFilters.selectedRestrictions.length && {
       restriction: { $in: queryFilters.selectedRestrictions },
     }),
@@ -299,8 +306,6 @@ const query = computed(() => ({
     $limit: 20,
   },
 }))
-
-watchEffect(() => console.log(query.value))
 
 const {
   data: items,

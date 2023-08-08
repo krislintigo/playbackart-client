@@ -157,7 +157,8 @@ const validate = async () => {
 }
 
 const clearValidation = () => {
-  form.value.clearValidate()
+  // form.value.clearValidate()
+  form.value.resetFields()
 }
 
 defineExpose({ validate, clearValidation })

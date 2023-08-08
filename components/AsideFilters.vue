@@ -24,7 +24,7 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
     el-col
       el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
         h3.font-medium.uppercase Жанры
-        div
+        .flex.items-center
           span.text-sm {{ selectors.genres === '$all' ? 'А и Б' : 'А или Б' }}
           el-switch.ml-2(
             v-model='selectors.genres',
@@ -44,7 +44,7 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
     el-col
       el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
         h3.font-medium.uppercase Создатели
-        div
+        .flex.items-center
           span.text-sm {{ selectors.developers === '$all' ? 'А и Б' : 'А или Б' }}
           el-switch.ml-2(
             v-model='selectors.developers',
