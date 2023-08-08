@@ -75,12 +75,12 @@ const dialog = ref(false)
 const item = ref()
 const savePending = ref(false)
 
-// reset clone /  clear object urls // clear validation
+// reset clone /  clear object urls / clear validation
 watch(dialog, (open) => {
   if (open) return
   item.value.reset()
   clearObjectUrls()
-  itemForm.value.clearValidation()
+  // itemForm.value.clearValidation()
 })
 
 const save = async () => {
