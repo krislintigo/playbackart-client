@@ -239,7 +239,7 @@ const sort = computed(() =>
 
 const query = computed(() => ({
   query: {
-    userId: route.query.userId || authStore.user?._id,
+    userId: queryFilters.userId,
     ...(route.query.type && { type: route.query.type }),
     ...((queryFilters.searchQuery ||
       queryFilters.selectedRatings.length ||

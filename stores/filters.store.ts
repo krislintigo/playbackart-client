@@ -32,6 +32,10 @@ export const useFilters = defineStore('filters', () => {
     developers: JSON.parse(route.query.selectors || '{}').developers || '$in',
   })
 
+  const userId = computed<string | undefined>(
+    () => route.query.userId || authStore.user?._id
+  )
+
   // watchEffect(() => console.log(selectors.value))
 
   watchEffect(() => {
@@ -62,9 +66,10 @@ export const useFilters = defineStore('filters', () => {
   })
 
   const fetchFilters = async () => {
+    console.log('REFETCH')
     try {
       filters.value = await api.service('items').filters({
-        userId: route.query.userId || authStore.user?._id,
+        userId: userId.value,
         type: route.query.type as Item['type'] | undefined,
       })
     } catch (e: any) {
@@ -72,14 +77,20 @@ export const useFilters = defineStore('filters', () => {
     }
   }
 
-  api.service('items').on('created', fetchFilters)
-  api.service('items').on('patched', fetchFilters)
-  api.service('items').on('removed', fetchFilters)
+  const checkUpdate = ({ userId: _userId }: { userId: string }) => {
+    if (_userId !== userId.value) return
+    fetchFilters()
+  }
+
+  api.service('items').on('created', checkUpdate)
+  api.service('items').on('patched', checkUpdate)
+  api.service('items').on('removed', checkUpdate)
   watch(() => route.query.type, fetchFilters, { immediate: true })
   watch(() => authStore.user, fetchFilters)
 
   return {
     filters,
+    userId,
     searchQuery: skipHydrate(searchQuery),
     selectedRatings: skipHydrate(selectedRatings),
     selectedRestrictions: skipHydrate(selectedRestrictions),
