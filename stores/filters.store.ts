@@ -5,7 +5,7 @@ export const useFilters = defineStore('filters', () => {
   const route = useRoute()
   const authStore = useAuthStore()
 
-  const filters = ref<FiltersOutput>(null)
+  const filters = ref<FiltersOutput | null>(null)
   const searchQuery = ref(route.query.searchQuery || '')
   const selectedRatings = ref(
     [route.query.selectedRatings ?? []]

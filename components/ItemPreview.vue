@@ -22,7 +22,7 @@ el-row.max-w-md
       )
   el-col(:span='13', :push='1')
     h2.mt-4.break-normal.text-left.font-medium.text-xl {{ item.name }}
-    h3.text-base.font-normal(v-if='item.config.parts.extended')
+    h3.text-base.break-normal.font-normal(v-if='item.config.parts.extended')
       span.mr-1 {{ item.parts[currentPart].name }}
       span(v-if='item.parts[currentPart].year') ({{ item.parts[currentPart].year }})
     el-row.mt-2(v-if='item.config.parts.extended', align='middle')

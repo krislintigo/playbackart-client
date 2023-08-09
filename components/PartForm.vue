@@ -9,23 +9,25 @@ el-form(
   .flex
     el-form-item.mr-7.mb-4(
       v-if='config.multiplePosters',
-      label='Постер',
+      label='Постер:',
       prop='poster',
       label-width='60'
     )
       ImageLoader(v-model='part.poster')
     .w-full
-      el-form-item.mb-4(label='Имя', prop='name')
+      el-form-item.mb-4(label='Имя:', prop='name')
         el-input(v-model='part.name')
+      el-form-item.mb-4(label='Статус:', prop='status')
+        StatusButton(v-model='part.status')
       el-form-item.mb-4(
         v-if='config.multipleRatings',
         label='Рейтинг',
         prop='rating'
       )
         RatingInput(v-model='part.rating')
-      el-form-item.mb-4(label='Длительность', prop='time')
+      el-form-item.mb-4(label='Длительность:', prop='time')
         TimeInput(v-model='part.time')
-      el-form-item.mb-4(label='Год выхода', prop='year')
+      el-form-item.mb-4(label='Год выхода:', prop='year')
         el-date-picker(v-model='part.year', value-format='YYYY', type='year')
       el-form-item.mb-4(
         v-if='config.multipleDevelopers',

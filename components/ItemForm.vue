@@ -41,13 +41,7 @@ el-form.item-form(
         :label='type.value'
       ) {{ type.title }}
   el-form-item(label='Статус:', prop='status')
-    el-radio-group(v-model='item.status')
-      el-radio-button(
-        v-for='status in statuses',
-        :key='status.value',
-        :label='status.value',
-        :style='{ "--el-radio-button-checked-bg-color": status.color }'
-      ) {{ status.title }}
+    StatusButton(v-model='item.status')
   el-form-item(label='Жанры:', prop='genres')
     TagsInput(v-model='item.genres')
   el-form-item(
@@ -166,13 +160,3 @@ defineExpose({ validate, clearValidation })
 </script>
 
 <style scoped lang="scss"></style>
-<style lang="scss">
-.item-form .el-radio-button__original-radio:checked + .el-radio-button__inner {
-  border-color: transparent;
-  box-shadow: none;
-}
-
-//.item-form .el-radio-button > .el-radio-button__inner:hover {
-//  color: red;
-//}
-</style>

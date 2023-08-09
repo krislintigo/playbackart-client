@@ -17,4 +17,5 @@ export const EMPTY_PART_DATA = {
   },
   year: '',
   developers: [],
+  status: '',
 }

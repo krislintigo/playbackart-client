@@ -94,11 +94,12 @@ const save = async () => {
   try {
     savePending.value = true
     await item.value.save()
-    dialog.value = false
-    savePending.value = false
     ElMessage.success('Элемент успешно сохранен!')
+    dialog.value = false
   } catch (e: any) {
     ElMessage.error('Что-то пошло не так...')
+  } finally {
+    savePending.value = false
   }
 }
 
