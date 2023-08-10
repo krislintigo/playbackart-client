@@ -8,31 +8,28 @@ el-row.max-w-md
       arrow='never',
       :autoplay='false'
     )
-      el-carousel-item(v-for='(part, i) in item.parts', :key='i')
-        LoadablePoster(
-          :src='part.poster.key',
-          :size='170',
-          @error='onPosterError'
-        )
+      el-carousel-item(v-for='(_part, i) in item.parts', :key='i')
+        LoadablePoster(:src='_part.poster.key', :size='170')
     template(v-else)
-      LoadablePoster(
-        :src='item.poster.key',
-        :size='170',
-        @error='onPosterError'
-      )
+      LoadablePoster(:src='item.poster.key', :size='170')
   el-col(:span='13', :push='1')
     h2.mt-4.break-normal.text-left.font-medium.text-xl {{ item.name }}
-    h3.text-base.break-normal.font-normal(v-if='item.config.parts.extended')
-      span.mr-1 {{ item.parts[currentPart].name }}
-      span(v-if='item.parts[currentPart].year') ({{ item.parts[currentPart].year }})
+    el-row(v-if='item.config.parts.extended', align='middle')
+      .w-4.h-4.rounded-full.mr-2.cursor-pointer(
+        :style='{ background: statuses.find((s) => s.value === part.status).color }',
+        @click='updateItemStatus(currentPartIndex, "")'
+      )
+      h3.text-base.break-normal.font-normal
+        span.mr-1 {{ part.name }}
+        span(v-if='part.year') ({{ part.year }})
     el-row.mt-2(v-if='item.config.parts.extended', align='middle')
       el-button(
         :icon='ElIconArrowLeft',
         circle,
         size='small',
         text,
-        :disabled='currentPart === 0',
-        @click='currentPart--'
+        :disabled='currentPartIndex === 0',
+        @click='currentPartIndex--'
       )
       p.mx-2 Сезоны
       el-button(
@@ -40,8 +37,8 @@ el-row.max-w-md
         circle,
         size='small',
         text,
-        :disabled='currentPart === item.parts.length - 1',
-        @click='currentPart++'
+        :disabled='currentPartIndex === item.parts.length - 1',
+        @click='currentPartIndex++'
       )
     h4.mt-4.mb-2.font-normal Информация:
     .tags-container
@@ -71,18 +68,18 @@ el-row.max-w-md
           v-for='(developer, i) in uniquePartsDevelopers(item)',
           :key='i',
           type='info',
-          :hit='item.parts[currentPart].developers.includes(developer)'
+          :hit='part.developers.includes(developer)'
         ) {{ developer }}
     template(v-if='authStore.isAuthenticated && !route.query.userId')
       SetStatusCollapseButton.hidden-xs-only(
         :current-status='item.status',
-        @update='updateItemStatus($event)'
+        @update='updateItemStatus(null, $event)'
       )
 el-row.hidden-sm-and-up(justify='center', class='max-w-[250px]')
   el-col(:span='24')
     SetStatusCollapseButton(
       :current-status='item.status',
-      @update='updateItemStatus($event)'
+      @update='updateItemStatus(null, $event)'
     )
 </template>
 
@@ -93,24 +90,45 @@ const route = useRoute()
 const authStore = useAuthStore()
 
 const carousel = ref<any>(null)
-const currentPart = ref(0)
+const currentPartIndex = ref(0)
 
-watch(currentPart, () => {
+const part = computed(() => props.item.parts[currentPartIndex.value])
+
+watch(currentPartIndex, () => {
   if (!props.item.config.parts.multiplePosters) return
-  carousel.value.setActiveItem(currentPart.value)
+  carousel.value.setActiveItem(currentPartIndex.value)
 })
 
-const onPosterError = () => {
-  ElMessage.warning('Кажется, ссылка на фото элемента недействительна...')
-}
-
-const updateItemStatus = async (status: string) => {
+const updateItemStatus = async (
+  partIndex: number | string | null,
+  status: string
+) => {
   try {
-    await props.item.save({ diff: { status } })
+    const _item = await props.item.clone()
+    if (partIndex !== null) {
+      const statusArray = statuses.map((st) => st.value)
+      const currentStatusIndex = statusArray.indexOf(
+        _item.parts[partIndex].status
+      )
+      _item.parts[partIndex].status =
+        currentStatusIndex + 1 < statusArray.length
+          ? statusArray.at(currentStatusIndex + 1)
+          : statusArray.at(0)
+    } else {
+      _item.status = status
+    }
+    await _item.save()
+    await _item.reset()
     ElMessage.success('Статус изменен')
   } catch (error: any) {
     ElMessage.error('Что-то пошло не так...')
   }
+  // try {
+  //   await props.item.save({ diff: { status } })
+  //   ElMessage.success('Статус изменен')
+  // } catch (error: any) {
+  //   ElMessage.error('Что-то пошло не так...')
+  // }
 }
 </script>
 
