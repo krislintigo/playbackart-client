@@ -106,14 +106,13 @@ const updateItemStatus = async (
   try {
     const _item = await props.item.clone()
     if (partIndex !== null) {
-      const statusArray = statuses.map((st) => st.value)
-      const currentStatusIndex = statusArray.indexOf(
+      const currentStatusIndex = orderedMainStatuses.indexOf(
         _item.parts[partIndex].status
       )
       _item.parts[partIndex].status =
-        currentStatusIndex + 1 < statusArray.length
-          ? statusArray.at(currentStatusIndex + 1)
-          : statusArray.at(0)
+        currentStatusIndex + 1 < orderedMainStatuses.length
+          ? orderedMainStatuses.at(currentStatusIndex + 1)
+          : orderedMainStatuses.at(0)
     } else {
       _item.status = status
     }

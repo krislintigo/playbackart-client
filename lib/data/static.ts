@@ -31,6 +31,13 @@ export const statuses = [
   },
 ]
 
+export const orderedMainStatuses = [
+  'postponed',
+  'planned',
+  'in-process',
+  'completed',
+]
+
 export const rating = {
   texts: [
     'Отвратительно',

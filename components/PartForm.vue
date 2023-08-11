@@ -48,12 +48,19 @@ const rules: FormRules = {
       trigger: 'change',
     },
   ],
+  status: [
+    {
+      required: true,
+      message: 'Выберите статус',
+      trigger: 'change',
+    },
+  ],
 }
 
-const props = defineProps<{ modelValue: Item['part']; config: any }>()
+const props = defineProps<{ modelValue: Item['parts'][number]; config: any }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: Item['part']): void
+  (e: 'update:modelValue', value: Item['parts'][number]): void
 }>()
 
 const form = ref<any>(null)
