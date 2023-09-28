@@ -112,7 +112,7 @@ el-collapse-item.status-table(
                   type='info'
                 ) x{{ part.time.replays }}
               el-divider(class='!my-2')
-              h3.text-base.font-medium Итого: {{ formatDuration(computeDuration(item, false)) }}
+              h3.text-base.font-medium Итого: {{ formatDuration(computeDuration(item, null, false)) }}
             .text-sm(v-else) {{ formatDuration(item.time.count * item.time.duration) || '-' }}
           .cursor-pointer(v-if='item.config.parts.extended')
             el-row(justify='space-between')
@@ -182,7 +182,6 @@ el-collapse-item.status-table(
               size='small',
               text
             )
-  // find problem with total (hybrid)
   el-pagination.mt-3(
     v-model:current-page='currentPage',
     v-model:page-size='limit',
@@ -195,7 +194,7 @@ el-collapse-item.status-table(
     StatisticItem(title='Всего', :content='total')
     StatisticItem(
       title='Продолжительность',
-      :content='(formatDuration(items.reduce((acc, cur) => acc + computeDuration(cur, false), 0)) || "-") + " / " + (formatDuration(items.reduce((acc, cur) => acc + computeDuration(cur, true), 0)) || "-")',
+      :content='(formatDuration(items.reduce((acc, cur) => acc + computeDuration(cur, status, false), 0)) || "-") + " / " + (formatDuration(items.reduce((acc, cur) => acc + computeDuration(cur, status, true), 0)) || "-")',
       tooltip='Без повторов / Полная'
     )
     StatisticItem(
@@ -241,17 +240,17 @@ const query = computed(() => ({
   query: {
     userId: queryFilters.userId,
     ...(route.query.type && { type: route.query.type }),
-    ...((queryFilters.searchQuery ||
+    ...((queryFilters.search ||
       queryFilters.selectedRatings.length ||
       queryFilters.selectedDevelopers.length) && {
       $and: [
-        ...(queryFilters.searchQuery && [
+        ...(queryFilters.search && [
           {
             $or: [
-              { name: { $regex: queryFilters.searchQuery, $options: 'i' } },
+              { name: { $regex: queryFilters.search, $options: 'i' } },
               {
                 'parts.name': {
-                  $regex: queryFilters.searchQuery,
+                  $regex: queryFilters.search,
                   $options: 'i',
                 },
               },
@@ -316,7 +315,7 @@ const {
   total,
 } = api.service('items').useFind(query, { paginateOn: 'server' })
 
-watch(limit, () => (currentPage.value = 1))
+watch([limit, queryFilters], () => (currentPage.value = 1))
 
 const indexHandler = (index: number) =>
   (currentPage.value - 1) * limit.value + index + 1

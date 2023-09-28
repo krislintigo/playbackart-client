@@ -33,8 +33,8 @@ div
             el-button(type='success', :loading='savePending', @click='save') Подтвердить
       .flex.gap-x-8
         .flex.flex-col.w-full.overflow-hidden
-          el-input.mb-5(
-            v-model='queryFilters.searchQuery',
+          SearchInput.mb-5(
+            v-model='queryFilters.search',
             placeholder='Поиск по названию...',
             clearable
           )

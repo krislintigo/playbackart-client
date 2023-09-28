@@ -13,7 +13,7 @@ export const totalPartsCount = (item: Item) =>
   )
 
 export const averagePartsDuration = (item: Item) =>
-  round(computeDuration(item, false) / totalPartsCount(item))
+  round(computeDuration(item, null, false) / totalPartsCount(item))
 
 export const averagePartsReplays = (item: Item) =>
   round(

@@ -10,10 +10,18 @@ export const formatDuration = (min: number) => {
   )
 }
 
-export const computeDuration = (item: Item, full: boolean) => {
+export const computeDuration = (
+  item: Item,
+  status: Item['status'] | null,
+  full: boolean
+) => {
   const part = (i: Item['time']) =>
     (full ? i.replays + 1 : 1) * i.count * i.duration
+
   return (
-    part(item.time) + item.parts.reduce((acc, cur) => acc + part(cur.time), 0)
+    part(item.time) +
+    item.parts
+      .filter((part) => (status ? part.status === status : true))
+      .reduce((acc, cur) => acc + part(cur.time), 0)
   )
 }

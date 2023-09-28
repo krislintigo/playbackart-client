@@ -6,7 +6,7 @@ export const useFilters = defineStore('filters', () => {
   const authStore = useAuthStore()
 
   const filters = ref<FiltersOutput | null>(null)
-  const searchQuery = ref(route.query.searchQuery || '')
+  const search = ref(route.query.search || '')
   const selectedRatings = ref(
     [route.query.selectedRatings ?? []]
       .flat(1)
@@ -28,8 +28,10 @@ export const useFilters = defineStore('filters', () => {
     genres: '$in' | '$all'
     developers: '$in' | '$all'
   }>({
-    genres: JSON.parse(route.query.selectors || '{}').genres || '$in',
-    developers: JSON.parse(route.query.selectors || '{}').developers || '$in',
+    genres:
+      JSON.parse((route.query.selectors as string) || '{}').genres || '$in',
+    developers:
+      JSON.parse((route.query.selectors as string) || '{}').developers || '$in',
   })
 
   const userId = computed<string | undefined>(
@@ -52,7 +54,7 @@ export const useFilters = defineStore('filters', () => {
       {
         query: {
           ...route.query,
-          searchQuery: searchQuery.value || undefined,
+          search: search.value || undefined,
           selectedRatings: selectedRatings.value,
           selectedRestrictions: selectedRestrictions.value,
           selectedGenres: selectedGenres.value,
@@ -91,7 +93,7 @@ export const useFilters = defineStore('filters', () => {
   return {
     filters,
     userId,
-    searchQuery: skipHydrate(searchQuery),
+    search: skipHydrate(search),
     selectedRatings: skipHydrate(selectedRatings),
     selectedRestrictions: skipHydrate(selectedRestrictions),
     selectedGenres: skipHydrate(selectedGenres),
