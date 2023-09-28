@@ -38,7 +38,7 @@ export const useFilters = defineStore('filters', () => {
     () => route.query.userId || authStore.user?._id
   )
 
-  // watchEffect(() => console.log(selectors.value))
+  watchEffect(() => console.log('userId', userId.value))
 
   watchEffect(() => {
     if (process.server) return
@@ -80,6 +80,7 @@ export const useFilters = defineStore('filters', () => {
   }
 
   const checkUpdate = ({ userId: _userId }: { userId: string }) => {
+    console.log('updated userId', _userId, 'vs system userId', userId.value)
     if (_userId !== userId.value) return
     fetchFilters()
   }
@@ -88,7 +89,7 @@ export const useFilters = defineStore('filters', () => {
   api.service('items').on('patched', checkUpdate)
   api.service('items').on('removed', checkUpdate)
   watch(() => route.query.type, fetchFilters, { immediate: true })
-  watch(() => authStore.user, fetchFilters)
+  watch(userId, fetchFilters)
 
   return {
     filters,
