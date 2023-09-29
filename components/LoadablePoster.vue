@@ -1,6 +1,6 @@
 <template lang="pug">
-.w-full.h-60(v-show='progress', v-loading='progress')
-el-image.mt-5(
+.w-full.h-60.mt-3(v-show='progress', v-loading='progress')
+el-image.mt-3.rounded-sm(
   v-show='!progress',
   :src='fileUrl(src)',
   @load='progress = false',

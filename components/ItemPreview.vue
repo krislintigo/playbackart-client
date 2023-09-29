@@ -13,13 +13,14 @@ el-row.max-w-md
     template(v-else)
       LoadablePoster(:src='item.poster.key', :size='170')
   el-col(:span='13', :push='1')
-    h2.mt-4.break-normal.text-left.font-medium.text-xl {{ item.name }}
-    el-row(v-if='item.config.parts.extended', align='middle')
-      .w-4.h-4.rounded-full.mr-2.cursor-pointer(
+    h2.mt-2.break-normal.text-left.font-medium.text-xl {{ item.name }}
+    div(v-if='item.config.parts.extended')
+      .w-4.h-4.rounded-full.mr-2.cursor-pointer.float-left(
+        class='mt-[3px]',
         :style='{ background: statuses.find((s) => s.value === part.status).color }',
         @click='updateItemStatus(currentPartIndex, "")'
       )
-      h3.text-base.break-normal.font-normal
+      h3.text-base.break-normal.text-left.font-normal
         span.mr-1 {{ part.name }}
         span(v-if='part.year') ({{ part.year }})
     el-row.mt-2(v-if='item.config.parts.extended', align='middle')
