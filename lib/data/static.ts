@@ -31,7 +31,7 @@ export const statuses = [
   },
 ]
 
-export const orderedMainStatuses = [
+export const orderedMainStatuses: Item['status'][] = [
   'postponed',
   'planned',
   'in-process',
