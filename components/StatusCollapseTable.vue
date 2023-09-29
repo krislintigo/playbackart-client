@@ -374,8 +374,7 @@ const transferItem = async (item: Item) => {
 
 <style scoped lang="scss"></style>
 <style lang="scss">
-.status-table > .el-collapse-item__header, // WHAT THE FUCK
-.status-table > div > .el-collapse-item__header {
+.status-table > .el-collapse-item__header {
   background-color: var(--el-color-info-light-8);
   padding: 0 20px;
   border-left: 7px solid;
