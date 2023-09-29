@@ -1,4 +1,5 @@
-import { Item as _Item,
+import {
+  Item as _Item,
   ItemData as _ItemData,
   User as _User,
   SimpleStatistic as _SimpleStatistic,

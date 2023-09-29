@@ -67,29 +67,32 @@ export const useFilters = defineStore('filters', () => {
     )
   })
 
-  const fetchFilters = async () => {
-    console.log('REFETCH')
+  const fetchFilters = (type: string) => async () => {
+    console.log('REFETCH', type)
     try {
       filters.value = await api.service('items').filters({
         userId: userId.value,
         type: route.query.type as Item['type'] | undefined,
       })
+      console.dir(filters.value)
     } catch (e: any) {
       console.error(e.message)
     }
   }
 
   const checkUpdate = ({ userId: _userId }: { userId: string }) => {
-    console.log('updated userId', _userId, 'vs system userId', userId.value)
+    // console.log('updated userId', _userId, 'vs system userId', userId.value)
+    // console.log('equals (should be false to run)', _userId !== userId.value)
     if (_userId !== userId.value) return
-    fetchFilters()
+    // console.log('fetch')
+    fetchFilters('crud')()
   }
 
   api.service('items').on('created', checkUpdate)
   api.service('items').on('patched', checkUpdate)
   api.service('items').on('removed', checkUpdate)
-  watch(() => route.query.type, fetchFilters, { immediate: true })
-  watch(userId, fetchFilters)
+  watch(() => route.query.type, fetchFilters('type'), { immediate: true })
+  watch(userId, fetchFilters('userId'))
 
   return {
     filters,

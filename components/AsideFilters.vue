@@ -112,6 +112,7 @@ const { width } = useWindowSize()
 const queryFilters = useFilters()
 const {
   filters,
+  search,
   selectedRatings,
   selectedRestrictions,
   selectedGenres,
@@ -139,8 +140,8 @@ const developers = computed(() => {
   filters.value.developers
     .filter((i) => i.value)
     .forEach((developer) => {
-      const percentage = getFilterPercentage(developer)
-      if (percentage > 7) {
+      const percentage = developer.coefficient * 100
+      if (percentage > 1.7) {
         primary.push(developer)
       } else {
         secondary.push(developer)
@@ -154,8 +155,8 @@ const franchises = computed(() => {
   filters.value.franchises
     .filter((i) => i.value)
     .forEach((franchise) => {
-      const percentage = getFilterPercentage(franchise)
-      if (percentage > 7) {
+      const percentage = franchise.coefficient * 100
+      if (percentage > 1.7) {
         primary.push(franchise)
       } else {
         secondary.push(franchise)
@@ -164,14 +165,8 @@ const franchises = computed(() => {
   return { primary, secondary }
 })
 
-const getFilterPercentage = (item: ExtendedStatistic<string>) =>
-  ((item.fullDurations.reduce((acc, cur) => acc + cur, 0) *
-    ratingCoefficient(item.ratings)) /
-    filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)) *
-  100
-
-const ratingClick = (gradeIndex: number) => {
-  const rating = ratings.value[gradeIndex]
+const ratingClick = (index: number) => {
+  const rating = ratings.value[index]
   if (selectedRatings.value.includes(rating.value)) {
     selectedRatings.value = selectedRatings.value.filter(
       (r) => r !== rating.value
@@ -181,8 +176,8 @@ const ratingClick = (gradeIndex: number) => {
   }
 }
 
-const restrictionClick = (restrictionIndex: number) => {
-  const restriction = restrictions.value[restrictionIndex]
+const restrictionClick = (index: number) => {
+  const restriction = restrictions.value[index]
   if (selectedRestrictions.value.includes(restriction.value)) {
     selectedRestrictions.value = selectedRestrictions.value.filter(
       (r) => r !== restriction.value
@@ -222,50 +217,23 @@ const franchiseClick = (franchise: string) => {
 
 const textClass = (
   target: 'genre' | 'developer' | 'franchise',
-  value: {
-    value: string
-    ratings: number[]
-    durations: number[]
-    fullDurations: number[]
-    count: number
-  }
+  value: ExtendedStatistic<string>
 ) => {
   const getPercentage = () => {
     switch (target) {
       case 'genre':
-        return (
-          (value.fullDurations.reduce((acc, cur) => acc + cur, 0) *
-            ratingCoefficient(value.ratings)) /
-          filters.value.total.reduce((acc, cur) => acc + cur.duration, 0)
-        )
+        return value.coefficient * 100
       case 'developer':
-        return (
-          ((value.fullDurations.reduce((acc, cur) => acc + cur, 0) *
-            ratingCoefficient(value.ratings)) /
-            developers.value.primary.reduce(
-              (acc, cur) =>
-                acc + cur.durations.reduce((acc, cur) => acc + cur, 0),
-              0
-            )) *
-          100
-        )
+        return value.coefficient * 1000
       case 'franchise':
-        return (
-          ((value.fullDurations.reduce((acc, cur) => acc + cur, 0) *
-            ratingCoefficient(value.ratings)) /
-            developers.value.primary.reduce(
-              (acc, cur) =>
-                acc + cur.durations.reduce((acc, cur) => acc + cur, 0),
-              0
-            )) *
-          100
-        )
+        return value.coefficient * 1000
     }
   }
   return getTextSizeClass(getPercentage(), target)
 }
 
 const resetFilters = () => {
+  search.value = ''
   selectedRatings.value = []
   selectedRestrictions.value = []
   selectedGenres.value = []
