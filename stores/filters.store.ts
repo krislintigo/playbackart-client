@@ -5,6 +5,7 @@ export const useFilters = defineStore('filters', () => {
   const route = useRoute()
   const authStore = useAuthStore()
 
+  const isPending = ref(true)
   const filters = ref<FiltersOutput | null>(null)
   const search = ref(route.query.search || '')
   const selectedRatings = ref(
@@ -38,8 +39,6 @@ export const useFilters = defineStore('filters', () => {
     () => route.query.userId || authStore.user?._id
   )
 
-  watchEffect(() => console.log('userId', userId.value))
-
   watchEffect(() => {
     if (process.server) return
     const stringSelectors = JSON.stringify({
@@ -67,35 +66,36 @@ export const useFilters = defineStore('filters', () => {
     )
   })
 
-  const fetchFilters = (type: string) => async () => {
-    console.log('REFETCH', type)
+  const fetchFilters = async () => {
     try {
+      console.log('REFETCH')
+      isPending.value = true
       filters.value = await api.service('items').filters({
         userId: userId.value,
         type: route.query.type as Item['type'] | undefined,
       })
-      console.dir(filters.value)
+      // console.dir(filters.value)
     } catch (e: any) {
       console.error(e.message)
+    } finally {
+      isPending.value = false
     }
   }
 
   const checkUpdate = ({ userId: _userId }: { userId: string }) => {
-    // console.log('updated userId', _userId, 'vs system userId', userId.value)
-    // console.log('equals (should be false to run)', _userId !== userId.value)
     if (_userId !== userId.value) return
-    // console.log('fetch')
-    fetchFilters('crud')()
+    fetchFilters()
   }
 
   api.service('items').on('created', checkUpdate)
   api.service('items').on('patched', checkUpdate)
   api.service('items').on('removed', checkUpdate)
-  watch(() => route.query.type, fetchFilters('type'), { immediate: true })
-  watch(userId, fetchFilters('userId'))
+  watch(() => route.query.type, fetchFilters, { immediate: true })
+  watch(userId, fetchFilters)
 
   return {
     filters,
+    isPending,
     userId,
     search: skipHydrate(search),
     selectedRatings: skipHydrate(selectedRatings),

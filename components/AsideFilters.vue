@@ -2,8 +2,7 @@
 el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
   el-row
     el-col
-      el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
-        h3.font-medium.uppercase Рейтинги
+      FilterHeader(title='Рейтинги', :is-pending='isPending')
       HorizontalBarChart(
         :labels='ratings.map((r) => r.value)',
         :data='ratings.map((r) => r.count)',
@@ -12,8 +11,7 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
       )
   el-row
     el-col
-      el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
-        h3.font-medium.uppercase Возрастные ограничения
+      FilterHeader(title='Возрастные ограничения', :is-pending='isPending')
       HorizontalBarChart(
         :labels='restrictions.map((r) => r.value)',
         :data='restrictions.map((r) => r.count)',
@@ -22,16 +20,11 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
       )
   el-row
     el-col
-      el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
-        h3.font-medium.uppercase Жанры
-        .flex.items-center
-          span.text-sm {{ selectors.genres === '$all' ? 'А и Б' : 'А или Б' }}
-          el-switch.ml-2(
-            v-model='selectors.genres',
-            size='small',
-            active-value='$all',
-            inactive-value='$in'
-          )
+      FilterHeader(
+        v-model:selector='selectors.genres',
+        title='Жанры',
+        :is-pending='isPending'
+      )
       el-row
         el-link.mx-2(
           v-for='genre in genres',
@@ -42,16 +35,11 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
         ) {{ genre.value }}
   el-row
     el-col
-      el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
-        h3.font-medium.uppercase Создатели
-        .flex.items-center
-          span.text-sm {{ selectors.developers === '$all' ? 'А и Б' : 'А или Б' }}
-          el-switch.ml-2(
-            v-model='selectors.developers',
-            size='small',
-            active-value='$all',
-            inactive-value='$in'
-          )
+      FilterHeader(
+        v-model:selector='selectors.developers',
+        title='Создатели',
+        :is-pending='isPending'
+      )
       el-row
         el-link.mx-2(
           v-for='developer in developers.primary',
@@ -77,8 +65,7 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
           )
   el-row
     el-col
-      el-row.filter-header.mb-3.p-2(justify='space-between', align='middle')
-        h3.font-medium.uppercase Франшизы
+      FilterHeader(title='Франшзы', :is-pending='isPending')
       el-row
         el-link.mx-2(
           v-for='franchise in franchises.primary',
@@ -112,6 +99,7 @@ const { width } = useWindowSize()
 const queryFilters = useFilters()
 const {
   filters,
+  isPending,
   search,
   selectedRatings,
   selectedRestrictions,
@@ -122,46 +110,40 @@ const {
 } = storeToRefs(queryFilters)
 
 const ratings = computed(() =>
-  [...filters.value.ratings.filter((i) => i.value)].sort(
-    (a, b) => b.value - a.value
-  )
+  [...filters.value.ratings].sort((a, b) => b.value - a.value)
 )
 const restrictions = computed(() =>
-  [...filters.value.restrictions.filter((r) => r.value)].sort(
+  [...filters.value.restrictions].sort(
     (a, b) =>
       restrictionsTemplate.indexOf(a.value) -
       restrictionsTemplate.indexOf(b.value)
   )
 )
-const genres = computed(() => filters.value.genres.filter((i) => i.value))
+const genres = computed(() => filters.value.genres)
 const developers = computed(() => {
   const primary: ExtendedStatistic<string>[] = []
   const secondary: ExtendedStatistic<string>[] = []
-  filters.value.developers
-    .filter((i) => i.value)
-    .forEach((developer) => {
-      const percentage = developer.coefficient * 100
-      if (percentage > 1.7) {
-        primary.push(developer)
-      } else {
-        secondary.push(developer)
-      }
-    })
+  filters.value.developers.forEach((developer) => {
+    const percentage = developer.coefficient * 100
+    if (percentage > 2) {
+      primary.push(developer)
+    } else {
+      secondary.push(developer)
+    }
+  })
   return { primary, secondary }
 })
 const franchises = computed(() => {
   const primary: ExtendedStatistic<string>[] = []
   const secondary: ExtendedStatistic<string>[] = []
-  filters.value.franchises
-    .filter((i) => i.value)
-    .forEach((franchise) => {
-      const percentage = franchise.coefficient * 100
-      if (percentage > 1.7) {
-        primary.push(franchise)
-      } else {
-        secondary.push(franchise)
-      }
-    })
+  filters.value.franchises.forEach((franchise) => {
+    const percentage = franchise.coefficient * 100
+    if (percentage > 2) {
+      primary.push(franchise)
+    } else {
+      secondary.push(franchise)
+    }
+  })
   return { primary, secondary }
 })
 
@@ -224,9 +206,9 @@ const textClass = (
       case 'genre':
         return value.coefficient * 100
       case 'developer':
-        return value.coefficient * 1000
+        return value.coefficient * 500
       case 'franchise':
-        return value.coefficient * 1000
+        return value.coefficient * 500
     }
   }
   return getTextSizeClass(getPercentage(), target)
@@ -243,11 +225,6 @@ const resetFilters = () => {
 </script>
 
 <style scoped lang="scss">
-.filter-header {
-  background-color: var(--el-color-info-light-8);
-  border-left: 5px solid var(--el-text-color-primary);
-}
-
 .item-selected {
   color: var(--el-color-primary);
 }
