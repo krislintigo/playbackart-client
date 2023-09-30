@@ -309,11 +309,17 @@ const query = computed(() => ({
 const {
   data: items,
   isPending,
+  find,
   limit,
   currentPage,
   pageCount,
   total,
 } = api.service('items').useFind(query, { paginateOn: 'server' })
+
+api.service('items').on('cud', ({ userId: _userId }) => {
+  if (_userId !== queryFilters.userId) return
+  find()
+})
 
 watch([limit, queryFilters], () => (currentPage.value = 1))
 
