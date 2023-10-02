@@ -316,7 +316,7 @@ const {
   total,
 } = api.service('items').useFind(query, { paginateOn: 'server' })
 
-api.service('items').on('cud', ({ userId: _userId }) => {
+api.service('items').on('cud', ({ userId: _userId }: Item) => {
   if (_userId !== queryFilters.userId) return
   find()
 })

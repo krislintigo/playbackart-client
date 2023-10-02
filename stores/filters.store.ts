@@ -82,13 +82,11 @@ export const useFilters = defineStore('filters', () => {
     }
   }
 
-  const checkUpdate = ({ userId: _userId }: { userId: string }) => {
+  api.service('items').on('cud', ({ userId: _userId }: Item) => {
     console.log('check update')
     if (_userId !== userId.value) return
     fetchFilters()
-  }
-
-  api.service('items').on('cud', checkUpdate)
+  })
   watch(() => route.query.type, fetchFilters, { immediate: true })
   watch(userId, fetchFilters)
 
