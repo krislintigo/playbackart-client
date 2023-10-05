@@ -1,78 +1,65 @@
 <template lang="pug">
-el-popover(
-  :visible='visible',
-  placement='bottom',
-  :width='380',
-  trigger='click',
-  popper-class='mr-5'
-)
-  template(#reference)
-    el-avatar.cursor-pointer(
-      :size='50',
-      :icon='authStore.isAuthenticated ? ElIconUserFilled : ElIconUser',
-      @click='visible = !visible'
+el-row(justify='space-between', align='middle')
+  h2.mb-3.font-normal.text-2xl Профиль
+  //el-button(circle, text, size='large', @click='toggleDark()')
+  //  el-icon(v-if='isDark', :size='24')
+  //    ElIconSunny
+  //  el-icon(v-else, :size='24')
+  //    ElIconMoon
+div(v-if='authStore.isAuthenticated')
+  h3.my-3.font-normal.text-lg
+    span Добро пожаловать,
+    span.ml-1.font-medium.italic {{ authStore.user.login }}
+    span !
+  el-row.mb-4(align='middle')
+    h4.m-0.text-base.font-light Поделиться приложением:
+    el-button.ml-2(
+      circle,
+      plain,
+      size='small',
+      :icon='ElIconShare',
+      @click='copyLink'
     )
-  el-row(justify='space-between', align='middle')
-    h2.mb-3.font-normal.text-2xl Профиль
-    //el-button(circle, text, size='large', @click='toggleDark()')
-    //  el-icon(v-if='isDark', :size='24')
-    //    ElIconSunny
-    //  el-icon(v-else, :size='24')
-    //    ElIconMoon
-  div(v-if='authStore.isAuthenticated')
-    h3.my-3.font-normal.text-lg
-      span Добро пожаловать,
-      span.ml-1.font-medium.italic {{ authStore.user.login }}
-      span !
-    el-row.mb-4(align='middle')
-      h4.m-0.text-base.font-light Поделиться приложением:
-      el-button.ml-2(
-        circle,
-        plain,
-        size='small',
-        :icon='ElIconShare',
-        @click='copyLink'
+  ListEditor
+  el-row.my-3(justify='center')
+    el-button.w-full(type='primary', @click='trackedDialog = true') Отслеживаемое
+    AppDialog(
+      v-model='trackedDialog',
+      title='Отслеживаемое',
+      max-width='700px'
+    )
+      el-tabs(
+        v-if='queryFilters.filters',
+        v-model='active',
+        stretch,
+        type='border-card'
       )
-    ListEditor
-    el-row.my-3(justify='center')
-      el-button.w-full(type='primary', @click='trackedDialog = true') Отслеживаемое
-      AppDialog(
-        v-model='trackedDialog',
-        title='Отслеживаемое',
-        max-width='700px'
-      )
-        el-tabs(
-          v-if='queryFilters.filters',
-          v-model='active',
-          stretch,
-          type='border-card'
-        )
-          el-tab-pane(name='trackedItems', label='Элементы')
-            TrackedEditor(input-type='input', user-target='trackedItems')
-          el-tab-pane(name='trackedDevelopers', label='Создатели')
-            TrackedEditor(
-              input-type='select',
-              filter-target='developers',
-              user-target='trackedDevelopers'
-            )
-          el-tab-pane(name='trackedFranchises', label='Франшизы')
-            TrackedEditor(
-              input-type='select',
-              filter-target='franchises',
-              user-target='trackedFranchises'
-            )
-    el-row.mt-3(justify='end')
-      el-button(type='danger', @click='handleUserAction("logout")') Выход
-  div(v-else)
-    h3.my-3.font-medium.text-base Войдите в аккаунт!
-    el-form(v-model='authData', label-position='right', :label-width='65')
-      el-form-item(label='Логин')
-        el-input(v-model='authData.login')
-      el-form-item(label='Пароль')
-        el-input(v-model='authData.password', type='password', show-password)
-      el-row(justify='end')
-        el-button(type='success', @click='handleUserAction("login")') Вход
-        el-button(type='warning', @click='handleUserAction("register")') Регистрация
+        el-tab-pane(name='trackedItems', label='Элементы')
+          TrackedEditor(input-type='input', user-target='trackedItems')
+        el-tab-pane(name='trackedDevelopers', label='Создатели')
+          TrackedEditor(
+            input-type='select',
+            filter-target='developers',
+            user-target='trackedDevelopers'
+          )
+        el-tab-pane(name='trackedFranchises', label='Франшизы')
+          TrackedEditor(
+            input-type='select',
+            filter-target='franchises',
+            user-target='trackedFranchises'
+          )
+  el-row.mt-3(justify='end')
+    el-button(type='danger', @click='handleUserAction("logout")') Выход
+div(v-else)
+  h3.my-3.font-medium.text-base Войдите в аккаунт!
+  el-form(v-model='authData', label-position='right', :label-width='65')
+    el-form-item(label='Логин')
+      el-input(v-model='authData.login')
+    el-form-item(label='Пароль')
+      el-input(v-model='authData.password', type='password', show-password)
+    el-row(justify='end')
+      el-button(type='success', @click='handleUserAction("login")') Вход
+      el-button(type='warning', @click='handleUserAction("register")') Регистрация
 </template>
 
 <script setup lang="ts">
@@ -83,7 +70,6 @@ const authStore = useAuthStore()
 // const isDark = useDark({ storageKey: 'theme' })
 // const toggleDark = useToggle(isDark)
 
-const visible = ref(false)
 const active = ref('trackedItems')
 const trackedDialog = ref(false)
 const authData = reactive({

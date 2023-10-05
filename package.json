@@ -38,6 +38,7 @@
     "@tiptap/starter-kit": "^2.0.3",
     "@tiptap/vue-3": "^2.0.3",
     "chart.js": "^4.3.0",
+    "dayjs": "^1.11.10",
     "feathers-pinia": "^3.0.4",
     "nuxt-feathers-pinia": "^0.0.3",
     "nuxt-lodash": "^2.4.1",

@@ -15,10 +15,23 @@ el-main.m-auto(class='max-w-[1550px]')
                 el-icon
                   component(:is='tab.icon')
                 span.ml-2.font-normal {{ tab.label }}
-          ProfileController
+          el-popover(
+            :visible='popover',
+            placement='bottom',
+            :width='380',
+            trigger='click',
+            popper-class='mr-5'
+          )
+            template(#reference)
+              el-avatar.cursor-pointer.hidden-xs-only(
+                :size='50',
+                @click='popover = !popover'
+              )
+                h3.text-xl {{ authStore.user?.login.slice(0, 2).toUpperCase() ?? '-' }}
+            ProfileController
           el-button.hidden-lg-and-up(text, @click='drawer = true')
             el-icon(:size='30')
-              ElIconMenu
+              ElIconOperation
           el-drawer(v-model='drawer', :size='width > 400 ? "400px" : "100%"')
             template(#header)
               h2.text-2xl.font-medium.text-white Меню
@@ -37,6 +50,17 @@ el-main.m-auto(class='max-w-[1550px]')
                     component(:is='tab.icon')
                   span.ml-2.font-normal {{ tab.label }}
             AsideFilters
+            .hidden-sm-and-up
+              hr.mt-5
+              //el-divider
+              //el-row.px-4(justify='end', align='middle')
+              el-avatar.mt-3.cursor-pointer(
+                :size='50',
+                @click='modal = !modal'
+              )
+                h3.text-xl {{ authStore.user?.login.slice(0, 2).toUpperCase() }}
+              AppDialog(v-model='modal', title='')
+                ProfileController
   el-divider
   slot
   el-backtop
@@ -45,9 +69,12 @@ el-main.m-auto(class='max-w-[1550px]')
 <script setup lang="ts">
 const route = useRoute()
 const { width } = useWindowSize()
+const authStore = useAuthStore()
 
 const active = ref((route.query.type as string) ?? '')
 const drawer = ref(false)
+const popover = ref(false)
+const modal = ref(false)
 
 const tabClick = (tab: any) => {
   drawer.value = false
