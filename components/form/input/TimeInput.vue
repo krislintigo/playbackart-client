@@ -1,21 +1,13 @@
 <template lang="pug">
-//el-row.w-fit
-//  el-col(:span='8')
-//    el-input-number(v-model='time.count', :min='1')
-//    h4.m-0.text-center Кол-во элементов
-//  el-col(:span='8', :push='1')
-//    el-input-number(v-model='time.duration', :min='0')
-//    h4.m-0.text-center Длительность (мин)
-//  el-col(:span='8', :push='2')
-//    el-input-number(v-model='time.replays', :min='0')
-//    h4.m-0.text-center Повторы
 el-row.w-fit.gap-x-5
   .flex.flex-col
     el-input-number(v-model='time.count', :min='1')
     h4.m-0.text-center Кол-во элементов
   .flex.flex-col
     el-input-number(v-model='time.duration', :min='0')
-    h4.m-0.text-center Длительность (мин)
+    h4.m-0.text-center
+      span Длительность (мин)
+      .text-xs(class='mt-[-7px]') {{ formatDuration(time.duration) }}
   .flex.flex-col
     el-input-number(v-model='time.replays', :min='0')
     h4.m-0.text-center Повторы

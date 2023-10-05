@@ -70,7 +70,6 @@ el-form.item-form(
     prop='year'
   )
     el-date-picker(v-model='item.year', value-format='YYYY', type='year')
-
   el-form-item(
     v-if='item.config.parts.extended',
     label='Сезоны:',
