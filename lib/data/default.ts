@@ -19,3 +19,7 @@ export const EMPTY_PART_DATA = {
   developers: [],
   status: '',
 }
+
+export const EMPTY_SESSION_DATA = {
+  duration: 0,
+}
