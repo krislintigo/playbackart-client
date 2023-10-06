@@ -50,13 +50,13 @@ watch(
   }
 )
 
-watch(
-  () => config.value.time.extended,
-  (newValue) => {
-    if (!newValue || item.value.time.sessions.length) return
-    item.value.time.sessions = [_cloneDeep(EMPTY_SESSION_DATA)]
-  }
-)
+// watch(
+//   () => config.value.time.extended,
+//   (newValue) => {
+//     if (!newValue || item.value.time.sessions.length) return
+//     item.value.time.sessions = [_cloneDeep(EMPTY_SESSION_DATA)]
+//   }
+// )
 </script>
 
 <style scoped></style>

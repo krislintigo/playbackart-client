@@ -14,6 +14,7 @@ export const EMPTY_PART_DATA = {
     count: 1,
     duration: 0,
     replays: 0,
+    sessions: [],
   },
   year: '',
   developers: [],

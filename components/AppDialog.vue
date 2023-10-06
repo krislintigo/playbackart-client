@@ -36,7 +36,7 @@ watch(dialog, (open) => {
   document.documentElement.style.paddingRight = open
     ? window.innerWidth - document.documentElement.clientWidth + 'px'
     : ''
-  document.documentElement.style.overflowY = open ? 'hidden' : 'scroll'
+  document.documentElement.style.overflowY = open ? 'hidden' : ''
 })
 </script>
 

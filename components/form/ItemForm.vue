@@ -28,7 +28,7 @@ el-form.item-form(
       )
         RatingInput(v-model='item.rating')
       el-form-item(
-        v-if='!item.config.parts.extended',
+        v-if='!item.config.parts.extended && !item.config.time.extended',
         label='Длительность:',
         prop='time'
       )
@@ -87,27 +87,14 @@ el-form.item-form(
         PartForm(
           ref='partForms',
           v-model='item.parts[i]',
-          :config='item.config.parts'
+          :config='item.config'
         )
-  el-form-item(v-if='item.config.time.extended', label='Время:', prop='time')
-    el-row.gap-y-5.w-full
-      el-button(@click='appendSession') Добавить
-      el-card(v-for='(session, i) in item.time.sessions', :key='i')
-        template(#header)
-          el-row(justify='space-between', align='middle')
-            h2 Сессия {{ i + 1 }}
-            el-button(
-              v-if='item.time.sessions.length > 1',
-              :icon='ElIconDelete',
-              circle,
-              type='danger',
-              @click='removeSession(i)'
-            )
-        .flex.flex-col
-          el-input-number(v-model='session.duration', :min='0')
-          h4.m-0.text-center
-            span Длительность (мин)
-            .text-xs(class='mt-[-7px]') {{ formatDuration(session.duration) }}
+  el-form-item(
+    v-if='item.config.time.extended',
+    label='Длительность:',
+    prop='time'
+  )
+    SessionsForm(v-model='item.time.sessions', :config='item.config')
 </template>
 
 <script setup lang="ts">
@@ -147,16 +134,8 @@ const appendPart = () => {
   item.value.parts.push(_cloneDeep(EMPTY_PART_DATA))
 }
 
-const appendSession = () => {
-  item.value.time.sessions.push(_cloneDeep(EMPTY_SESSION_DATA))
-}
-
 const removePart = (index: string | number) => {
   item.value.parts.splice(index, 1)
-}
-
-const removeSession = (index: string | number) => {
-  item.value.time.sessions.splice(index, 1)
 }
 
 const validate = async () => {
