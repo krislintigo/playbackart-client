@@ -1,8 +1,8 @@
 <template lang="pug">
 el-main.m-auto(class='max-w-[1550px]')
-  el-header.px-7.header(height='70px')
+  el-header(height='70px')
     el-row(justify='space-between', align='middle')
-      h1.mt-4.mb-5.font-light(class='text-[40px]') PlaybackArt
+      el-image.mt-5.mb-5.w-64(src='/logo.svg')
       .flex.items-center.gap-x-8
         client-only
           el-tabs.hidden-sm-and-down(v-model='active', @tab-click='tabClick')

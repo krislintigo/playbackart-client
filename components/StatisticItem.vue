@@ -21,10 +21,4 @@ defineProps<{
 }>()
 </script>
 
-<style scoped>
-.stat-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-</style>
+<style scoped lang="scss"></style>

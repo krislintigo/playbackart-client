@@ -21,7 +21,7 @@ export default defineNuxtConfig({
     layoutTransition: { name: 'layout', mode: 'out-in' },
     pageTransition: { name: 'page', mode: 'out-in' },
     head: {
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/icon.png' }],
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/icon.svg' }],
       title: 'PlaybackArt',
       htmlAttrs: { class: 'dark' },
     },
