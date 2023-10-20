@@ -81,13 +81,13 @@ const copyLink = async () => {
   try {
     if (!navigator?.clipboard?.writeText)
       throw new Error('Ваш браузер не поддерживает эту функцию!')
-    const query =
-      JSON.stringify(route.query) === '{}'
-        ? '?userId=' + authStore.user._id
-        : route.fullPath + '&userId=' + authStore.user._id
+    const query = `?userId=${authStore.user._id}&${route.fullPath.replace(
+      /^[/?]+|userId=[^&]+&?/g,
+      ''
+    )}`
     await navigator.clipboard.writeText(location.origin + query)
     ElMessage.success('Ссылка успешно скопирована!')
-  } catch (e: Error) {
+  } catch (e: any) {
     ElMessage.error(e.message)
   }
 }
