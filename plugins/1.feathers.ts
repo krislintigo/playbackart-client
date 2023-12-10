@@ -15,8 +15,7 @@ import io from 'socket.io-client'
  * Also provides a cookie-storage adapter for JWT SSR using Nuxt APIs.
  */
 export default defineNuxtPlugin((nuxt) => {
-  const host =
-    (import.meta.env.VITE_API_URL as string) || 'http://localhost:9000'
+  const host = import.meta.env.VITE_API_URL
 
   // Store JWT in a cookie for SSR.
   const storageKey = 'feathers-jwt'
