@@ -43,7 +43,10 @@ el-form.item-form(
   el-form-item(label='Статус:', prop='status')
     StatusButton(v-model='item.status')
   el-form-item(label='Жанры:', prop='genres')
-    TagsInput(v-model='item.genres')
+    AutocompleteInput(
+      v-model='item.genres',
+      :options='queryFilters.filters.genres'
+    )
   el-form-item(
     v-if='!item.config.parts.extended || !item.config.parts.multipleDevelopers',
     label='Создатели:',
@@ -97,6 +100,7 @@ el-form.item-form(
 
 <script setup lang="ts">
 import { type FormRules } from 'element-plus'
+import { useFilters } from '#imports'
 
 const rules: FormRules = {
   name: [
@@ -119,6 +123,8 @@ const rules: FormRules = {
 const props = defineProps<{ modelValue: Item }>()
 
 const emit = defineEmits<{ (e: 'update:modelValue', value: boolean): void }>()
+
+const queryFilters = useFilters()
 
 const item = computed({
   get: () => props.modelValue,

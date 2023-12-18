@@ -1,8 +1,11 @@
 <template lang="pug">
-el-input.mb-1(v-model='input', class='!w-72', @keyup.enter='append')
-el-button.ml-1(text, circle, :icon='ElIconMore', @click='split')
-el-button.mx-3.my-0(text, @click='append') Добавить
-el-tag.mr-3(
+el-input.mb-1(v-model='input', class='!w-80', @keyup.enter='append')
+  template(#suffix)
+    el-row
+      el-button-group
+        el-button(text, :icon='ElIconPlus', @click='append')
+        el-button(text, :icon='ElIconMore', @click='split')
+el-tag.mx-3(
   v-for='(item, i) in items',
   :key='item',
   size='large',
@@ -16,7 +19,7 @@ el-tag.mr-3(
 const props = defineProps<{ modelValue: string[] }>()
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
+  (e: 'update:modelValue', value: string[]): void
 }>()
 
 const input = ref('')
@@ -33,6 +36,7 @@ const append = () => {
 }
 
 const split = () => {
+  if (!input.value.trim()) return
   const array = input.value.trim().split(', ')
   items.value.push(...array.map((i) => i.charAt(0).toUpperCase() + i.slice(1)))
   input.value = ''

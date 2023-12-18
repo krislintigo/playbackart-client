@@ -21,12 +21,8 @@ export const averagePartsReplays = (item: Item) =>
       item.parts.length
   )
 
-export const uniquePartsDevelopers = (item: Item) =>
-  Array.from(
-    new Set(
-      item.parts.reduce(
-        (acc, cur) => [...acc, ...cur.developers],
-        [] as string[]
-      )
-    )
-  )
+export const uniquePartsDevelopers = (item: Item) => [
+  ...new Set(
+    item.parts.reduce<string[]>((acc, cur) => [...acc, ...cur.developers], [])
+  ),
+]
