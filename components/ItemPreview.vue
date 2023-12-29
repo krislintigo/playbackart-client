@@ -102,13 +102,13 @@ watch(currentPartIndex, () => {
 
 const updateItemStatus = async (
   partIndex: number | string | null,
-  status: string
+  status: string,
 ) => {
   try {
     const _item = await props.item.clone()
     if (partIndex !== null) {
       const currentStatusIndex = orderedMainStatuses.indexOf(
-        _item.parts[partIndex].status
+        _item.parts[partIndex].status,
       )
       _item.parts[partIndex].status =
         currentStatusIndex + 1 < orderedMainStatuses.length

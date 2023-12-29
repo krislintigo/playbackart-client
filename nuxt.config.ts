@@ -16,6 +16,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'nuxt-feathers-pinia',
     'nuxt-lodash',
+    '@nuxtjs/eslint-module',
   ],
   app: {
     layoutTransition: { name: 'layout', mode: 'out-in' },

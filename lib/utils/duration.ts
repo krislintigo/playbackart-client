@@ -13,7 +13,7 @@ export const formatDuration = (min: number) => {
 export const computeDuration = (
   item: Item,
   status: Item['status'] | null,
-  full: boolean
+  full: boolean,
 ) => {
   const part = (i: Item['time']) =>
     (full ? i.replays + 1 : 1) * i.count * i.duration

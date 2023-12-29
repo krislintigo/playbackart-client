@@ -110,14 +110,14 @@ const {
 } = storeToRefs(queryFilters)
 
 const ratings = computed(() =>
-  [...filters.value.ratings].sort((a, b) => b.value - a.value)
+  [...filters.value.ratings].sort((a, b) => b.value - a.value),
 )
 const restrictions = computed(() =>
   [...filters.value.restrictions].sort(
     (a, b) =>
       restrictionsTemplate.indexOf(a.value) -
-      restrictionsTemplate.indexOf(b.value)
-  )
+      restrictionsTemplate.indexOf(b.value),
+  ),
 )
 const genres = computed(() => filters.value.genres)
 const developers = computed(() => {
@@ -151,7 +151,7 @@ const ratingClick = (index: number) => {
   const rating = ratings.value[index]
   if (selectedRatings.value.includes(rating.value)) {
     selectedRatings.value = selectedRatings.value.filter(
-      (r) => r !== rating.value
+      (r) => r !== rating.value,
     )
   } else {
     selectedRatings.value.push(rating.value)
@@ -162,7 +162,7 @@ const restrictionClick = (index: number) => {
   const restriction = restrictions.value[index]
   if (selectedRestrictions.value.includes(restriction.value)) {
     selectedRestrictions.value = selectedRestrictions.value.filter(
-      (r) => r !== restriction.value
+      (r) => r !== restriction.value,
     )
   } else {
     selectedRestrictions.value.push(restriction.value)
@@ -180,7 +180,7 @@ const genreClick = (genre: string) => {
 const developerClick = (developer: string) => {
   if (selectedDevelopers.value.includes(developer)) {
     selectedDevelopers.value = selectedDevelopers.value.filter(
-      (d) => d !== developer
+      (d) => d !== developer,
     )
   } else {
     selectedDevelopers.value.push(developer)
@@ -190,7 +190,7 @@ const developerClick = (developer: string) => {
 const franchiseClick = (franchise: string) => {
   if (selectedFranchises.value.includes(franchise)) {
     selectedFranchises.value = selectedFranchises.value.filter(
-      (d) => d !== franchise
+      (d) => d !== franchise,
     )
   } else {
     selectedFranchises.value.push(franchise)
@@ -199,7 +199,7 @@ const franchiseClick = (franchise: string) => {
 
 const textClass = (
   target: 'genre' | 'developer' | 'franchise',
-  value: ExtendedStatistic<string>
+  value: ExtendedStatistic<string>,
 ) => {
   const getPercentage = () => {
     switch (target) {

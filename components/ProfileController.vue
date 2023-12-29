@@ -83,7 +83,7 @@ const copyLink = async () => {
       throw new Error('Ваш браузер не поддерживает эту функцию!')
     const query = `?userId=${authStore.user._id}&${route.fullPath.replace(
       /^[/?]+|userId=[^&]+&?/g,
-      ''
+      '',
     )}`
     await navigator.clipboard.writeText(location.origin + query)
     ElMessage.success('Ссылка успешно скопирована!')

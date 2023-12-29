@@ -83,7 +83,7 @@ const tabClick = (tab: any) => {
       path: route.path,
       query: { ...route.query, type: tab.props.name || undefined },
     },
-    { replace: true }
+    { replace: true },
   )
 }
 </script>

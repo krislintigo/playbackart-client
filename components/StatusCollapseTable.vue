@@ -1,12 +1,16 @@
 <template lang="pug">
 el-collapse-item.status-table(
-  v-if='items.length',
+  v-if='items$.data.length',
   :name='index',
   :class='[status]'
 )
   template(#title)
     h2.font-medium.text-lg {{ title }}
-  el-table(v-loading='isPending', :data='items', @sort-change='onSortChange')
+  el-table(
+    v-loading='items$.isPending',
+    :data='items$.data',
+    @sort-change='onSortChange'
+  )
     el-table-column(v-if='width < tableBreakpoints.item', type='expand')
       template(#default='{ row: item }')
         el-card(body-style='padding: 10px')
@@ -183,22 +187,22 @@ el-collapse-item.status-table(
               text
             )
   el-pagination.mt-3(
-    v-model:current-page='currentPage',
-    v-model:page-size='limit',
-    :hide-on-single-page='limit === 20',
+    v-model:current-page='items$.currentPage',
+    v-model:page-size='items$.limit',
+    :hide-on-single-page='items$.limit === 20',
     layout='prev, pager, next, sizes',
     :page-sizes='[20, 50, 100]',
-    :total='total'
+    :total='items$.total'
   )
   el-row.gap-x-7.mt-3(align='middle')
-    StatisticItem(title='Всего', :content='total')
+    StatisticItem(title='Всего', :content='items$.total')
     StatisticItem(
       title='Продолжительность',
-      :content='(formatDuration(items.reduce((acc, cur) => acc + computeDuration(cur, status, false), 0)) || "-") + " / " + (formatDuration(items.reduce((acc, cur) => acc + computeDuration(cur, status, true), 0)) || "-")',
+      :content='(formatDuration(items$.data.reduce((acc, cur) => acc + computeDuration(cur, status, false), 0)) || "-") + " / " + (formatDuration(items$.data.reduce((acc, cur) => acc + computeDuration(cur, status, true), 0)) || "-")',
       tooltip='Без повторов / Полная'
     )
     StatisticItem(
-      v-if='pageCount > 1',
+      v-if='items$.pageCount > 1',
       title='Общая продолжительность',
       :content='(formatDuration(queryFilters.filters.total.find((i) => i.status === status)?.duration) || "-") + " / " + (formatDuration(queryFilters.filters.total.find((i) => i.status === status)?.fullDuration) || "-")',
       tooltip='Без повторов / Полная'
@@ -233,7 +237,7 @@ const sortSelected = reactive<Sort>({
 const sort = computed(() =>
   sortSelected.prop === 'name'
     ? { name: sortSelected.order }
-    : { [sortSelected.prop]: sortSelected.order, name: 1 }
+    : { [sortSelected.prop]: sortSelected.order, name: 1 },
 )
 
 const query = computed(() => ({
@@ -306,25 +310,17 @@ const query = computed(() => ({
   },
 }))
 
-const {
-  data: items,
-  isPending,
-  find,
-  limit,
-  currentPage,
-  pageCount,
-  total,
-} = api.service('items').useFind(query, { paginateOn: 'server' })
+const items$ = api.service('items').useFind(query, { paginateOn: 'server' })
 
 api.service('items').on('cud', ({ userId: _userId }: Item) => {
   if (_userId !== queryFilters.userId) return
-  find()
+  items$.find()
 })
 
-watch([limit, queryFilters], () => (currentPage.value = 1))
+watch([() => items$.limit, queryFilters], () => (items$.currentPage = 1))
 
 const indexHandler = (index: number) =>
-  (currentPage.value - 1) * limit.value + index + 1
+  (items$.currentPage - 1) * items$.limit + index + 1
 
 const onSortChange = ({ prop, order }: Sort) => {
   const sortRef = { ascending: 1, descending: -1 }
@@ -335,7 +331,7 @@ const onSortChange = ({ prop, order }: Sort) => {
 const updateItemRating = async (
   item: Item,
   partIndex: number | string | null,
-  rating: number
+  rating: number,
 ) => {
   try {
     const _item = await item.clone()

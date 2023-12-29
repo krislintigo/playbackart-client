@@ -47,7 +47,7 @@ watch(
   (newValue) => {
     if (!newValue || item.value.parts.length) return
     item.value.parts = [_cloneDeep(EMPTY_PART_DATA)]
-  }
+  },
 )
 </script>
 

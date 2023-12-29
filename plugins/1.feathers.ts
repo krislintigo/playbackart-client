@@ -1,5 +1,5 @@
 // plugins/1.feathers.ts
-import { createClient, ServiceTypes } from 'playbackart-server'
+import { createClient } from 'playbackart-server'
 import { createPiniaClient, OFetch } from 'feathers-pinia'
 
 // rest imports for the server
@@ -28,8 +28,8 @@ export default defineNuxtPlugin((nuxt) => {
 
   // Use Rest for the SSR Server and socket.io for the browser
   const connection = process.server
-    ? rest<ServiceTypes>(host).fetch($fetch, OFetch)
-    : socketio<ServiceTypes>(io(host, { transports: ['websocket'] }))
+    ? rest(host).fetch($fetch, OFetch)
+    : socketio(io(host, { transports: ['websocket'] }))
 
   // create the feathers client
   const feathersClient = createClient(connection, { storage, storageKey })

@@ -11,19 +11,19 @@ export const useFilters = defineStore('filters', () => {
   const selectedRatings = ref(
     [route.query.selectedRatings ?? []]
       .flat(1)
-      .map((i) => Number(i)) as number[]
+      .map((i) => Number(i)) as number[],
   )
   const selectedRestrictions = ref(
-    [route.query.selectedRestrictions ?? []].flat(1) as string[]
+    [route.query.selectedRestrictions ?? []].flat(1) as string[],
   )
   const selectedGenres = ref(
-    [route.query.selectedGenres ?? []].flat(1) as string[]
+    [route.query.selectedGenres ?? []].flat(1) as string[],
   )
   const selectedDevelopers = ref(
-    [route.query.selectedDevelopers ?? []].flat(1) as string[]
+    [route.query.selectedDevelopers ?? []].flat(1) as string[],
   )
   const selectedFranchises = ref(
-    [route.query.selectedFranchises ?? []].flat(1) as string[]
+    [route.query.selectedFranchises ?? []].flat(1) as string[],
   )
   const selectors = ref<{
     genres: '$in' | '$all'
@@ -36,7 +36,7 @@ export const useFilters = defineStore('filters', () => {
   })
 
   const userId = computed<string | undefined>(
-    () => route.query.userId || authStore.user?._id
+    () => route.query.userId || authStore.user?._id,
   )
 
   watchEffect(() => {
@@ -62,13 +62,12 @@ export const useFilters = defineStore('filters', () => {
           selectors: stringSelectors !== '{}' ? stringSelectors : undefined,
         },
       },
-      { replace: true }
+      { replace: true },
     )
   })
 
   const fetchFilters = async () => {
     try {
-      console.log('REFETCH')
       isPending.value = true
       filters.value = await api.service('items').filters({
         userId: userId.value,
@@ -83,7 +82,6 @@ export const useFilters = defineStore('filters', () => {
   }
 
   api.service('items').on('cud', ({ userId: _userId }: Item) => {
-    console.log('check update')
     if (_userId !== userId.value) return
     fetchFilters()
   })

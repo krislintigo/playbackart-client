@@ -59,9 +59,10 @@ const items = computed(() =>
     ? queryFilters.filters[props.filterTarget]
         .map((i) => i.value)
         .filter(
-          (i) => !!i && !_user.value[props.userTarget].find((t) => t.name === i)
+          (i) =>
+            !!i && !_user.value[props.userTarget].find((t) => t.name === i),
         ) ?? []
-    : []
+    : [],
 )
 
 const track = (item: string) => {
@@ -74,7 +75,7 @@ const track = (item: string) => {
 
 const untrack = (item: string) => {
   _user.value[props.userTarget] = _user.value[props.userTarget].filter(
-    (i) => i.name !== item
+    (i) => i.name !== item,
   )
   activeTabs.value = activeTabs.value.filter((tab) => tab !== item)
 }
@@ -115,7 +116,7 @@ watch(
     prevStringifiedItems.value = JSON.stringify(newValue)
     save()
   },
-  { deep: true }
+  { deep: true },
 )
 </script>
 

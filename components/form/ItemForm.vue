@@ -147,7 +147,7 @@ const validate = async () => {
     await form.value.validate()
     if (!partForms.value) return true
     const validations = await Promise.all(
-      partForms.value.map((form) => form.validate())
+      partForms.value.map((form) => form.validate()),
     )
     return validations.every((v) => v)
   } catch (error) {
