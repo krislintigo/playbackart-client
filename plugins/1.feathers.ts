@@ -18,8 +18,12 @@ export default defineNuxtPlugin((nuxt) => {
   const host = import.meta.env.VITE_API_URL
 
   // Store JWT in a cookie for SSR.
-  const storageKey = 'feathers-jwt'
-  const jwt = useCookie<string | null>(storageKey)
+  const storageKey = 'pba-jwt'
+  const jwt = useCookie<string | null>(storageKey, {
+    expires: dayjs().add(14, 'days').toDate(),
+    secure: true,
+    sameSite: 'strict',
+  })
   const storage = {
     getItem: () => jwt.value,
     setItem: (_: string, val: string) => (jwt.value = val),
