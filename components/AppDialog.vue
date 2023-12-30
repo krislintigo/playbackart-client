@@ -1,18 +1,20 @@
 <template lang="pug">
-el-dialog.dialog(
-  v-model='dialog',
-  width='95%',
-  :style='{ maxWidth: maxWidth ?? "1300px" }',
-  :lock-scroll='false',
-  :close-on-click-modal='false'
-)
-  template(#header)
-    slot(name='header')
-      h3.font-normal.text-2xl {{ title }}
-  template(#default)
-    slot(name='default')
-  template(#footer)
-    slot(name='footer')
+client-only
+  el-dialog.dialog(
+    v-model='dialog',
+    append-to-body,
+    width='95%',
+    :style='{ maxWidth: maxWidth ?? "1300px" }',
+    :lock-scroll='false',
+    :close-on-click-modal='false'
+  )
+    template(#header)
+      slot(name='header')
+        h3.font-normal.text-2xl {{ title }}
+    template(#default)
+      slot(name='default')
+    template(#footer)
+      slot(name='footer')
 </template>
 
 <script setup lang="ts">
