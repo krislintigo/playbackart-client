@@ -9,6 +9,7 @@ export default defineNuxtConfig({
       },
     },
   },
+
   modules: [
     '@pinia/nuxt',
     '@element-plus/nuxt',
@@ -18,6 +19,7 @@ export default defineNuxtConfig({
     'nuxt-lodash',
     '@nuxtjs/eslint-module',
   ],
+
   app: {
     layoutTransition: { name: 'layout', mode: 'out-in' },
     pageTransition: { name: 'page', mode: 'out-in' },
@@ -27,11 +29,15 @@ export default defineNuxtConfig({
       htmlAttrs: { class: 'dark' },
     },
   },
+
   elementPlus: {
     themes: ['dark'],
     importStyle: 'scss',
+    components: ['ElDivider'],
   },
+
   css: ['~/assets/css/main.scss', 'element-plus/theme-chalk/src/display.scss'],
+
   components: {
     global: true,
     dirs: [
@@ -41,14 +47,23 @@ export default defineNuxtConfig({
       },
     ],
   },
+
   imports: {
     dirs: ['composables/**', 'stores/**', 'lib/**', 'router/**'],
   },
+
   typescript: {
     shim: false,
   },
+
   lodash: {
     prefix: '_',
     upperAfterPrefix: false,
+  },
+
+  devtools: {
+    timeline: {
+      enabled: true,
+    },
   },
 })

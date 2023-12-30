@@ -6,7 +6,14 @@ export const useFilters = defineStore('filters', () => {
   const authStore = useAuthStore()
 
   const isPending = ref(true)
-  const filters = ref<FiltersOutput | null>(null)
+  const filters = ref<FiltersOutput>({
+    ratings: [],
+    restrictions: [],
+    genres: [],
+    developers: [],
+    franchises: [],
+    total: [],
+  })
   const search = ref(route.query.search || '')
   const selectedRatings = ref(
     [route.query.selectedRatings ?? []]

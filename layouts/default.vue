@@ -1,45 +1,41 @@
 <template lang="pug">
-el-main.m-auto(class='max-w-[1550px]')
-  el-header(height='70px')
-    el-row(justify='space-between', align='middle')
-      el-image.mt-5.mb-5.w-64(src='/logo.svg')
-      .flex.items-center.gap-x-8
-        client-only
-          el-tabs.hidden-sm-and-down(v-model='active', @tab-click='tabClick')
-            el-tab-pane(
-              v-for='tab in navigationTabs',
-              :key='tab.label',
-              :name='tab.searchType'
-            )
-              template(#label)
-                el-icon
-                  component(:is='tab.icon')
-                span.ml-2.font-normal {{ tab.label }}
-          el-popover(
-            :visible='popover',
-            placement='bottom',
-            :width='380',
-            trigger='click',
-            popper-class='mr-5'
-          )
-            template(#reference)
-              el-avatar.cursor-pointer.hidden-xs-only(
-                :size='50',
-                @click='popover = !popover'
-              )
-                h3.text-xl {{ authStore.user?.login.slice(0, 2).toUpperCase() ?? '-' }}
-            ProfileController
-          el-button.hidden-lg-and-up(text, @click='drawer = true')
-            el-icon(:size='30')
-              ElIconOperation
-          el-drawer(v-model='drawer', :size='width > 400 ? "400px" : "100%"')
-            template(#header)
-              h2.text-2xl.font-medium.text-white Меню
-            el-tabs.hidden-md-and-up.mb-10(
-              v-model='active',
-              tab-position='right',
-              @tab-click='tabClick'
-            )
+div
+  client-only
+    el-drawer(
+      v-model='drawer',
+      :size='width > 400 ? "400px" : "100%"',
+      append-to-body
+    )
+      template(#header)
+        h2.text-2xl.font-medium.text-white Меню
+      el-tabs.hidden-md-and-up.mb-10(
+        v-model='active',
+        tab-position='right',
+        @tab-click='tabClick'
+      )
+        el-tab-pane(
+          v-for='tab in navigationTabs',
+          :key='tab.label',
+          :name='tab.searchType'
+        )
+          template(#label)
+            el-icon
+              component(:is='tab.icon')
+            span.ml-2.font-normal {{ tab.label }}
+      AsideFilters
+      .hidden-sm-and-up
+        el-divider
+        el-avatar.mt-3.cursor-pointer(:size='50', @click='modal = !modal')
+          h3.text-xl {{ authStore.user?.login.slice(0, 2).toUpperCase() }}
+  AppDialog(v-model='modal', title='')
+    ProfileController
+  .m-auto(class='max-w-[1550px]')
+    el-header.m-5(height='70px')
+      el-row(justify='space-between', align='middle')
+        el-image.mt-5.mb-5.w-64(src='/logo.svg')
+        .flex.items-center.gap-x-8
+          client-only
+            el-tabs.hidden-sm-and-down(v-model='active', @tab-click='tabClick')
               el-tab-pane(
                 v-for='tab in navigationTabs',
                 :key='tab.label',
@@ -49,21 +45,30 @@ el-main.m-auto(class='max-w-[1550px]')
                   el-icon
                     component(:is='tab.icon')
                   span.ml-2.font-normal {{ tab.label }}
-            AsideFilters
-            .hidden-sm-and-up
-              hr.mt-5
-              //el-divider
-              //el-row.px-4(justify='end', align='middle')
-              el-avatar.mt-3.cursor-pointer(
-                :size='50',
-                @click='modal = !modal'
-              )
-                h3.text-xl {{ authStore.user?.login.slice(0, 2).toUpperCase() }}
-              AppDialog(v-model='modal', title='')
-                ProfileController
-  el-divider
-  slot
-  el-backtop
+            el-popover(
+              teleported,
+              :visible='popover',
+              placement='bottom',
+              :width='380',
+              trigger='click',
+              popper-class='mr-5'
+            )
+              template(#reference)
+                el-avatar.cursor-pointer.hidden-xs-only(
+                  :size='50',
+                  @click='popover = !popover'
+                )
+                  h3.text-xl {{ authStore.user?.login.slice(0, 2).toUpperCase() ?? '-' }}
+              ProfileController
+            el-button.hidden-lg-and-up(text, @click='drawer = true')
+              el-icon(:size='30')
+                ElIconOperation
+    .mx-5
+      client-only
+        el-divider(class='!mb-0')
+    el-main
+      slot
+    el-backtop
 </template>
 
 <script setup lang="ts">
