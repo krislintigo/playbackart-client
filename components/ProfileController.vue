@@ -114,7 +114,7 @@ const handleUserAction = async (action: 'register' | 'login' | 'logout') => {
       }
     }
     ElMessage.success('Успешно!')
-  } catch (e: Error) {
+  } catch (e: any) {
     ElMessage.error(e.message)
   }
 }

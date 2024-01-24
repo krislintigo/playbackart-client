@@ -32,7 +32,9 @@ div
   .m-auto(class='max-w-[1550px]')
     el-header.m-5(height='70px')
       el-row(justify='space-between', align='middle')
-        el-image.mt-5.mb-5.w-64(src='/logo.svg')
+        .flex.items-center.mt-5.mb-5.gap-x-3
+          el-image.w-10(src='/icon.svg')
+          h1.text-4xl.font-normal PlaybackArt
         .flex.items-center.gap-x-8
           client-only
             el-tabs.hidden-sm-and-down(v-model='active', @tab-click='tabClick')
