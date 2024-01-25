@@ -1,21 +1,22 @@
 <template lang="pug">
 el-row.gap-x-12.mt-5(justify='center')
-  StatisticItem(
-    title='Всего',
-    :content='queryFilters.filters.total.reduce((acc, cur) => acc + cur.count, 0) + " шт."'
-  )
+  StatisticItem(title='Всего', :content='(status?.count ?? 0) + " шт."')
   StatisticItem(
     title='Продолжительность без повторов',
-    :content='formatDuration(queryFilters.filters.total.reduce((acc, cur) => acc + cur.duration, 0)) || "---"'
+    :content='formatDuration(status?.duration) || "---"'
   )
   StatisticItem(
     title='Полная продолжительность',
-    :content='formatDuration(queryFilters.filters.total.reduce((acc, cur) => acc + cur.fullDuration, 0)) || "---"'
+    :content='formatDuration(status?.fullDuration) || "---"'
   )
 </template>
 
 <script setup lang="ts">
 const queryFilters = useFilters()
+
+const status = computed(() =>
+  queryFilters.filters.total.find((s) => s.status === 'all'),
+)
 </script>
 
 <style scoped></style>

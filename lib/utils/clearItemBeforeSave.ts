@@ -1,5 +1,3 @@
-import { EMPTY_FILE_DATA } from '~/lib/data/default'
-
 export const clearItemBeforeSave = (item: Item) => {
   item.name = item.name.trim()
   item.franchise = item.franchise.trim()

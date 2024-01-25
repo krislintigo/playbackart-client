@@ -80,7 +80,6 @@ export const useFilters = defineStore('filters', () => {
         userId: userId.value,
         type: route.query.type as Item['type'] | undefined,
       })
-      // console.dir(filters.value)
     } catch (e: any) {
       console.error(e.message)
     } finally {
