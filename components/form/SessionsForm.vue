@@ -19,12 +19,14 @@ el-row.gap-y-5.w-full
       :label-width='120',
       :rules='rules'
     )
-    el-form-item.mb-4(label='Длительность:', prop='time')
-      .flex.flex-col
-        el-input-number(v-model='session.duration', :min='0')
-        h4.m-0.text-center
-          span Длительность (мин)
-          .text-xs(class='mt-[-7px]') {{ formatDuration(session.duration) }}
+      el-form-item.mb-4(label='Имя:', prop='name')
+        el-input(v-model='session.name')
+      el-form-item.mb-4(label='Длительность:', prop='time')
+        .flex.flex-col
+          el-input-number(v-model='session.duration', :min='0')
+          h4.m-0.text-center
+            span Длительность (мин)
+            .text-xs(class='mt-[-7px]') {{ formatDuration(session.duration) }}
 </template>
 
 <script setup lang="ts">
@@ -49,7 +51,7 @@ const rules: FormRules = {
 
 const props = defineProps<{
   modelValue: Item['time']['sessions']
-  config: any
+  config: Item['config']
 }>()
 
 const emit = defineEmits<{

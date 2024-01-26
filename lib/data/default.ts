@@ -22,5 +22,6 @@ export const EMPTY_PART_DATA = {
 }
 
 export const EMPTY_SESSION_DATA = {
+  name: '',
   duration: 0,
 }

@@ -90,7 +90,7 @@ el-form.item-form(
           :config='item.config'
         )
   el-form-item(
-    v-if='item.config.time.extended',
+    v-if='item.config.time.extended && !item.config.parts.extended',
     label='Длительность:',
     prop='time'
   )

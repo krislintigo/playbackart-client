@@ -67,7 +67,10 @@ const rules: FormRules = {
   ],
 }
 
-const props = defineProps<{ modelValue: Item['parts'][number]; config: any }>()
+const props = defineProps<{
+  modelValue: Item['parts'][number]
+  config: Item['config']
+}>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: Item['parts'][number]): void
