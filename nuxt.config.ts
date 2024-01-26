@@ -49,7 +49,13 @@ export default defineNuxtConfig({
   },
 
   imports: {
-    dirs: ['composables/**', 'stores/**', 'lib/**', 'router/**'],
+    dirs: [
+      'composables/**',
+      'stores/**',
+      'constants/**',
+      'helpers/**',
+      'utils/**',
+    ],
   },
 
   typescript: {
