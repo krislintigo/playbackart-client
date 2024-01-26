@@ -1,6 +1,6 @@
 <template lang="pug">
 el-collapse-item.status-table(
-  v-if='items$.data.length',
+  v-if='filters.status.length ? true : items$.data.length',
   :name='index',
   :class='[status]'
 )
@@ -9,13 +9,31 @@ el-collapse-item.status-table(
   el-table(
     v-loading='items$.isPending',
     :data='items$.data',
+    empty-text='Нет данных',
     @sort-change='onSortChange'
   )
     el-table-column(v-if='width < tableBreakpoints.item', type='expand')
       template(#default='{ row: item }')
         el-card(body-style='padding: 10px')
           ItemPreview(:item='item')
-    el-table-column(type='index', label='#', width='57', :index='indexHandler')
+    el-table-column(type='index', width='60', :index='indexHandler')
+      template(#header)
+        el-row.gap-x-2(align='middle')
+          span #
+          el-popover(trigger='click')
+            template(#reference)
+              el-button(size='small', circle, text, class='!size-4')
+                el-icon(size='12')
+                  ElIconFilter
+            h4.mb-2.text-sm.font-medium Status:
+            el-row.gap-x-2
+              .size-5.rounded-full.cursor-pointer(
+                v-for='status in statuses.filter((i) => i.value !== props.status)',
+                :key='status.value',
+                :style='{ background: status.color }',
+                :class='{ "border border-white": filters.status.includes(status.value) }',
+                @click='statusClickHandler(status.value)'
+              )
     el-table-column(
       sortable='custom',
       prop='name',
@@ -229,6 +247,9 @@ const { width } = useWindowSize()
 const authStore = useAuthStore()
 const queryFilters = useFilters()
 
+const filters = reactive({
+  status: [] as Item['status'][],
+})
 const sortSelected = reactive<Sort>({
   prop: 'name',
   order: 1,
@@ -243,6 +264,8 @@ const sort = computed(() =>
 const query = computed(() => ({
   query: {
     userId: queryFilters.userId,
+    status: props.status,
+    ...(filters.status.length && { 'parts.status': { $in: filters.status } }),
     ...(route.query.type && { type: route.query.type }),
     ...((queryFilters.search ||
       queryFilters.selectedRatings.length ||
@@ -304,7 +327,6 @@ const query = computed(() => ({
     ...(queryFilters.selectedFranchises.length && {
       franchise: { $in: queryFilters.selectedFranchises },
     }),
-    status: props.status,
     $sort: sort.value,
     $limit: 20,
   },
@@ -322,6 +344,14 @@ watch([() => items$.limit, queryFilters], () => (items$.currentPage = 1))
 const indexHandler = (index: number) =>
   (items$.currentPage - 1) * items$.limit + index + 1
 
+const statusClickHandler = (status: Item['status']) => {
+  if (filters.status.includes(status)) {
+    filters.status = filters.status.filter((i) => i !== status)
+  } else {
+    filters.status.push(status)
+  }
+}
+
 const onSortChange = ({ prop, order }: Sort) => {
   const sortRef = { ascending: 1, descending: -1 }
   sortSelected.prop = order ? prop : 'name'
@@ -333,44 +363,36 @@ const updateItemRating = async (
   partIndex: number | string | null,
   rating: number,
 ) => {
-  try {
-    const _item = await item.clone()
-    if (partIndex !== null) {
-      _item.parts[partIndex].rating = rating
-    } else {
-      _item.rating = rating
-    }
-    await _item.save()
-    await _item.reset()
-    ElMessage.success('Рейтинг изменен')
-  } catch (error: any) {
-    ElMessage.error('Что-то пошло не так...')
+  const _item = item.clone()
+  if (partIndex !== null) {
+    _item.parts[partIndex].rating = rating
+  } else {
+    _item.rating = rating
   }
+  await _item.save()
+  _item.reset()
+  ElMessage.success('Рейтинг изменен')
 }
 
 const transferItem = async (item: Item) => {
-  try {
-    const newItem = api.service('items').new({
-      ...item,
-      _id: undefined,
-      userId: authStore.user._id,
-      status: 'postponed',
+  const newItem = api.service('items').new({
+    ...item,
+    _id: undefined,
+    userId: authStore.user._id,
+    status: 'postponed',
+    rating: 0,
+    poster: {
+      ...item.poster,
+      action: 'copy',
+    },
+    parts: item.parts.map((i) => ({
+      ...i,
       rating: 0,
-      poster: {
-        ...item.poster,
-        action: 'copy',
-      },
-      parts: item.parts.map((i) => ({
-        ...i,
-        rating: 0,
-        poster: { ...i.poster, action: 'copy' },
-      })),
-    })
-    await newItem.save()
-    ElMessage.success('Элемент перенесен!')
-  } catch (error: any) {
-    ElMessage.error('Что-то пошло не так...')
-  }
+      poster: { ...i.poster, action: 'copy' },
+    })),
+  })
+  await newItem.save()
+  ElMessage.success('Элемент перенесен!')
 }
 </script>
 
