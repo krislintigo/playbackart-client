@@ -114,7 +114,7 @@ el-collapse-item.status-table(
       template(#default='{ row: item }')
         el-tooltip(placement='left', effect='light')
           template(#content)
-            div(v-if='item.config.parts.extended')
+            template(v-if='item.config.parts.extended')
               el-row(
                 v-for='(part, i) in item.parts',
                 :key='i',
@@ -123,11 +123,22 @@ el-collapse-item.status-table(
               )
                 .text-sm
                   h3.text-base.font-medium {{ part.name + ': ' }}
-                  template(v-if='part.time.duration')
-                    span(v-if='part.time.count > 1') {{ part.time.count }} x&nbsp;
-                    span {{ formatDuration(part.time.duration) }}
-                    span ( {{ formatDuration(part.time.count * part.time.duration) }} )
-                  span(v-else) -
+                  .mb-2(v-if='item.config.time.extended')
+                    el-row.ml-1(
+                      v-for='(session, i) in part.time.sessions',
+                      :key='i',
+                      align='middle'
+                    )
+                      .mr-2.text-sm &#8226;
+                      .text-sm
+                        span {{ session.name + ': ' }}
+                        span.italic {{ session.duration ? formatDuration(session.duration) : '-' }}
+                  template(v-else)
+                    template(v-if='part.time.duration')
+                      span(v-if='part.time.count > 1') {{ part.time.count }} x&nbsp;
+                      span {{ formatDuration(part.time.duration) }}
+                      span ( {{ formatDuration(part.time.count * part.time.duration) }} )
+                    span(v-else) -
                 el-tag.ml-2(
                   v-if='part.time.replays',
                   effect='plain',
@@ -135,29 +146,49 @@ el-collapse-item.status-table(
                 ) x{{ part.time.replays }}
               el-divider(class='!my-2')
               h3.text-base.font-medium Итого: {{ formatDuration(computeDuration(item, null, false)) }}
-            .text-sm(v-else) {{ formatDuration(item.time.count * item.time.duration) || '-' }}
-          .cursor-pointer(v-if='item.config.parts.extended')
-            el-row(justify='space-between')
-              div(v-if='averagePartsDuration(item)')
-                span {{ totalPartsCount(item) }} x&nbsp;
-                span {{ formatDuration(averagePartsDuration(item)) }}
-              span(v-else) -
-              el-tag.ml-2(
-                v-if='averagePartsReplays(item)',
-                effect='plain',
-                type='info'
-              ) x{{ averagePartsReplays(item) }}
-          span.cursor-pointer(v-else-if='!item.time.duration') -
+            template(v-else)
+              template(v-if='item.config.time.extended')
+                el-row(
+                  v-for='(session, i) in item.time.sessions',
+                  :key='i',
+                  align='middle'
+                )
+                  .mr-2.text-xs &#8226;
+                  .text-sm
+                    span {{ session.name + ': ' }}
+                    span.italic {{ session.duration ? formatDuration(session.duration) : '-' }}
+                el-divider(class='!my-2')
+                h3.text-base.font-medium Итого: {{ formatDuration(computeDuration(item, null, false)) }}
+              template(v-else)
+                .text-sm {{ formatDuration(item.time.count * item.time.duration) || '-' }}
+          .cursor-pointer(v-if='item.config.time.extended')
+            el-row(v-if='computeDuration(item, null, false)', align='middle')
+              .mr-1.mb-px &sum;
+              span {{ formatDuration(computeDuration(item, null, false)) }}
+            span(v-else) -
           .cursor-pointer(v-else)
-            el-row(justify='space-between')
-              div
-                span(v-if='item.time.count > 1') {{ item.time.count }} x&nbsp;
-                span {{ formatDuration(item.time.duration) }}
-              el-tag.ml-2(
-                v-if='item.time.replays',
-                effect='plain',
-                type='info'
-              ) x{{ item.time.replays }}
+            template(v-if='item.config.parts.extended')
+              el-row(justify='space-between')
+                div(v-if='averagePartsDuration(item)')
+                  span {{ totalPartsCount(item) }} x&nbsp;
+                  span {{ formatDuration(averagePartsDuration(item)) }}
+                span(v-else) -
+                el-tag.ml-2(
+                  v-if='averagePartsReplays(item)',
+                  effect='plain',
+                  type='info'
+                ) x{{ averagePartsReplays(item) }}
+            template(v-else)
+              el-row(v-if='item.time.duration', justify='space-between')
+                div
+                  span(v-if='item.time.count > 1') {{ item.time.count }} x&nbsp;
+                  span {{ formatDuration(item.time.duration) }}
+                el-tag.ml-2(
+                  v-if='item.time.replays',
+                  effect='plain',
+                  type='info'
+                ) x{{ item.time.replays }}
+              span.cursor-pointer(v-else) -
     el-table-column(
       v-if='authStore.isAuthenticated && width > 600',
       label='Операции',
@@ -228,6 +259,8 @@ el-collapse-item.status-table(
 </template>
 
 <script setup lang="ts">
+import { computeItemsQuery } from '~/helpers/item.query'
+
 type Sort = {
   prop: 'name' | 'rating' | 'time'
   order: 1 | -1
@@ -262,74 +295,13 @@ const sort = computed(() =>
 )
 
 const query = computed(() => ({
-  query: {
-    userId: queryFilters.userId,
+  query: computeItemsQuery({
+    queryFilters,
     status: props.status,
-    ...(filters.status.length && { 'parts.status': { $in: filters.status } }),
-    ...(route.query.type && { type: route.query.type }),
-    ...((queryFilters.search ||
-      queryFilters.selectedRatings.length ||
-      queryFilters.selectedDevelopers.length) && {
-      $and: [
-        ...(queryFilters.search && [
-          {
-            $or: [
-              { name: { $regex: queryFilters.search, $options: 'i' } },
-              {
-                'parts.name': {
-                  $regex: queryFilters.search,
-                  $options: 'i',
-                },
-              },
-            ],
-          },
-        ]),
-        ...(queryFilters.selectedRatings.length
-          ? [
-              {
-                $or: [
-                  { rating: { $in: queryFilters.selectedRatings } },
-                  { 'parts.rating': { $in: queryFilters.selectedRatings } },
-                ],
-              },
-            ]
-          : []),
-        ...(queryFilters.selectedDevelopers.length
-          ? [
-              {
-                $or: [
-                  {
-                    developers: {
-                      [queryFilters.selectors.developers]:
-                        queryFilters.selectedDevelopers,
-                    },
-                  },
-                  {
-                    'parts.developers': {
-                      [queryFilters.selectors.developers]:
-                        queryFilters.selectedDevelopers,
-                    },
-                  },
-                ],
-              },
-            ]
-          : []),
-      ],
-    }),
-    ...(queryFilters.selectedRestrictions.length && {
-      restriction: { $in: queryFilters.selectedRestrictions },
-    }),
-    ...(queryFilters.selectedGenres.length && {
-      genres: {
-        [queryFilters.selectors.genres]: queryFilters.selectedGenres,
-      },
-    }),
-    ...(queryFilters.selectedFranchises.length && {
-      franchise: { $in: queryFilters.selectedFranchises },
-    }),
-    $sort: sort.value,
-    $limit: 20,
-  },
+    filters,
+    sort: sort.value,
+    routeQuery: route.query,
+  }),
 }))
 
 const items$ = api.service('items').useFind(query, { paginateOn: 'server' })

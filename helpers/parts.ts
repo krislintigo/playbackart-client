@@ -7,10 +7,9 @@ export const averagePartsRating = (item: Item) => {
 }
 
 export const totalPartsCount = (item: Item) =>
-  item.parts.reduce(
-    (acc, cur) => acc + (cur.time.duration ? cur.time.count : 0),
-    0,
-  )
+  item.parts
+    .filter((p) => p.time.duration)
+    .reduce((acc, cur) => acc + cur.time.count, 0)
 
 export const averagePartsDuration = (item: Item) =>
   round(computeDuration(item, null, false) / totalPartsCount(item))

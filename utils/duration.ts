@@ -16,7 +16,8 @@ export const computeDuration = (
   full: boolean,
 ) => {
   const part = (i: Item['time']) =>
-    (full ? i.replays + 1 : 1) * i.count * i.duration
+    (full ? i.replays + 1 : 1) * i.count * i.duration +
+    i.sessions.reduce((acc, cur) => acc + cur.duration, 0)
 
   return (
     part(item.time) +
