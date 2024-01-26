@@ -58,13 +58,6 @@ const rules: FormRules = {
       trigger: 'change',
     },
   ],
-  status: [
-    {
-      required: true,
-      message: 'Выберите статус',
-      trigger: 'change',
-    },
-  ],
 }
 
 const props = defineProps<{
