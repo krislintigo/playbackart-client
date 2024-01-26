@@ -45,7 +45,7 @@
     "feathers-pinia": "^4.1.1",
     "nuxt-feathers-pinia": "^0.1.0",
     "pinia": "^2.1.7",
-    "playbackart-server": "./server/playbackart-server-1.4.0.tgz",
+    "playbackart-server": "./server/playbackart-server-2.0.0.tgz",
     "socket.io-client": "^4.7.4",
     "vue-chart-3": "^3.1.8"
   }
