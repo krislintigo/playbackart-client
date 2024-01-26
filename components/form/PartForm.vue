@@ -8,7 +8,7 @@ el-form(
 )
   .flex
     el-form-item.mr-7.mb-4(
-      v-if='config.multiplePosters',
+      v-if='config.parts.multiplePosters',
       label='Постер:',
       prop='poster',
       label-width='60'
@@ -20,21 +20,31 @@ el-form(
       el-form-item.mb-4(label='Статус:', prop='status')
         StatusButton(v-model='part.status')
       el-form-item.mb-4(
-        v-if='config.multipleRatings',
+        v-if='config.parts.multipleRatings',
         label='Рейтинг',
         prop='rating'
       )
         RatingInput(v-model='part.rating')
-      el-form-item.mb-4(label='Длительность:', prop='time')
+      el-form-item.mb-4(
+        v-if='!config.time.extended',
+        label='Длительность:',
+        prop='time'
+      )
         TimeInput(v-model='part.time')
       el-form-item.mb-4(label='Год выхода:', prop='year')
         el-date-picker(v-model='part.year', value-format='YYYY', type='year')
       el-form-item.mb-4(
-        v-if='config.multipleDevelopers',
+        v-if='config.parts.multipleDevelopers',
         label='Создатели:',
         prop='developers'
       )
         TagsInput(v-model='part.developers')
+      el-form-item(
+        v-if='config.time.extended',
+        label='Длительность:',
+        prop='time'
+      )
+        SessionsForm(v-model='part.time.sessions', :config='config')
 </template>
 
 <script setup lang="ts">
@@ -48,16 +58,12 @@ const rules: FormRules = {
       trigger: 'change',
     },
   ],
-  status: [
-    {
-      required: true,
-      message: 'Выберите статус',
-      trigger: 'change',
-    },
-  ],
 }
 
-const props = defineProps<{ modelValue: Item['parts'][number]; config: any }>()
+const props = defineProps<{
+  modelValue: Item['parts'][number]
+  config: Item['config']
+}>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: Item['parts'][number]): void

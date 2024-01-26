@@ -28,7 +28,7 @@ el-form.item-form(
       )
         RatingInput(v-model='item.rating')
       el-form-item(
-        v-if='!item.config.parts.extended',
+        v-if='!item.config.parts.extended && !item.config.time.extended',
         label='Длительность:',
         prop='time'
       )
@@ -73,11 +73,7 @@ el-form.item-form(
     prop='year'
   )
     el-date-picker(v-model='item.year', value-format='YYYY', type='year')
-  el-form-item(
-    v-if='item.config.parts.extended',
-    label='Сезоны:',
-    prop='parts'
-  )
+  el-form-item(v-if='item.config.parts.extended', label='Части:', prop='parts')
     el-row.gap-y-5.w-full
       el-button(@click='appendPart') Добавить
       el-card.w-full(v-for='(part, i) in item.parts', :key='i')
@@ -94,8 +90,14 @@ el-form.item-form(
         PartForm(
           ref='partForms',
           v-model='item.parts[i]',
-          :config='item.config.parts'
+          :config='item.config'
         )
+  el-form-item(
+    v-if='item.config.time.extended && !item.config.parts.extended',
+    label='Длительность:',
+    prop='time'
+  )
+    SessionsForm(v-model='item.time.sessions', :config='item.config')
 </template>
 
 <script setup lang="ts">

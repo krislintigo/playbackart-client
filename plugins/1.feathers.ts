@@ -69,9 +69,9 @@ export default defineNuxtPlugin((nuxt) => {
                 multipleRatings: false,
                 multipleDevelopers: false,
               },
-              // time: {
-              //   extended: false,
-              // },
+              time: {
+                extended: false,
+              },
             },
             name: '',
             poster: {
@@ -91,6 +91,7 @@ export default defineNuxtPlugin((nuxt) => {
               count: 1,
               duration: 0,
               replays: 0,
+              sessions: [],
             },
             year: '',
             developers: [],

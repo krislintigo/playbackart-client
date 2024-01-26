@@ -3,12 +3,12 @@ el-col
   el-row
     el-switch(
       v-model='config.parts.extended',
-      active-text='Расширенный учет сезонов'
+      active-text='Расширенный учет частей'
     )
-    //el-switch.ml-5(
-    //  v-model='item.config.time.extended',
-    //  active-text='Расширенный учет времени'
-    //)
+    el-switch.ml-5(
+      v-model='item.config.time.extended',
+      active-text='Расширенный учет времени'
+    )
   el-row.mt-3(v-if='config.parts.extended')
     el-checkbox-button(
       v-model='config.parts.multiplePosters',
@@ -49,6 +49,14 @@ watch(
     item.value.parts = [_cloneDeep(EMPTY_PART_DATA)]
   },
 )
+
+// watch(
+//   () => config.value.time.extended,
+//   (newValue) => {
+//     if (!newValue || item.value.time.sessions.length) return
+//     item.value.time.sessions = [_cloneDeep(EMPTY_SESSION_DATA)]
+//   }
+// )
 </script>
 
 <style scoped></style>

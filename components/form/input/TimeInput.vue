@@ -7,7 +7,7 @@ el-row.w-fit.gap-x-5
     el-input-number(v-model='time.duration', :min='0')
     h4.m-0.text-center
       span Длительность (мин)
-      .text-xs(class='mt-[-7px]') {{ formatDuration(time.duration) }}
+      .text-xs(class='mt-[-7px]') {{ formatDuration(time.duration) || '&nbsp;' }}
   .flex.flex-col
     el-input-number(v-model='time.replays', :min='0')
     h4.m-0.text-center Повторы
