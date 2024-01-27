@@ -8,25 +8,11 @@ div
     )
       template(#header)
         h2.text-2xl.font-medium.text-white Меню
-      el-tabs.hidden-md-and-up.mb-10(
-        v-model='active',
-        tab-position='right',
+      DrawerContent(
+        v-model:active='active',
+        v-model:modal='modal',
         @tab-click='tabClick'
       )
-        el-tab-pane(
-          v-for='tab in navigationTabs',
-          :key='tab.label',
-          :name='tab.searchType'
-        )
-          template(#label)
-            el-icon
-              component(:is='tab.icon')
-            span.ml-2.font-normal {{ tab.label }}
-      AsideFilters
-      .hidden-sm-and-up
-        el-divider
-        el-avatar.mt-3.cursor-pointer(:size='50', @click='modal = !modal')
-          h3.text-xl {{ authStore.user?.login.slice(0, 2).toUpperCase() }}
   AppDialog(v-model='modal', title='')
     ProfileController
   .m-auto(class='max-w-[1550px]')
@@ -36,17 +22,17 @@ div
           el-image.w-9(src='/icon.svg')
           h1.text-3xl.font-normal PlaybackArt
         .flex.items-center.gap-x-8
+          el-tabs.hidden-sm-and-down(v-model='active', @tab-click='tabClick')
+            el-tab-pane(
+              v-for='tab in navigationTabs',
+              :key='tab.label',
+              :name='tab.searchType'
+            )
+              template(#label)
+                el-icon
+                  component(:is='tab.icon')
+                span.ml-2.font-normal {{ tab.label }}
           client-only
-            el-tabs.hidden-sm-and-down(v-model='active', @tab-click='tabClick')
-              el-tab-pane(
-                v-for='tab in navigationTabs',
-                :key='tab.label',
-                :name='tab.searchType'
-              )
-                template(#label)
-                  el-icon
-                    component(:is='tab.icon')
-                  span.ml-2.font-normal {{ tab.label }}
             el-popover(
               teleported,
               :visible='popover',
@@ -66,8 +52,7 @@ div
               el-icon(:size='30')
                 ElIconOperation
     .mx-5
-      client-only
-        el-divider(class='!m-0')
+      el-divider(class='!m-0')
     el-main
       slot
     el-backtop

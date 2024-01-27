@@ -35,10 +35,17 @@ const { width } = useWindowSize()
 
 @each $status, $color in $statuses {
   .status-radio-button.#{$status}
+    > .el-radio-button__original-radio:not(:checked)
+    + .el-radio-button__inner:hover {
+    color: map-get($color, 'normal');
+  }
+
+  .status-radio-button.#{$status}
     .el-radio__input.is-checked
     + .el-radio__label {
     color: map-get($color, 'normal');
   }
+
   .status-radio-button.#{$status} .el-radio__input.is-checked .el-radio__inner {
     border-color: map-get($color, 'normal');
     background: map-get($color, 'normal');

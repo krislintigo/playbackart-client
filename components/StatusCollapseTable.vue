@@ -259,8 +259,6 @@ el-collapse-item.status-table(
 </template>
 
 <script setup lang="ts">
-import { computeItemsQuery } from '~/helpers/item.query'
-
 type Sort = {
   prop: 'name' | 'rating' | 'time'
   order: 1 | -1
@@ -305,6 +303,8 @@ const query = computed(() => ({
 }))
 
 const items$ = api.service('items').useFind(query, { paginateOn: 'server' })
+
+// items$.isSsr && (await items$.request)
 
 api.service('items').on('cud', ({ userId: _userId }: Item) => {
   if (_userId !== queryFilters.userId) return
