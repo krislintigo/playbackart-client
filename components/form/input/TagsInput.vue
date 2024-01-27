@@ -1,11 +1,11 @@
 <template lang="pug">
-el-input.mb-1(v-model='input', class='!w-80', @keyup.enter='append')
+el-input.mb-1.mr-3(v-model='input', class='!w-80', @keyup.enter='append')
   template(#suffix)
     el-row
       el-button-group
         el-button(text, :icon='ElIconPlus', @click='append')
         el-button(text, :icon='ElIconMore', @click='split')
-el-tag.mx-3(
+el-tag.mr-3(
   v-for='(item, i) in items',
   :key='item',
   size='large',

@@ -1,20 +1,19 @@
 <template lang="pug">
-el-select.mr-3(
+el-autocomplete.mr-3(
+  v-model='input.value',
   class='!w-80',
-  filterable,
-  multiple,
-  allow-create,
   placeholder='Выберите или введите',
-  @change='selectHandler'
+  :fetch-suggestions='querySearch',
+  @select='selectHandler'
 )
-  el-option(
-    v-for='item in options',
-    :key='item',
-    :label='item.value',
-    :value='item.value'
-  )
-  template(#footer)
-    el-switch(v-model='splitInput', active-text='Разделить ввод по запятым')
+  template(#suffix)
+    el-switch(
+      v-model='input.split',
+      inline-prompt,
+      :active-icon='ElIconMore',
+      :inactive-icon='ElIconPlus',
+      @click.stop
+    )
 el-tag.mr-3(
   v-for='(item, i) in items',
   :key='item',
@@ -35,25 +34,42 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: string[]): void
 }>()
 
-const splitInput = ref(false)
+const input = reactive({
+  value: '',
+  split: false,
+})
 
 const items = computed({
   get: () => props.modelValue,
   set: (value) => emit('update:modelValue', value),
 })
 
+const querySearch = (queryString: string, cb: any) => {
+  const search = queryString.trim().toLowerCase()
+  const options = props.options.map((item) => ({ value: item.value }))
+  if (!search) return cb(options)
+
+  const results = [
+    { value: queryString },
+    ...options.filter((item) => item.value.toLowerCase().includes(search)),
+  ]
+  cb(results)
+}
+
 const remove = (index: number) => {
   items.value.splice(index, 1)
 }
 
-const selectHandler = ([value]: string[]) => {
-  if (!splitInput.value) {
+const selectHandler = ({ value }: { value: string }) => {
+  const split = input.split
+  input.value = ''
+  input.split = false
+  if (!split) {
     items.value.push(value)
     return
   }
   const array = value.trim().split(', ')
   items.value.push(...array.map((i) => i.charAt(0).toUpperCase() + i.slice(1)))
-  splitInput.value = false
 }
 </script>
 
