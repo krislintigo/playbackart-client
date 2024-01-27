@@ -33,45 +33,6 @@ body, input, button, textarea, select {
   font-weight: 500 !important;
 }
 
-// COLLAPSE ITEMS COLORS
-.in-process .el-collapse-item__header {
-  border-left-color: var(--el-color-primary-light-3) !important;
-}
-.planned .el-collapse-item__header {
-  border-left-color: var(--el-color-warning-light-3) !important;
-}
-.completed .el-collapse-item__header {
-  border-left-color: var(--el-color-success-light-3) !important;
-}
-.postponed .el-collapse-item__header {
-  border-left-color: var(--el-color-info-light-3) !important;
-}
-.abandoned .el-collapse-item__header {
-  border-left-color: var(--el-color-danger) !important;
-}
-
-//// STATUS COLLAPSE BUTTON COLORS
-//.in-process .el-collapse-item__header {
-//  background: var(--el-color-primary-light-3);
-//  border-left-color: var(--el-color-primary-light-5);
-//}
-//.planned .el-collapse-item__header {
-//  background: var(--el-color-warning-light-3);
-//  border-left-color: var(--el-color-warning-light-5);
-//}
-//.completed .el-collapse-item__header {
-//  background: var(--el-color-success-light-3);
-//  border-left-color: var(--el-color-success-light-5);
-//}
-//.postponed .el-collapse-item__header {
-//  background: var(--el-color-info-light-3);
-//  border-left-color: var(--el-color-info-light-5);
-//}
-//.abandoned .el-collapse-item__header {
-//  background: var(--el-color-danger);
-//  border-left-color: var(--el-color-danger-light-3);
-//}
-
 $statuses: (
   "in-process": (
     "normal": var(--el-color-primary),

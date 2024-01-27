@@ -1,6 +1,6 @@
 <template lang="pug">
-el-collapse.set-status-collapse
-  el-collapse-item(:class='[currentStatus]')
+el-collapse.set-status-collapse(:class='[currentStatus]')
+  el-collapse-item
     template(#title)
       el-row.gap-x-3(align='middle')
         el-icon(size='large')
@@ -26,26 +26,36 @@ el-collapse.set-status-collapse
 <script setup lang="ts">
 defineProps<{ currentStatus: Item['status'] }>()
 
-defineEmits<{ (e: 'update', value: string) }>()
+defineEmits<{ (e: 'update', value: string): void }>()
 </script>
 
 <style scoped lang="scss"></style>
 <style lang="scss">
+@import 'assets/css/main.scss';
+
 .set-status-collapse,
 .set-status-collapse > .el-collapse-item > .el-collapse-item__wrap {
   border: 0;
 }
 
-.set-status-collapse .el-collapse-item__header {
+.set-status-collapse > .el-collapse-item > .el-collapse-item__header {
   padding: 0 15px;
   border-radius: 2px;
   border-bottom: 0;
 }
 
-.set-status-collapse .el-collapse-item__content {
-  display: flex;
-  flex-direction: column;
+.set-status-collapse
+  > .el-collapse-item
+  > .el-collapse-item__wrap
+  > .el-collapse-item__content {
+  @apply flex flex-col;
   padding: 10px 0 0 2px;
   row-gap: 10px;
+}
+
+@each $status, $color in $statuses {
+  .set-status-collapse.#{$status} .el-collapse-item__header {
+    background: map-get($color, 'light-3');
+  }
 }
 </style>

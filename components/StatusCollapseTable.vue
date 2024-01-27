@@ -332,7 +332,7 @@ const onSortChange = ({ prop, order }: Sort) => {
 
 const updateItemRating = async (
   item: Item,
-  partIndex: number | string | null,
+  partIndex: number | null,
   rating: number,
 ) => {
   const _item = item.clone()
@@ -370,15 +370,12 @@ const transferItem = async (item: Item) => {
 
 <style scoped lang="scss"></style>
 <style lang="scss">
-.status-table > .el-collapse-item__header {
-  background-color: var(--el-color-info-light-8);
-  padding: 0 20px;
-  border-left: 7px solid;
-}
+@import 'assets/css/main.scss';
 
 .status-table .el-table {
   --el-table-border-color: transparent;
   --el-table-header-bg-color: transparent;
+  --el-table-tr-bg-color: transparent;
 }
 
 .status-table .el-table .el-table__cell {
@@ -388,5 +385,13 @@ const transferItem = async (item: Item) => {
 
 .status-table .el-link__inner {
   word-break: normal;
+}
+
+@each $status, $color in $statuses {
+  .status-table.#{$status} > .el-collapse-item__header {
+    background-color: var(--el-color-info-light-8);
+    padding: 0 20px;
+    border-left: 7px solid map-get($color, 'light-3');
+  }
 }
 </style>
