@@ -1,13 +1,16 @@
 <template lang="pug">
 el-row(align='middle')
-  el-rate(
-    v-model='input',
-    :max='10',
-    show-text,
-    :texts='rating.texts',
-    :colors='rating.colors',
-    @change='emit("change", $event)'
-  )
+  .flex.flex-col
+    el-rate(
+      ref='refRate',
+      v-model='rating',
+      :max='10',
+      show-text,
+      :texts='RATING.texts',
+      :colors='RATING.colors',
+      @change='emit("change", $event)'
+    )
+    span.text-xs.text-center(ref='refText')
   el-button.ml-1(
     :icon='ElIconClose',
     size='small',
@@ -18,20 +21,24 @@ el-row(align='middle')
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{ modelValue: number }>()
-
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: number): void
-  (e: 'change', value: number)
+  (e: 'change', value: number): void
 }>()
 
-const input = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
+const rating = defineModel<number>({ required: true })
+
+const refRate = ref<any>(null)
+const refText = ref<any>(null)
+
+onMounted(() => {
+  if (!refRate.value || !refRate.value!.$el) return
+
+  const text = refRate.value.$el.querySelector('span.el-rate__text')
+  refText.value.append(text)
 })
 
 const clear = () => {
-  input.value = 0
+  rating.value = 0
   emit('change', 0)
 }
 </script>

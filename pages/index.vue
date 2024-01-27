@@ -10,11 +10,11 @@ div
   el-row(v-if='route.query.userId', align='middle')
     h3 Вы просматриваете список другого пользователя
     el-button.ml-3(link, type='primary', @click='navigateTo("/")') На свою страницу
-  el-row(v-if='!authStore.isAuthenticated && !route.query.userId')
-    h2.text-2xl.font-medium.my-5 Войдите, чтобы продолжить!
+  el-row.mb-5.mt-2(v-if='!authStore.isAuthenticated && !route.query.userId')
+    h2.text-2xl.font-medium Войдите, чтобы продолжить!
   .mb-8(v-else)
-    el-row(align='middle')
-      h2.text-2xl.font-light.my-5 {{ navigationTabs.find((tab) => tab.searchType === (route.query.type ?? ''))?.header }}
+    el-row.mb-5.mt-2(align='middle')
+      h2.text-2xl.font-light {{ navigationTabs.find((tab) => tab.searchType === (route.query.type ?? ''))?.header }}
       el-button.ml-3(
         v-if='authStore.isAuthenticated && !route.query.userId',
         circle,

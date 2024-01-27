@@ -2,14 +2,14 @@
 el-form.item-form(
   ref='form',
   :model='item',
-  label-position='right',
+  :label-position='width > itemFormBreakpoints.labelPosition ? "right" : "top"',
   :label-width='120',
   :rules='rules'
 )
   el-row
-    el-form-item(label='Конфигурация', prop='config')
+    el-form-item(label='Конфигурация:', prop='config')
       ConfigInput(v-model='item.config', v-model:item='item')
-  .flex
+  .flex.flex-col(class='sm:flex-row')
     el-form-item.mr-7(
       v-if='!item.config.parts.extended || !item.config.parts.multiplePosters',
       label='Постер:',
@@ -126,6 +126,7 @@ const props = defineProps<{ modelValue: Item }>()
 
 const emit = defineEmits<{ (e: 'update:modelValue', value: boolean): void }>()
 
+const { width } = useWindowSize()
 const queryFilters = useFilters()
 
 const item = computed({

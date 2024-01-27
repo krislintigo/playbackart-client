@@ -1,5 +1,5 @@
 <template lang="pug">
-el-row.w-fit.gap-x-5
+el-row.w-fit.gap-x-5.flex-col(class='md:flex-row')
   .flex.flex-col
     el-input-number(v-model='time.count', :min='1')
     h4.m-0.text-center Кол-во элементов
@@ -14,16 +14,7 @@ el-row.w-fit.gap-x-5
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{ modelValue: Item['time'] }>()
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: Item['time']): void
-}>()
-
-const time = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-})
+const time = defineModel<Item['time']>({ required: true })
 </script>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

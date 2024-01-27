@@ -63,7 +63,7 @@ el-collapse-item.status-table(
         el-popover(
           v-if='authStore.isAuthenticated && !route.query.userId',
           placement='right',
-          :width='400',
+          :width='300',
           trigger='hover',
           :show-after='300',
           :persistent='false'

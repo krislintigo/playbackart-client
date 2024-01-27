@@ -1,4 +1,4 @@
-export const rating = {
+export const RATING = {
   texts: [
     'Отвратительно',
     'Ужасно',
@@ -23,4 +23,4 @@ export const rating = {
     9: '#89c93a',
     10: '#67c23a',
   },
-}
+} as const

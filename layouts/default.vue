@@ -30,11 +30,11 @@ div
   AppDialog(v-model='modal', title='')
     ProfileController
   .m-auto(class='max-w-[1550px]')
-    el-header.m-5(height='70px')
-      el-row(justify='space-between', align='middle')
-        .flex.items-center.mt-5.mb-5.gap-x-3
-          el-image.w-10(src='/icon.svg')
-          h1.text-4xl.font-normal PlaybackArt
+    el-header.m-5.mt-7(height='60px')
+      el-row.h-full(justify='space-between', align='middle')
+        .flex.items-center.gap-x-3
+          el-image.w-9(src='/icon.svg')
+          h1.text-3xl.font-normal PlaybackArt
         .flex.items-center.gap-x-8
           client-only
             el-tabs.hidden-sm-and-down(v-model='active', @tab-click='tabClick')
@@ -67,7 +67,7 @@ div
                 ElIconOperation
     .mx-5
       client-only
-        el-divider(class='!mb-0')
+        el-divider(class='!m-0')
     el-main
       slot
     el-backtop
