@@ -35,6 +35,17 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
         ) {{ genre.value }}
   el-row
     el-col
+      FilterHeader(title='Категории', :is-pending='isPending')
+      el-row
+        el-link.mx-2(
+          v-for='category in categories',
+          :key='category',
+          :class='{ [textClass("category", category)]: true, "item-selected": selectedCategories.includes(category.value) }',
+          class='my-0.5',
+          @click='categoryClick(category.value)'
+        ) {{ category.value }}
+  el-row
+    el-col
       FilterHeader(
         v-model:selector='selectors.developers',
         title='Создатели',
@@ -65,7 +76,7 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
           )
   el-row
     el-col
-      FilterHeader(title='Франшзы', :is-pending='isPending')
+      FilterHeader(title='Франшизы', :is-pending='isPending')
       el-row
         el-link.mx-2(
           v-for='franchise in franchises.primary',
@@ -104,6 +115,7 @@ const {
   selectedRatings,
   selectedRestrictions,
   selectedGenres,
+  selectedCategories,
   selectedDevelopers,
   selectedFranchises,
   selectors,
@@ -120,6 +132,7 @@ const restrictions = computed(() =>
   ),
 )
 const genres = computed(() => filters.value.genres)
+const categories = computed(() => filters.value.categories)
 const developers = computed(() => {
   const primary: ExtendedStatistic<string>[] = []
   const secondary: ExtendedStatistic<string>[] = []
@@ -177,6 +190,16 @@ const genreClick = (genre: string) => {
   }
 }
 
+const categoryClick = (category: string) => {
+  if (selectedCategories.value.includes(category)) {
+    selectedCategories.value = selectedCategories.value.filter(
+      (c) => c !== category,
+    )
+  } else {
+    selectedCategories.value.push(category)
+  }
+}
+
 const developerClick = (developer: string) => {
   if (selectedDevelopers.value.includes(developer)) {
     selectedDevelopers.value = selectedDevelopers.value.filter(
@@ -198,13 +221,15 @@ const franchiseClick = (franchise: string) => {
 }
 
 const textClass = (
-  target: 'genre' | 'developer' | 'franchise',
+  target: 'genre' | 'category' | 'developer' | 'franchise',
   value: ExtendedStatistic<string>,
 ) => {
   const getPercentage = () => {
     switch (target) {
       case 'genre':
         return value.coefficient * 100
+      case 'category':
+        return value.coefficient * 500
       case 'developer':
         return value.coefficient * 500
       case 'franchise':

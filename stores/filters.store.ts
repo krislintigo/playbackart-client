@@ -12,6 +12,7 @@ export const useFilters = defineStore('filters', () => {
     genres: [],
     developers: [],
     franchises: [],
+    categories: [],
     total: [],
   })
   const search = ref(route.query.search || '')
@@ -25,6 +26,9 @@ export const useFilters = defineStore('filters', () => {
   )
   const selectedGenres = ref(
     [route.query.selectedGenres ?? []].flat(1) as string[],
+  )
+  const selectedCategories = ref(
+    [route.query.selectedCategories ?? []].flat(1) as string[],
   )
   const selectedDevelopers = ref(
     [route.query.selectedDevelopers ?? []].flat(1) as string[],
@@ -64,6 +68,7 @@ export const useFilters = defineStore('filters', () => {
           selectedRatings: selectedRatings.value,
           selectedRestrictions: selectedRestrictions.value,
           selectedGenres: selectedGenres.value,
+          selectedCategories: selectedCategories.value,
           selectedDevelopers: selectedDevelopers.value,
           selectedFranchises: selectedFranchises.value,
           selectors: stringSelectors !== '{}' ? stringSelectors : undefined,
@@ -102,6 +107,7 @@ export const useFilters = defineStore('filters', () => {
     selectedRatings: skipHydrate(selectedRatings),
     selectedRestrictions: skipHydrate(selectedRestrictions),
     selectedGenres: skipHydrate(selectedGenres),
+    selectedCategories: skipHydrate(selectedCategories),
     selectedDevelopers: skipHydrate(selectedDevelopers),
     selectedFranchises: skipHydrate(selectedFranchises),
     selectors: skipHydrate(selectors),

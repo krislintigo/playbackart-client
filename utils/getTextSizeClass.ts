@@ -1,9 +1,10 @@
 export const getTextSizeClass = (
   percentage: number,
-  target: 'genre' | 'developer' | 'franchise',
+  target: 'genre' | 'category' | 'developer' | 'franchise',
 ): string => {
   switch (target) {
     case 'genre':
+    case 'category':
     case 'developer':
     case 'franchise':
       switch (true) {

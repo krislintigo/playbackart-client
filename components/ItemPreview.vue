@@ -54,6 +54,10 @@ el-row.max-w-md
       h4.mb-2.font-normal Жанры:
       .tags-container
         el-tag(v-for='(genre, i) in item.genres', :key='i', type='info') {{ genre }}
+    template(v-if='item.categories.length')
+      h4.mb-2.font-normal Категории:
+      .tags-container
+        el-tag(v-for='(category, i) in item.categories', :key='i', type='info') {{ category }}
     template(v-if='item.developers.length')
       h4.mb-2.font-normal Создатели:
       .tags-container
@@ -101,34 +105,24 @@ watch(currentPartIndex, () => {
 })
 
 const updateItemStatus = async (
-  partIndex: number | string | null,
-  status: string,
+  partIndex: number | null,
+  status: Item['status'],
 ) => {
-  try {
-    const _item = await props.item.clone()
-    if (partIndex !== null) {
-      const currentStatusIndex = orderedMainStatuses.indexOf(
-        _item.parts[partIndex].status,
-      )
-      _item.parts[partIndex].status =
-        currentStatusIndex + 1 < orderedMainStatuses.length
-          ? orderedMainStatuses.at(currentStatusIndex + 1)
-          : orderedMainStatuses.at(0)
-    } else {
-      _item.status = status
-    }
-    await _item.save()
-    await _item.reset()
-    ElMessage.success('Статус изменен')
-  } catch (error: any) {
-    ElMessage.error('Что-то пошло не так...')
+  const _item = props.item.clone()
+  if (partIndex !== null) {
+    const currentStatusIndex = orderedMainStatuses.indexOf(
+      _item.parts[partIndex].status,
+    )
+    _item.parts[partIndex].status =
+      currentStatusIndex + 1 < orderedMainStatuses.length
+        ? orderedMainStatuses.at(currentStatusIndex + 1)
+        : orderedMainStatuses.at(0)
+  } else {
+    _item.status = status
   }
-  // try {
-  //   await props.item.save({ diff: { status } })
-  //   ElMessage.success('Статус изменен')
-  // } catch (error: any) {
-  //   ElMessage.error('Что-то пошло не так...')
-  // }
+  await _item.save()
+  _item.reset()
+  ElMessage.success('Статус изменен')
 }
 </script>
 

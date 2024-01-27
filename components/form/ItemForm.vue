@@ -47,6 +47,11 @@ el-form.item-form(
       v-model='item.genres',
       :options='queryFilters.filters.genres'
     )
+  el-form-item(label='Категории:', prop='categories')
+    AutocompleteInput(
+      v-model='item.categories',
+      :options='queryFilters.filters.categories'
+    )
   el-form-item(
     v-if='!item.config.parts.extended || !item.config.parts.multipleDevelopers',
     label='Создатели:',

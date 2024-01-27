@@ -96,6 +96,7 @@ export default defineNuxtPlugin((nuxt) => {
             year: '',
             developers: [],
             franchise: '',
+            categories: [],
             parts: [],
           }
           return useInstanceDefaults(defaults, data)

@@ -72,6 +72,11 @@ export const computeItemsQuery = ({
       [queryFilters.selectors.genres]: queryFilters.selectedGenres,
     },
   }),
+  ...(queryFilters.selectedCategories.length && {
+    categories: {
+      $in: queryFilters.selectedCategories, // selector?
+    },
+  }),
   ...(queryFilters.selectedFranchises.length && {
     franchise: { $in: queryFilters.selectedFranchises },
   }),
