@@ -22,7 +22,7 @@ el-collapse-item.status-table(
           span #
           el-popover(trigger='click')
             template(#reference)
-              el-button(size='small', circle, text, class='!size-4')
+              el-button(size='small', circle, text, class='!size-4 mb-0.5')
                 el-icon(size='12')
                   ElIconFilter
             h4.mb-2.text-sm.font-medium Status:
