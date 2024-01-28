@@ -146,7 +146,7 @@ const appendPart = () => {
   item.value.parts.push(_cloneDeep(EMPTY_PART_DATA))
 }
 
-const removePart = (index: string | number) => {
+const removePart = (index: number) => {
   item.value.parts.splice(index, 1)
 }
 

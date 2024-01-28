@@ -69,7 +69,7 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
           placeholder='Другие создатели...'
         )
           el-option(
-            v-for='item in developers.secondary',
+            v-for='item in [...developers.primary, ...developers.secondary]',
             :key='item',
             :label='item.value',
             :value='item.value'
@@ -95,7 +95,7 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
           placeholder='Другие франшизы...'
         )
           el-option(
-            v-for='item in franchises.secondary',
+            v-for='item in [...franchises.primary, ...franchises.secondary]',
             :key='item',
             :label='item.value',
             :value='item.value'

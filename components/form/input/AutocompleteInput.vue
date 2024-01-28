@@ -4,7 +4,8 @@ el-autocomplete.mr-3(
   class='!w-80',
   placeholder='Выберите или введите',
   :fetch-suggestions='querySearch',
-  @select='selectHandler'
+  @select='selectHandler',
+  @keydown.enter='selectHandler({ value: input.value })'
 )
   template(#suffix)
     el-switch(
@@ -50,7 +51,9 @@ const querySearch = (queryString: string, cb: any) => {
   if (!search) return cb(options)
 
   const results = [
-    { value: queryString },
+    ...(options.map((item) => item.value).includes(queryString.trim())
+      ? []
+      : [{ value: queryString }]),
     ...options.filter((item) => item.value.toLowerCase().includes(search)),
   ]
   cb(results)
