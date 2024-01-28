@@ -99,8 +99,8 @@ el-collapse-item.status-table(
                   .text-sm
                     h3.text-base.font-medium
                       span.mr-1 {{ part.name + ': ' + (part.rating || '-') }}
-                      span(v-if='part.rating') ({{ rating.texts[part.rating - 1] }})
-              .text-sm(v-else) {{ rating.texts[item.rating - 1] }}
+                      span(v-if='part.rating') ({{ RATING.texts[part.rating - 1] }})
+              .text-sm(v-else) {{ RATING.texts[item.rating - 1] }}
             div(v-if='item.config.parts.multipleRatings') {{ averagePartsRating(item) }}
             div(v-else, class='w-1/2') {{ item.rating || '-' }}
           span(v-else) -
