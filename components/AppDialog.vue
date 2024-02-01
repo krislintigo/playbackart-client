@@ -4,6 +4,7 @@ client-only
     v-model='dialog',
     append-to-body,
     width='95%',
+    :fullscreen='width < DIALOG_BREAKPOINTS.fullscreen',
     :style='{ maxWidth: maxWidth ?? "1300px" }',
     :lock-scroll='false',
     :close-on-click-modal='false'
@@ -18,20 +19,11 @@ client-only
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-  modelValue: boolean
-  maxWidth?: string
-  title: string
-}>()
+defineProps<{ maxWidth?: string; title: string }>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-}>()
+const dialog = defineModel<boolean>({ required: true })
 
-const dialog = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-})
+const { width } = useWindowSize()
 
 // fix html scroll
 watch(dialog, (open) => {
@@ -43,12 +35,3 @@ watch(dialog, (open) => {
 </script>
 
 <style scoped lang="scss"></style>
-<style lang="scss">
-.dialog .el-dialog__body {
-  padding-top: 20px;
-}
-
-.dialog .el-rate__item {
-  line-height: 0;
-}
-</style>

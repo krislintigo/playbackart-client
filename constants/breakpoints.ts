@@ -12,3 +12,7 @@ export const itemFormBreakpoints = {
     time: 1250,
   },
 }
+
+export const DIALOG_BREAKPOINTS = {
+  fullscreen: 600,
+}

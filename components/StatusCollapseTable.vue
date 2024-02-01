@@ -15,7 +15,11 @@ el-collapse-item.status-table(
     el-table-column(v-if='width < tableBreakpoints.item', type='expand')
       template(#default='{ row: item }')
         el-card(body-style='padding: 10px')
-          ItemPreview(:item='item')
+          ItemPreview(
+            :item='item',
+            @update-item='$emit("update-item", $event)',
+            @delete-item='$emit("delete-item", $event)'
+          )
     el-table-column(type='index', width='60', :index='indexHandler')
       template(#header)
         el-row.gap-x-2(align='middle')

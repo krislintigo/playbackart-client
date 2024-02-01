@@ -12,6 +12,25 @@ el-row.max-w-md
         LoadablePoster(:src='_part.poster.key', :size='170')
     template(v-else)
       LoadablePoster(:src='item.poster.key', :size='170')
+    el-row.gap-x-2.mt-2(
+      v-if='width < tableBreakpoints.operations',
+      justify='center'
+    )
+      el-button(
+        :icon='ElIconEditPen',
+        type='warning',
+        circle,
+        @click='$emit("update-item", item._id)'
+      )
+      el-popconfirm(
+        title='Вы действительно хотите удалить элемент?',
+        width='250',
+        confirm-button-text='Да',
+        cancel-button-text='Нет',
+        @confirm='$emit("delete-item", item._id)'
+      )
+        template(#reference)
+          el-button(:icon='ElIconDelete', type='danger', circle)
   el-col(:span='13', :push='1')
     h2.mt-2.break-normal.text-left.font-medium.text-xl {{ item.name }}
     div(v-if='item.config.parts.extended')
@@ -80,19 +99,18 @@ el-row.max-w-md
         :current-status='item.status',
         @update='updateItemStatus(null, $event)'
       )
-el-row.hidden-sm-and-up(justify='center', class='max-w-[250px]')
-  el-col(:span='24')
-    SetStatusCollapseButton(
-      :current-status='item.status',
-      @update='updateItemStatus(null, $event)'
-    )
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{ item: Item }>()
+defineEmits<{
+  (e: 'update-item', itemId: string): void
+  (e: 'delete-item', itemId: string): void
+}>()
 
 const route = useRoute()
 const authStore = useAuthStore()
+const { width } = useWindowSize()
 
 const carousel = ref<any>(null)
 const currentPartIndex = ref(0)
