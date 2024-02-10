@@ -43,10 +43,7 @@ el-form.item-form(
   el-form-item(label='Статус:', prop='status')
     StatusButton(v-model='item.status')
   el-form-item(label='Жанры:', prop='genres')
-    AutocompleteInput(
-      v-model='item.genres',
-      :options='queryFilters.filters.genres'
-    )
+    GroupSelect(v-model='item.genres', :data='GENRES')
   el-form-item(label='Категории:', prop='categories')
     AutocompleteInput(
       v-model='item.categories',
@@ -127,17 +124,10 @@ const rules: FormRules = {
   type: [{ required: true, message: 'Выберите тип', trigger: 'change' }],
 }
 
-const props = defineProps<{ modelValue: Item }>()
-
-const emit = defineEmits<{ (e: 'update:modelValue', value: boolean): void }>()
-
 const { width } = useWindowSize()
 const queryFilters = useFilters()
 
-const item = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-})
+const item = defineModel<Item>({ required: true })
 
 const form = ref<any>(null)
 const partForms = ref<any>(null)

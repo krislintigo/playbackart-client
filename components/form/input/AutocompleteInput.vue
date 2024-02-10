@@ -27,22 +27,14 @@ el-tag.mr-3(
 
 <script setup lang="ts">
 const props = defineProps<{
-  modelValue: string[]
   options: Array<{ value: string }>
 }>()
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: string[]): void
-}>()
+const items = defineModel<string[]>({ required: true })
 
 const input = reactive({
   value: '',
   split: false,
-})
-
-const items = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
 })
 
 const querySearch = (queryString: string, cb: any) => {
