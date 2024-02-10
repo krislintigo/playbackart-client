@@ -32,7 +32,7 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
           :class='{ [textClass("genre", genre)]: true, "item-selected": selectedGenres.includes(genre.value) }',
           class='my-0.5',
           @click='genreClick(genre.value)'
-        ) {{ genre.value }}
+        ) {{ PLAIN_GENRES.find((g) => g.value === genre.value).label }}
   el-row
     el-col
       FilterHeader(title='Категории', :is-pending='isPending')
@@ -105,6 +105,7 @@ el-aside.flex.flex-col.gap-7(:width='width > 400 ? "350px" : "300px"')
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { PLAIN_GENRES } from '../constants/genres'
 
 const { width } = useWindowSize()
 const queryFilters = useFilters()

@@ -72,7 +72,7 @@ el-row.max-w-md
     template(v-if='item.genres.length')
       h4.mb-2.font-normal Жанры:
       .tags-container
-        el-tag(v-for='(genre, i) in item.genres', :key='i', type='info') {{ genre }}
+        el-tag(v-for='(genre, i) in item.genres', :key='i', type='info') {{ PLAIN_GENRES.find((g) => g.value === genre).label }}
     template(v-if='item.categories.length')
       h4.mb-2.font-normal Категории:
       .tags-container
@@ -102,6 +102,8 @@ el-row.max-w-md
 </template>
 
 <script setup lang="ts">
+import { PLAIN_GENRES } from '~/constants/genres'
+
 const props = defineProps<{ item: Item }>()
 defineEmits<{
   (e: 'update-item', itemId: string): void
