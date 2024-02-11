@@ -245,6 +245,7 @@ const resetFilters = () => {
   selectedRatings.value = []
   selectedRestrictions.value = []
   selectedGenres.value = []
+  selectedCategories.value = []
   selectedDevelopers.value = []
   selectedFranchises.value = []
 }
