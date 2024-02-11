@@ -7,6 +7,13 @@ el-upload.avatar-uploader(
 )
   el-icon.avatar-uploader-icon
     ElIconPlus
+  el-button.mt-2.absolute.top-0.right-2(
+    type='primary',
+    circle,
+    text,
+    :icon='ElIconCopyDocument',
+    @click.stop='uploadFromClipboard'
+  )
 .image-container(
   v-else,
   @mouseover='showControl = true',
@@ -26,24 +33,17 @@ el-upload.avatar-uploader(
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{ modelValue: any }>()
-
-const emit = defineEmits<{
-  (e: 'update:modelValue', value: any): void
-}>()
+const IMAGE_TYPES = ['image/png', 'image/jpeg']
 
 const { trackObjectUrl } = useResources()
 
-const showControl = ref(false)
+const image = defineModel<any>({ required: true })
 
-const image = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-})
+const showControl = ref(false)
 
 const preview = computed(() => image.value.preview || fileUrl(image.value.key))
 
-const toBase64 = (file) =>
+const toBase64 = (file: File) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -51,25 +51,29 @@ const toBase64 = (file) =>
     reader.onerror = reject
   })
 
-const onSuccess = async (_, uploadFile) => {
-  image.value.name = uploadFile.name
-  image.value.buffer = await toBase64(uploadFile.raw)
-  image.value.preview = URL.createObjectURL(uploadFile.raw)
+const upload = async (file: File) => {
+  image.value.name = file.name
+  image.value.buffer = await toBase64(file)
+  image.value.preview = URL.createObjectURL(file)
   trackObjectUrl(image.value.preview)
+}
+
+const onSuccess = async (_: any, uploadFile: any) =>
+  await upload(uploadFile.raw)
+
+const uploadFromClipboard = async () => {
+  const [clipboard] = await navigator.clipboard.read()
+  const mimeType = clipboard.types.find((type) => IMAGE_TYPES.includes(type))
+  if (!mimeType) return
+
+  const blob = await clipboard.getType(mimeType)
+  const file = new File([blob], 'image.png', { type: mimeType })
+  await upload(file)
 }
 
 const remove = () => {
   image.value = _cloneDeep(EMPTY_FILE_DATA)
 }
-
-// const beforeUpload = (rawFile) => {
-//   console.log(rawFile)
-//   if (rawFile.size / 1024 / 1024 > 2) {
-//     ElMessage.error('Avatar picture size can not exceed 2MB!')
-//     return false
-//   }
-//   return true
-// }
 </script>
 
 <style scoped lang="scss"></style>
