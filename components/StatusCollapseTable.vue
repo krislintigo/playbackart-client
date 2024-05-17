@@ -306,9 +306,9 @@ const query = computed(() => ({
   }),
 }))
 
-const items$ = api.service('items').useFind(query, { paginateOn: 'server' })
-
-// items$.isSsr && (await items$.request)
+const items$ = fixUseFind(
+  api.service('items').useFind(query, { paginateOn: 'server' }),
+)
 
 api.service('items').on('cud', ({ userId: _userId }: Item) => {
   if (_userId !== queryFilters.userId) return
