@@ -54,7 +54,10 @@ el-form.item-form(
     label='Создатели:',
     prop='developers'
   )
-    TagsInput(v-model='item.developers')
+    AutocompleteInput(
+      v-model='item.developers',
+      :options='queryFilters.filters.developers'
+    )
   el-form-item(label='Ограничение:', prop='restriction')
     el-radio-group(v-model='item.restriction')
       el-radio-button(
