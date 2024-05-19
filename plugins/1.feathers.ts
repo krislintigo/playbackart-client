@@ -74,6 +74,7 @@ export default defineNuxtPlugin((nuxt) => {
               },
             },
             name: '',
+            localName: '',
             poster: {
               name: '',
               key: '',

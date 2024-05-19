@@ -3,34 +3,58 @@ el-form.item-form(
   ref='form',
   :model='item',
   :label-position='width > itemFormBreakpoints.labelPosition ? "right" : "top"',
-  :label-width='120',
+  label-width='120',
   :rules='rules'
 )
   el-row
     el-form-item(label='Конфигурация:', prop='config')
       ConfigInput(v-model='item.config', v-model:item='item')
-  .flex.flex-col(class='sm:flex-row')
-    el-form-item.mr-7(
-      v-if='!item.config.parts.extended || !item.config.parts.multiplePosters',
-      label='Постер:',
-      prop='poster'
-    )
-      ImageLoader(v-model='item.poster')
-    .w-full
-      el-form-item(label='Название:', prop='name')
-        el-input(v-model='item.name')
-      el-form-item(label='Франшиза:', prop='franchise')
-        el-input(v-model='item.franchise')
+  el-row
+    el-col(:span='6')
+      el-form-item.mr-7(
+        v-if='!item.config.parts.extended || !item.config.parts.multiplePosters',
+        label='Постер:',
+        prop='poster'
+      )
+        ImageLoader(v-model='item.poster')
+    el-col(:span='18')
+      el-row
+        el-col
+          h3.mb-2.text-sm
+            span.text-red-400 *&nbsp;
+            | Название
+          el-row(:gutter='20')
+            el-col(:span='12')
+              el-form-item(prop='name', label-width='0')
+                el-input(v-model='item.name', placeholder='Основное имя*')
+            el-col(:span='12')
+              el-form-item(prop='localName', label-width='0')
+                el-input(v-model='item.localName', placeholder='Локальное имя')
+      el-row
+        el-col
+          h3.mb-2.text-sm Франшиза
+          el-row(:gutter='20')
+            el-col(:span='12')
+              el-form-item(prop='franchise', label-width='0')
+                el-input(v-model='item.franchise', placeholder='Основное имя')
+            el-col(:span='12')
+              el-form-item(prop='franchiseLocal', label-width='0')
+                el-input(
+                  v-model='item.franchiseLocal',
+                  placeholder='Локальное имя'
+                )
       el-form-item(
         v-if='!item.config.parts.extended || !item.config.parts.multipleRatings',
         label='Рейтинг:',
-        prop='rating'
+        prop='rating',
+        label-width='160'
       )
         RatingInput(v-model='item.rating')
       el-form-item(
         v-if='!item.config.parts.extended && !item.config.time.extended',
         label='Длительность:',
-        prop='time'
+        prop='time',
+        label-width='160'
       )
         TimeInput(v-model='item.time')
   el-form-item(label='Тип:', prop='type')
