@@ -1,7 +1,11 @@
-export const fixUseFind = (storeResponse: any): any => {
+import type { UnwrapNestedRefs } from 'vue'
+
+export const fixUseFind = <T extends UnwrapNestedRefs<Record<any, any>>>(
+  storeResponse: T,
+) => {
   const refData = toRefs(storeResponse)
 
-  const data = ref<any[]>([])
+  const data = ref<unknown[]>([])
   const total = ref(0)
 
   watch(

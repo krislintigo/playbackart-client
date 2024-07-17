@@ -1,18 +1,17 @@
 <template lang="pug">
 div
-  client-only
-    el-drawer(
-      v-model='drawer',
-      :size='width > 400 ? "400px" : "100%"',
-      append-to-body
+  el-drawer(
+    v-model='drawer',
+    :size='width > 400 ? "400px" : "100%"',
+    append-to-body
+  )
+    template(#header)
+      h2.text-2xl.font-medium.text-white Меню
+    DrawerContent(
+      v-model:active='active',
+      v-model:modal='modal',
+      @tab-click='tabClick'
     )
-      template(#header)
-        h2.text-2xl.font-medium.text-white Меню
-      DrawerContent(
-        v-model:active='active',
-        v-model:modal='modal',
-        @tab-click='tabClick'
-      )
   AppDialog(v-model='modal', title='')
     ProfileController
   .m-auto(class='max-w-[1550px]')
@@ -32,25 +31,24 @@ div
                 el-icon
                   component(:is='tab.icon')
                 span.ml-2.font-normal {{ tab.label }}
-          client-only
-            el-popover(
-              teleported,
-              :visible='popover',
-              placement='bottom',
-              :width='380',
-              trigger='click',
-              popper-class='mr-5'
-            )
-              template(#reference)
-                el-avatar.cursor-pointer.hidden-xs-only(
-                  :size='50',
-                  @click='popover = !popover'
-                )
-                  h3.text-xl {{ authStore.user?.login.slice(0, 2).toUpperCase() ?? '-' }}
-              ProfileController
-            el-button.hidden-lg-and-up(text, @click='drawer = true')
-              el-icon(:size='30')
-                ElIconOperation
+          el-popover(
+            teleported,
+            :visible='popover',
+            placement='bottom',
+            :width='380',
+            trigger='click',
+            popper-class='mr-5'
+          )
+            template(#reference)
+              el-avatar.cursor-pointer.hidden-xs-only(
+                :size='50',
+                @click='popover = !popover'
+              )
+                h3.text-xl {{ authStore.user?.login.slice(0, 2).toUpperCase() ?? '-' }}
+            ProfileController
+          el-button.hidden-lg-and-up(text, @click='drawer = true')
+            el-icon(:size='30')
+              ElIconOperation
     .mx-5
       el-divider(class='!m-0')
     el-main

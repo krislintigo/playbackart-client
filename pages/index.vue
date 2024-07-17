@@ -31,21 +31,20 @@ div
           clearable
         )
         el-collapse(v-model='activeItems')
-          client-only
-            template(#fallback)
-              el-row.flex-col.my-8(align='middle')
-                h2.text-2xl Loading...
-                el-icon.is-loading.mt-3(size='30')
-                  ElIconLoading
-            StatusCollapseTable(
-              v-for='(block, i) in statuses',
-              :key='block.value',
-              :title='block.title.toUpperCase()',
-              :status='block.value',
-              :index='i',
-              @update-item='updateItemHandler',
-              @delete-item='deleteItem'
-            )
+          template(#fallback)
+            el-row.flex-col.my-8(align='middle')
+              h2.text-2xl Loading...
+              el-icon.is-loading.mt-3(size='30')
+                ElIconLoading
+          StatusCollapseTable(
+            v-for='(block, i) in statuses',
+            :key='block.value',
+            :title='block.title.toUpperCase()',
+            :status='block.value',
+            :index='i',
+            @update-item='updateItemHandler',
+            @delete-item='deleteItem'
+          )
         SummaryFooter
       AsideFilters.hidden-md-and-down
 </template>
